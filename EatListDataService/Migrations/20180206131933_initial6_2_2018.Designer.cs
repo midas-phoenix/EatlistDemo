@@ -11,9 +11,10 @@ using System;
 namespace EatListDataService.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180206131933_initial6_2_2018")]
+    partial class initial6_2_2018
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,8 +36,6 @@ namespace EatListDataService.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<bool>("IsRestaurant");
-
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
@@ -52,8 +51,6 @@ namespace EatListDataService.Migrations
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
-
-                    b.Property<string>("RestaurantName");
 
                     b.Property<string>("SecurityStamp");
 
@@ -146,11 +143,9 @@ namespace EatListDataService.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<string>("RestaurantID");
+                    b.Property<int>("RestaurantID");
 
                     b.HasKey("DishesID");
-
-                    b.HasIndex("RestaurantID");
 
                     b.ToTable("TblDishes");
                 });
@@ -377,13 +372,6 @@ namespace EatListDataService.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("EatListDataService.DataTables.Dishes", b =>
-                {
-                    b.HasOne("EatListDataService.DataBase.ApplicationUser", "ApplicationUser")
-                        .WithMany("Dishes")
-                        .HasForeignKey("RestaurantID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -13,7 +13,7 @@ namespace EatListDataService.DataTables
         public int TagID { get; set; }
         public int DishID { get; set; }
         public DateTime DateCreated { get; set; }
-        public int CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
 
         //public ICollection<Enrollment> Enrollments { get; set; }
     }

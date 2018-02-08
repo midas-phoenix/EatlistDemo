@@ -11,8 +11,8 @@ using System;
 namespace EatListDataService.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180124172335_init")]
-    partial class init
+    [Migration("20180207090717_Dishes2_7_2_2018")]
+    partial class Dishes2_7_2_2018
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,6 +36,8 @@ namespace EatListDataService.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<bool>("IsRestaurant");
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
@@ -51,6 +53,8 @@ namespace EatListDataService.Migrations
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("RestaurantName");
 
                     b.Property<string>("SecurityStamp");
 
@@ -81,7 +85,7 @@ namespace EatListDataService.Migrations
 
                     b.Property<DateTime>("BookingTime");
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<string>("CreatedBy");
 
                     b.Property<DateTime>("DateCreated");
 
@@ -99,7 +103,7 @@ namespace EatListDataService.Migrations
                     b.Property<int>("BookingStatusID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<string>("CreatedBy");
 
                     b.Property<DateTime>("DateCreated");
 
@@ -141,11 +145,15 @@ namespace EatListDataService.Migrations
 
                     b.Property<DateTime>("DateCreated");
 
+                    b.Property<string>("Id");
+
                     b.Property<string>("Name");
 
-                    b.Property<int>("RestaurantID");
+                    b.Property<string>("RestaurantID");
 
                     b.HasKey("DishesID");
+
+                    b.HasIndex("Id");
 
                     b.ToTable("TblDishes");
                 });
@@ -171,7 +179,7 @@ namespace EatListDataService.Migrations
                     b.Property<int>("LikeID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<string>("CreatedBy");
 
                     b.Property<DateTime>("DateCreated");
 
@@ -205,7 +213,7 @@ namespace EatListDataService.Migrations
                     b.Property<int>("PostID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<string>("CreatedBy");
 
                     b.Property<DateTime>("DateCreated");
 
@@ -223,7 +231,7 @@ namespace EatListDataService.Migrations
                     b.Property<int>("TagID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<string>("CreatedBy");
 
                     b.Property<DateTime>("DateCreated");
 
@@ -239,7 +247,7 @@ namespace EatListDataService.Migrations
                     b.Property<int>("ToDoID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<string>("CreatedBy");
 
                     b.Property<DateTime>("DateCreated");
 
@@ -248,6 +256,22 @@ namespace EatListDataService.Migrations
                     b.HasKey("ToDoID");
 
                     b.ToTable("TblToDoMeals");
+                });
+
+            modelBuilder.Entity("EatListDataService.DataTables.Upload", b =>
+                {
+                    b.Property<int>("UploadID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("FileUrl");
+
+                    b.Property<bool>("IsProfile");
+
+                    b.Property<Guid>("UserID");
+
+                    b.HasKey("UploadID");
+
+                    b.ToTable("tblUploads");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -356,6 +380,13 @@ namespace EatListDataService.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("EatListDataService.DataTables.Dishes", b =>
+                {
+                    b.HasOne("EatListDataService.DataBase.ApplicationUser", "ApplicationUser")
+                        .WithMany("Dishes")
+                        .HasForeignKey("Id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

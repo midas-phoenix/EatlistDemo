@@ -14,11 +14,11 @@ C:\Users\adebolaakindele\source\repos\Eatlist\EatlistApi\obj\Debug\netcoreapp2.0
 \\192.168.10.10\wwwroot\Eatlist\EatlistApi\bin\Debug\netcoreapp2.0\EatlistApi.runtimeconfig.dev.json
 \\192.168.10.10\wwwroot\Eatlist\EatlistApi\bin\Debug\netcoreapp2.0\EatlistApi.dll
 \\192.168.10.10\wwwroot\Eatlist\EatlistApi\bin\Debug\netcoreapp2.0\EatlistApi.pdb
+\\192.168.10.10\wwwroot\Eatlist\EatlistApi\bin\Debug\netcoreapp2.0\EatListDataService.dll
+\\192.168.10.10\wwwroot\Eatlist\EatlistApi\bin\Debug\netcoreapp2.0\EatListDataService.pdb
 \\192.168.10.10\wwwroot\Eatlist\EatlistApi\obj\Debug\netcoreapp2.0\EatlistApi.csprojResolveAssemblyReference.cache
 \\192.168.10.10\wwwroot\Eatlist\EatlistApi\obj\Debug\netcoreapp2.0\EatlistApi.csproj.CoreCompileInputs.cache
 \\192.168.10.10\wwwroot\Eatlist\EatlistApi\obj\Debug\netcoreapp2.0\EatlistApi.AssemblyInfoInputs.cache
 \\192.168.10.10\wwwroot\Eatlist\EatlistApi\obj\Debug\netcoreapp2.0\EatlistApi.AssemblyInfo.cs
 \\192.168.10.10\wwwroot\Eatlist\EatlistApi\obj\Debug\netcoreapp2.0\EatlistApi.dll
 \\192.168.10.10\wwwroot\Eatlist\EatlistApi\obj\Debug\netcoreapp2.0\EatlistApi.pdb
-\\192.168.10.10\wwwroot\Eatlist\EatlistApi\bin\Debug\netcoreapp2.0\EatListDataService.dll
-\\192.168.10.10\wwwroot\Eatlist\EatlistApi\bin\Debug\netcoreapp2.0\EatListDataService.pdb

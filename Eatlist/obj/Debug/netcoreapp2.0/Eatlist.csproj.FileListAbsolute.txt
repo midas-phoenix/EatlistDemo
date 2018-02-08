@@ -14,7 +14,6 @@ C:\Users\adebolaakindele\source\repos\Eatlist\Eatlist\obj\Debug\netcoreapp2.0\Ea
 \\192.168.10.10\wwwroot\Eatlist\Eatlist\bin\Debug\netcoreapp2.0\Eatlist.runtimeconfig.dev.json
 \\192.168.10.10\wwwroot\Eatlist\Eatlist\bin\Debug\netcoreapp2.0\Eatlist.dll
 \\192.168.10.10\wwwroot\Eatlist\Eatlist\bin\Debug\netcoreapp2.0\Eatlist.pdb
-\\192.168.10.10\wwwroot\Eatlist\Eatlist\obj\Debug\netcoreapp2.0\Eatlist.csprojResolveAssemblyReference.cache
 \\192.168.10.10\wwwroot\Eatlist\Eatlist\obj\Debug\netcoreapp2.0\Eatlist.csproj.CoreCompileInputs.cache
 \\192.168.10.10\wwwroot\Eatlist\Eatlist\obj\Debug\netcoreapp2.0\Eatlist.AssemblyInfoInputs.cache
 \\192.168.10.10\wwwroot\Eatlist\Eatlist\obj\Debug\netcoreapp2.0\Eatlist.AssemblyInfo.cs

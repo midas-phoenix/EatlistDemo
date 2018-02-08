@@ -22,7 +22,7 @@ namespace EatListDataService.DataTables
 
         public DateTime DateCreated { get; set; }
 
-        public int CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
 
        // public ICollection<Enrollment> Enrollments { get; set; }
     }
@@ -35,7 +35,7 @@ namespace EatListDataService.DataTables
         public string StatusName { get; set; }
         public string Description { get; set; }
         public DateTime DateCreated { get; set; }
-        public int CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
 
         //public ICollection<Enrollment> Enrollments { get; set; }
     }

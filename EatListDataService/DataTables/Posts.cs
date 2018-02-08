@@ -8,15 +8,13 @@ namespace EatListDataService.DataTables
 {
     public class Posts
     {
-
         [Key()]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PostID { get; set; }
         public string FileURL { get; set; }
         public string FileType { get; set; }
         public DateTime DateCreated { get; set; }
-        public int CreatedBy { get; set; }
-
-      
+        public string CreatedBy { get; set; }
+        
     }
 }

@@ -1,80 +1,79 @@
-﻿using System;
+﻿using EatListDataService.DataBase;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using EatListDataService.DataBase;
 using Microsoft.Extensions.Logging;
 
 namespace EatListDataService.Repository
 {
-    public class PostRepository
+    public class ChatRepository
     {
         #region "Declarations and Constructors"
         private readonly ApplicationDbContext entities;
-        readonly ILogger<PostRepository> _log;
+        readonly ILogger<ChatRepository> _log;
 
-        public PostRepository(ILogger<PostRepository> log)
+        public ChatRepository(ILogger<ChatRepository> log)
         {
             _log = log;
         }
         //private List<Posts> entities;
         string errorMessage = string.Empty;
 
-        public PostRepository(ApplicationDbContext context)
+        public ChatRepository(ApplicationDbContext context)
         {
             //this.context = context;
             entities = context;
         }
         #endregion
 
-        #region "Posts"
+        #region "Chats"
 
-        public List<DataTables.Posts> GetAll()
+        public List<DataTables.ChatMessages> GetAll()
         {
-            return entities.TblPosts.ToList();
+            return entities.ChatMessages.ToList();
         }
 
-        public DataTables.Posts Get(long id)
+        public DataTables.ChatMessages Get(long id)
         {
-            return entities.TblPosts.Find(id);
+            return entities.ChatMessages.Find(id);
         }
 
-        public List<DataTables.Posts> GetQueryable(long id)
+        public List<DataTables.ChatMessages> GetQueryable(long id)
         {
-            return entities.TblPosts.Where(x => x.PostID == id).ToList();
+            return entities.ChatMessages.Where(x => x.ChatMessageID == id).ToList();
         }
 
 
-        public DataTables.Posts Insert(DataTables.Posts entity)
+        public DataTables.ChatMessages Insert(DataTables.ChatMessages entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException("entity");
             }
-            entities.TblPosts.Add(entity);
+            entities.ChatMessages.Add(entity);
             SaveChange();
             return entity;
         }
 
-        public DataTables.Posts Update(DataTables.Posts entity)
+        public DataTables.ChatMessages Update(DataTables.ChatMessages entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException("entity");
             }
-            entities.TblPosts.Update(entity);
+            entities.ChatMessages.Update(entity);
             SaveChange();
             return entity;
         }
 
-        public void Delete(DataTables.Posts entity)
+        public void Delete(DataTables.ChatMessages entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException("entity");
             }
-            entities.TblPosts.Remove(entity);
+            entities.ChatMessages.Remove(entity);
             SaveChange();
         }
 
@@ -114,3 +113,6 @@ namespace EatListDataService.Repository
 
     }
 }
+
+    
+

@@ -14,7 +14,7 @@ namespace EatListDataService.DataTables
         public int LikeID { get; set; }
         public int PostID { get; set; }
         public DateTime DateCreated { get; set; }
-        public int CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
 
         //public ICollection<Enrollment> Enrollments { get; set; }
     }

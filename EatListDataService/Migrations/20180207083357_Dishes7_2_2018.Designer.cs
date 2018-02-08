@@ -11,9 +11,10 @@ using System;
 namespace EatListDataService.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180207083357_Dishes7_2_2018")]
+    partial class Dishes7_2_2018
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,7 +143,11 @@ namespace EatListDataService.Migrations
                     b.Property<int>("DishesID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ApplicationUserId");
+
                     b.Property<DateTime>("DateCreated");
+
+                    b.Property<Guid>("Id");
 
                     b.Property<string>("Name");
 
@@ -150,7 +155,7 @@ namespace EatListDataService.Migrations
 
                     b.HasKey("DishesID");
 
-                    b.HasIndex("RestaurantID");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("TblDishes");
                 });
@@ -383,7 +388,7 @@ namespace EatListDataService.Migrations
                 {
                     b.HasOne("EatListDataService.DataBase.ApplicationUser", "ApplicationUser")
                         .WithMany("Dishes")
-                        .HasForeignKey("RestaurantID");
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

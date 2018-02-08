@@ -17,4 +17,11 @@ namespace EatlistApi.Models
 
         public bool IsProfile { get; set; }
     }
+
+    public class Restaurant//:Upload
+    {
+        public string UserID { get; set; }
+
+        public bool IsRestaurant { get; set; }
+    }
 }

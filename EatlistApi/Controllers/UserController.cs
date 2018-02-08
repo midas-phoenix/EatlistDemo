@@ -20,6 +20,8 @@ namespace EatlistApi.Controllers
         //private readonly UserManager<ApplicationUser> _userManager;
         //private readonly SignInManager<ApplicationUser> _signInManager;
         private Upload _upload;
+        private Restaurant _restaurant;
+        string UserID = "03503819-15ce-489c-946e-ff86a5324189";
 
         // GET: api/<controller>
         [HttpGet]
@@ -38,7 +40,8 @@ namespace EatlistApi.Controllers
         // POST api/<controller>
         //[Route("Upload")]
         [HttpPost]
-        public async Task<IActionResult> PostUploads(ProfileUpload upload)
+        [HttpPost, Route("profileX")]
+        public async Task<IActionResult> Uploads(ProfileUpload upload)
         {
             var identity = (ClaimsIdentity)User.Identity;
             var userName = identity.Name;
@@ -63,7 +66,7 @@ namespace EatlistApi.Controllers
 
         // POST api/<controller>
        // [Route("Post")]
-        [HttpPost]
+        [HttpPost ,Route("profileUp")]
         public async Task<IActionResult> Post(ProfileUpload upload)
         {
             var identity = (ClaimsIdentity)User.Identity;
@@ -84,6 +87,25 @@ namespace EatlistApi.Controllers
                 return BadRequest();
             }
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Post(Restaurant restaurant)
+        {
+            if (ModelState.IsValid)
+            {
+
+                
+                await _context.tblUploads.AddAsync(_upload);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]

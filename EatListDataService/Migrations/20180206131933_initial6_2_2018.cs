@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace EatListDataService.Migrations
 {
-    public partial class init : Migration
+    public partial class initial6_2_2018 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -56,7 +56,7 @@ namespace EatListDataService.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     BookingStatusID = table.Column<int>(nullable: false),
                     BookingTime = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     DishID = table.Column<int>(nullable: false)
@@ -72,7 +72,7 @@ namespace EatListDataService.Migrations
                 {
                     BookingStatusID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CreatedBy = table.Column<int>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     StatusName = table.Column<string>(nullable: true)
@@ -136,7 +136,7 @@ namespace EatListDataService.Migrations
                 {
                     LikeID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CreatedBy = table.Column<int>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     PostID = table.Column<int>(nullable: false)
                 },
@@ -167,7 +167,7 @@ namespace EatListDataService.Migrations
                 {
                     PostID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CreatedBy = table.Column<int>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     FileType = table.Column<string>(nullable: true),
                     FileURL = table.Column<string>(nullable: true)
@@ -183,7 +183,7 @@ namespace EatListDataService.Migrations
                 {
                     TagID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CreatedBy = table.Column<int>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DishID = table.Column<int>(nullable: false)
                 },
@@ -198,13 +198,28 @@ namespace EatListDataService.Migrations
                 {
                     ToDoID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CreatedBy = table.Column<int>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DishID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TblToDoMeals", x => x.ToDoID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "tblUploads",
+                columns: table => new
+                {
+                    UploadID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    FileUrl = table.Column<string>(nullable: true),
+                    IsProfile = table.Column<bool>(nullable: false),
+                    UserID = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tblUploads", x => x.UploadID);
                 });
 
             migrationBuilder.CreateTable(
@@ -399,6 +414,9 @@ namespace EatListDataService.Migrations
 
             migrationBuilder.DropTable(
                 name: "TblToDoMeals");
+
+            migrationBuilder.DropTable(
+                name: "tblUploads");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

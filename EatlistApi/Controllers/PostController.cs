@@ -22,14 +22,20 @@ namespace EatlistApi.Controllers
         private static readonly ApplicationDbContext _post = new ApplicationDbContext();
         private readonly PostRepository _postRepo = new PostRepository(_post);
         readonly ILogger<PostController> _log;
+        private Posts _Posts = null;
+        //UserID will be changed
+        string UserID = "03503819-15ce-489c-946e-ff86a5324189";
 
         public PostController(ILogger<PostController> log)
         {
             _log = log;
         }
 
-        //private Post _post 
         // GET: api/<controller>
+        /// <summary>
+        /// gets all posts.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IEnumerable<string> Get()
         {
@@ -37,6 +43,11 @@ namespace EatlistApi.Controllers
         }
 
         // GET api/<controller>/5
+        /// <summary>
+        /// gets a specific post by PostID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public string Get(int id)
         {
@@ -44,45 +55,67 @@ namespace EatlistApi.Controllers
         }
 
         // POST api/<controller>
-        [HttpPost]
-        public void PostIns([FromBody]string value)
+        /// <summary>
+        /// endpoint to create new posts
+        /// </summary>
+        /// <param name="post"></param>
+        /// <returns></returns>
+        [HttpPost, Route("create")]
+        public IActionResult Post(Post post)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            _Posts = new Posts();
+            _Posts.FileURL = post.FileURL;
+            _Posts.FileType = post.FileType;
+            _Posts.DateCreated = DateTime.UtcNow;
+            _Posts.CreatedBy = UserID;
+
+            return Ok(_postRepo.Insert(_Posts));
         }
 
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        /// <summary>
+        /// endpoint to update posts.
+        /// </summary>
+        /// <param name="update"></param>
+        /// <returns></returns>
+        [HttpPut, Route("update")]
+        public IActionResult Update(Update update)
         {
+            try
+            {
+
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                _Posts = new Posts();
+                _Posts.PostID = update.PostID;
+                _Posts.FileURL = update.FileURL;
+                _Posts.FileType = update.FileType;
+
+                _postRepo.Update(_Posts);
+                return Ok(_postRepo.Update(_Posts));
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message.ToString());
+                return StatusCode(500);
+            }
         }
 
         // DELETE api/<controller>/5
+        /// <summary>
+        /// delete posts
+        /// </summary>
+        /// <param name="id"></param>
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
         }
-
-        //[ActionName("commentIns")]
-        [HttpPost]
-        public async Task<IActionResult> commentIns(Comments post)
-        {
-
-            if (ModelState.IsValid)
-            {
-
-                // _upload.IsProfile = true;
-                // _upload.UserID = Guid.Parse(identity.FindFirst(ClaimTypes.GivenName).ToString());
-                // _upload.FileUrl = upload.FileUrl;
-
-                // await DbContext.Posts.AddAsync(_upload);
-                // await _context.SaveChangesAsync();
-                return Ok(_postRepo.CommentInsert(post));
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
-
 
         [HttpPost, Route("comment")]
         public IActionResult comment(VM_Comment _vmComment)
@@ -100,7 +133,7 @@ namespace EatlistApi.Controllers
                     var res = _postRepo.CommentInsert(_comment);
                     if (res.GetType() == typeof(System.InvalidOperationException))
                     {
-                        _log.LogInformation(res.ToString ());
+                        _log.LogInformation(res.ToString());
                         return StatusCode(500);
                     }
                     return Ok(res);
@@ -113,9 +146,9 @@ namespace EatlistApi.Controllers
             catch (Exception ex)
             {
 
-                _log.LogInformation(ex.Message+" : "+ex.InnerException);
-                _log.LogInformation( " Ends here... " );
-                
+                _log.LogInformation(ex.Message + " : " + ex.InnerException);
+                _log.LogInformation(" Ends here... ");
+
                 return null;
             }
 
