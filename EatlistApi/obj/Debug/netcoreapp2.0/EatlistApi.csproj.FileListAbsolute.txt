@@ -22,3 +22,16 @@ C:\Users\adebolaakindele\source\repos\Eatlist\EatlistApi\obj\Debug\netcoreapp2.0
 \\192.168.10.10\wwwroot\Eatlist\EatlistApi\obj\Debug\netcoreapp2.0\EatlistApi.AssemblyInfo.cs
 \\192.168.10.10\wwwroot\Eatlist\EatlistApi\obj\Debug\netcoreapp2.0\EatlistApi.dll
 \\192.168.10.10\wwwroot\Eatlist\EatlistApi\obj\Debug\netcoreapp2.0\EatlistApi.pdb
+C:\Users\jhay\source\repos\EatListN\EatlistApi\bin\Debug\netcoreapp2.0\EatlistApi.deps.json
+C:\Users\jhay\source\repos\EatListN\EatlistApi\bin\Debug\netcoreapp2.0\EatlistApi.runtimeconfig.json
+C:\Users\jhay\source\repos\EatListN\EatlistApi\bin\Debug\netcoreapp2.0\EatlistApi.runtimeconfig.dev.json
+C:\Users\jhay\source\repos\EatListN\EatlistApi\bin\Debug\netcoreapp2.0\EatlistApi.dll
+C:\Users\jhay\source\repos\EatListN\EatlistApi\bin\Debug\netcoreapp2.0\EatlistApi.pdb
+C:\Users\jhay\source\repos\EatListN\EatlistApi\bin\Debug\netcoreapp2.0\EatListDataService.dll
+C:\Users\jhay\source\repos\EatListN\EatlistApi\bin\Debug\netcoreapp2.0\EatListDataService.pdb
+C:\Users\jhay\source\repos\EatListN\EatlistApi\obj\Debug\netcoreapp2.0\EatlistApi.csprojResolveAssemblyReference.cache
+C:\Users\jhay\source\repos\EatListN\EatlistApi\obj\Debug\netcoreapp2.0\EatlistApi.csproj.CoreCompileInputs.cache
+C:\Users\jhay\source\repos\EatListN\EatlistApi\obj\Debug\netcoreapp2.0\EatlistApi.AssemblyInfoInputs.cache
+C:\Users\jhay\source\repos\EatListN\EatlistApi\obj\Debug\netcoreapp2.0\EatlistApi.AssemblyInfo.cs
+C:\Users\jhay\source\repos\EatListN\EatlistApi\obj\Debug\netcoreapp2.0\EatlistApi.dll
+C:\Users\jhay\source\repos\EatListN\EatlistApi\obj\Debug\netcoreapp2.0\EatlistApi.pdb

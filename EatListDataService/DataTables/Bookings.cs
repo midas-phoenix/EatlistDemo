@@ -24,7 +24,9 @@ namespace EatListDataService.DataTables
 
         public string CreatedBy { get; set; }
 
-       // public ICollection<Enrollment> Enrollments { get; set; }
+        public int TableSize { get; set; }
+
+       // public List<BookingStatus> Enrollments { get; set; }
     }
 
     public class BookingStatus

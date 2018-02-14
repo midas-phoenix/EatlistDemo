@@ -36,10 +36,10 @@ namespace EatlistApi.Controllers
         /// gets all posts.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet, Route("getviewablepost")]
+        public IEnumerable<Posts> GetViewable(string userId)
         {
-            return new string[] { "value1", "value2" };
+            return _postRepo.GetViewableForUser(userId).ToList();
         }
 
         // GET api/<controller>/5
@@ -48,10 +48,10 @@ namespace EatlistApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{id}"),Route("getuserpost")]
+        public List<Posts> Get(string userId)
         {
-            return "value";
+            return _postRepo.GetAllByUserID(userId).ToList();
         }
 
         // POST api/<controller>
@@ -76,38 +76,46 @@ namespace EatlistApi.Controllers
             return Ok(_postRepo.Insert(_Posts));
         }
 
-        /// <summary>
-        /// endpoint to update posts.
-        /// </summary>
-        /// <param name="update"></param>
-        /// <returns></returns>
-        [HttpPut, Route("update")]
-        public IActionResult Update(Update update)
-        {
-            try
-            {
+        ///// <summary>
+        ///// endpoint to update posts.
+        ///// </summary>
+        ///// <param name="update"></param>
+        ///// <returns></returns>
+        //[HttpPut, Route("update")]
+        //public IActionResult Update(Update update)
+        //{
+        //    try
+        //    {
 
 
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                _Posts = new Posts();
-                _Posts.PostID = update.PostID;
-                _Posts.FileURL = update.FileURL;
-                _Posts.FileType = update.FileType;
+        //        if (!ModelState.IsValid)
+        //        {
+        //            return BadRequest(ModelState);
+        //        }
+        //        _Posts = new Posts();
+        //        _Posts.PostID = update.PostID;
+        //        _Posts.FileURL = update.FileURL;
+        //        _Posts.FileType = update.FileType;
 
-                _postRepo.Update(_Posts);
-                return Ok(_postRepo.Update(_Posts));
-            }
-            catch (Exception ex)
-            {
-                _log.LogInformation(ex.Message.ToString());
-                return StatusCode(500);
-            }
-        }
+        //        _postRepo.Update(_Posts);
+        //        var res = _postRepo.Update(_Posts);
+        //        if (res.GetType() == typeof(KeyNotFoundException))
+        //        {
+        //            _log.LogInformation(res.ToString());
+        //            return StatusCode(500);
+        //        }
+        //        return Ok(res);
+        //        //return Ok(_postRepo.Update(_Posts));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _log.LogInformation(ex.Message.ToString());
+        //        return StatusCode(500);
+        //    }
+        //}
 
         // DELETE api/<controller>/5
+
         /// <summary>
         /// delete posts
         /// </summary>
@@ -153,5 +161,107 @@ namespace EatlistApi.Controllers
             }
 
         }
+
+        [HttpGet, Route("comment")]
+        public IActionResult postComment(int PostID)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                   // var comments= _postRepo.FetchComments(PostID);
+                    var res = _postRepo.FetchComments(PostID);
+                    if(res.GetType() == typeof(System.InvalidOperationException) || res.GetType() == typeof(System.ArgumentNullException))
+                    {
+                        _log.LogInformation("Exception thrown from comments");
+                        return StatusCode(500);
+                    }
+                    return Ok(res);
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                _log.LogInformation(ex.Message + " : " + ex.InnerException);
+               // _log.LogInformation(" Ends here... ");
+
+                return null;
+            }
+
+        }
+
+        [HttpPost, Route("like")]
+        public IActionResult like(int PostID)
+        {
+            try
+            {
+                Posts _postObject = _postRepo.Get(Convert.ToInt64(PostID));
+                if (_postObject!=null)
+                {
+                    Likes _likes = new Likes();
+                    _likes.PostID = PostID;
+                    _likes.CreatedBy = UserID;
+                    _likes.DateCreated = DateTime.UtcNow.Date;
+                    
+                    var res = _postRepo.LikeInsert(_likes);
+                    if (res.GetType() == typeof(System.InvalidOperationException) || res.GetType() == typeof(System.ArgumentNullException))
+                    {
+                        _log.LogInformation(res.ToString());
+                        return StatusCode(500);
+                    }
+                    return Ok(res);
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                _log.LogInformation(ex.Message + " : " + ex.InnerException);
+                _log.LogInformation(" Ends here... ");
+
+                return null;
+            }
+
+        }
+
+        [HttpGet, Route("comment")]
+        public IActionResult postLikes(int PostID)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    // var comments= _postRepo.FetchComments(PostID);
+                    var res = _postRepo.FetchLikes(PostID);
+                    if (res.GetType() == typeof(System.InvalidOperationException) || res.GetType() == typeof(System.ArgumentNullException))
+                    {
+                        _log.LogInformation("Exception thrown from comments");
+                        return StatusCode(500);
+                    }
+                    return Ok(res);
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                _log.LogInformation(ex.Message + " : " + ex.InnerException);
+                // _log.LogInformation(" Ends here... ");
+
+                return null;
+            }
+
+        }
+
     }
 }
