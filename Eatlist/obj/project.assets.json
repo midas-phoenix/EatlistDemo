@@ -12536,8 +12536,7 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\hp\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\": {},
+    "C:\\Users\\jhay\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
@@ -12546,20 +12545,18 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "\\\\192.168.10.10\\wwwroot\\Eatlist\\Eatlist\\Eatlist.csproj",
+      "projectUniqueName": "C:\\Users\\jhay\\source\\repos\\EatListN\\Eatlist\\Eatlist.csproj",
       "projectName": "Eatlist",
-      "projectPath": "\\\\192.168.10.10\\wwwroot\\Eatlist\\Eatlist\\Eatlist.csproj",
-      "packagesPath": "C:\\Users\\hp\\.nuget\\packages\\",
-      "outputPath": "\\\\192.168.10.10\\wwwroot\\Eatlist\\Eatlist\\obj\\",
+      "projectPath": "C:\\Users\\jhay\\source\\repos\\EatListN\\Eatlist\\Eatlist.csproj",
+      "packagesPath": "C:\\Users\\jhay\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\jhay\\source\\repos\\EatListN\\Eatlist\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\hp\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config"
+        "C:\\Users\\jhay\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.0"
