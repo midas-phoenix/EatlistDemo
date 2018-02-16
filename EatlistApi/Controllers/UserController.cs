@@ -88,8 +88,12 @@ namespace EatlistApi.Controllers
             }
         }
 
-
-        [HttpPost]
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="restaurant"></param>
+        /// <returns></returns>
+        [HttpPost,Route("makeRestaurant")]
         public async Task<IActionResult> Post(Restaurant restaurant)
         {
             if (ModelState.IsValid)

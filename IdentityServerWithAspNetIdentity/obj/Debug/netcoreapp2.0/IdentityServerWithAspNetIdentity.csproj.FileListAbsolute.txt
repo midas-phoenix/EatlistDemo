@@ -52,3 +52,17 @@ C:\Users\jhay\source\repos\EatListN\IdentityServerWithAspNetIdentity\obj\Debug\n
 C:\Users\jhay\source\repos\EatListN\IdentityServerWithAspNetIdentity\obj\Debug\netcoreapp2.0\IdentityServerWithAspNetIdentity.AssemblyInfo.cs
 C:\Users\jhay\source\repos\EatListN\IdentityServerWithAspNetIdentity\obj\Debug\netcoreapp2.0\IdentityServerWithAspNetIdentity.dll
 C:\Users\jhay\source\repos\EatListN\IdentityServerWithAspNetIdentity\obj\Debug\netcoreapp2.0\IdentityServerWithAspNetIdentity.pdb
+\\192.168.10.10\wwwroot\EatListN\IdentityServerWithAspNetIdentity\bin\Debug\netcoreapp2.0\IdentityServerWithAspNetIdentity.deps.json
+\\192.168.10.10\wwwroot\EatListN\IdentityServerWithAspNetIdentity\bin\Debug\netcoreapp2.0\IdentityServerWithAspNetIdentity.runtimeconfig.json
+\\192.168.10.10\wwwroot\EatListN\IdentityServerWithAspNetIdentity\bin\Debug\netcoreapp2.0\IdentityServerWithAspNetIdentity.runtimeconfig.dev.json
+\\192.168.10.10\wwwroot\EatListN\IdentityServerWithAspNetIdentity\bin\Debug\netcoreapp2.0\IdentityServerWithAspNetIdentity.dll
+\\192.168.10.10\wwwroot\EatListN\IdentityServerWithAspNetIdentity\bin\Debug\netcoreapp2.0\IdentityServerWithAspNetIdentity.pdb
+\\192.168.10.10\wwwroot\EatListN\IdentityServerWithAspNetIdentity\bin\Debug\netcoreapp2.0\EatListDataService.dll
+\\192.168.10.10\wwwroot\EatListN\IdentityServerWithAspNetIdentity\bin\Debug\netcoreapp2.0\EatListDataService.pdb
+\\192.168.10.10\wwwroot\EatListN\IdentityServerWithAspNetIdentity\obj\Debug\netcoreapp2.0\IdentityServerWithAspNetIdentity.csproj.CoreCompileInputs.cache
+\\192.168.10.10\wwwroot\EatListN\IdentityServerWithAspNetIdentity\obj\Debug\netcoreapp2.0\UserSecretsAssemblyInfo.cs
+\\192.168.10.10\wwwroot\EatListN\IdentityServerWithAspNetIdentity\obj\Debug\netcoreapp2.0\IdentityServerWithAspNetIdentity.AssemblyInfoInputs.cache
+\\192.168.10.10\wwwroot\EatListN\IdentityServerWithAspNetIdentity\obj\Debug\netcoreapp2.0\IdentityServerWithAspNetIdentity.AssemblyInfo.cs
+\\192.168.10.10\wwwroot\EatListN\IdentityServerWithAspNetIdentity\obj\Debug\netcoreapp2.0\IdentityServerWithAspNetIdentity.dll
+\\192.168.10.10\wwwroot\EatListN\IdentityServerWithAspNetIdentity\obj\Debug\netcoreapp2.0\IdentityServerWithAspNetIdentity.pdb
+\\192.168.10.10\wwwroot\EatListN\IdentityServerWithAspNetIdentity\obj\Debug\netcoreapp2.0\IdentityServerWithAspNetIdentity.csprojResolveAssemblyReference.cache

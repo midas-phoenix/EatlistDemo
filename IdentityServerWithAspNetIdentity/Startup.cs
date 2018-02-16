@@ -51,24 +51,27 @@ namespace IdentityServerWithAspNetIdentity
             // configure identity server with in-memory stores, keys, clients and scopes
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()
-                .AddAspNetIdentity<ApplicationUser>()
-                .AddConfigurationStore(options =>
-                {
-                    options.ConfigureDbContext = builder =>
-                        builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                            sql => sql.MigrationsAssembly(migrationsAssembly));
-                })
-                // this adds the operational data from DB (codes, tokens, consents)
-                .AddOperationalStore(options =>
-                {
-                    options.ConfigureDbContext = builder =>
-                        builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                            sql => sql.MigrationsAssembly(migrationsAssembly));
+                .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                .AddInMemoryApiResources(Config.GetApiResources())
+                .AddInMemoryClients(Config.GetClients(Configuration))
+                .AddAspNetIdentity<ApplicationUser>();
+                //.AddConfigurationStore(options =>
+                //{
+                //    options.ConfigureDbContext = builder =>
+                //        builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                //            sql => sql.MigrationsAssembly(migrationsAssembly));
+                //})
+                //// this adds the operational data from DB (codes, tokens, consents)
+                //.AddOperationalStore(options =>
+                //{
+                //    options.ConfigureDbContext = builder =>
+                //        builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                //            sql => sql.MigrationsAssembly(migrationsAssembly));
 
-                    // this enables automatic token cleanup. this is optional.
-                    options.EnableTokenCleanup = true;
-                    options.TokenCleanupInterval = 30;
-                });
+                //    // this enables automatic token cleanup. this is optional.
+                //    options.EnableTokenCleanup = true;
+                //    options.TokenCleanupInterval = 30;
+                //});
 
             services.AddAuthentication().AddGoogle(options =>
             {

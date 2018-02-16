@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace EatlistApi.Controllers
 {
     [Route("api/[controller]")]
-    public class EatListController
+    public class EatListController: Controller
     {
         #region "Declaration"
         private static readonly ApplicationDbContext _EatList = new ApplicationDbContext();
@@ -43,11 +43,11 @@ namespace EatlistApi.Controllers
             return Ok(_eatlistRepo.GetToDoMealsByDishID(DishID));
         }
 
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+        //[HttpGet("{id}")]
+        //public string Get(int id)
+        //{
+        //    return "value";
+        //}
 
 
     }

@@ -12545,11 +12545,11 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "C:\\Users\\jhay\\source\\repos\\EatListN\\Eatlist\\Eatlist.csproj",
+      "projectUniqueName": "\\\\192.168.10.10\\wwwroot\\EatListN\\Eatlist\\Eatlist.csproj",
       "projectName": "Eatlist",
-      "projectPath": "C:\\Users\\jhay\\source\\repos\\EatListN\\Eatlist\\Eatlist.csproj",
+      "projectPath": "\\\\192.168.10.10\\wwwroot\\EatListN\\Eatlist\\Eatlist.csproj",
       "packagesPath": "C:\\Users\\jhay\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\jhay\\source\\repos\\EatListN\\Eatlist\\obj\\",
+      "outputPath": "\\\\192.168.10.10\\wwwroot\\EatListN\\Eatlist\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

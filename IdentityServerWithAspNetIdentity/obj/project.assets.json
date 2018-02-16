@@ -24,7 +24,7 @@
           "lib/netstandard1.3/AutoMapper.dll": {}
         }
       },
-      "IdentityModel/3.0.0": {
+      "IdentityModel/3.1.0": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "10.0.3"
@@ -36,10 +36,10 @@
           "lib/netstandard2.0/IdentityModel.dll": {}
         }
       },
-      "IdentityServer4/2.1.1": {
+      "IdentityServer4/2.1.2": {
         "type": "package",
         "dependencies": {
-          "IdentityModel": "3.0.0",
+          "IdentityModel": "3.1.0",
           "Microsoft.AspNetCore.Authentication": "2.0.1",
           "Microsoft.AspNetCore.Authentication.Cookies": "2.0.1",
           "Microsoft.AspNetCore.Authentication.OpenIdConnect": "2.0.1",
@@ -3209,35 +3209,35 @@
           "lib/netstandard1.3/Serilog.dll": {}
         }
       },
-      "Serilog.Extensions.Logging/1.4.0": {
+      "Serilog.Extensions.Logging/2.0.2": {
         "type": "package",
         "dependencies": {
-          "Microsoft.Extensions.Logging.Abstractions": "1.0.0",
+          "Microsoft.Extensions.Logging": "2.0.0",
           "Serilog": "2.3.0"
         },
         "compile": {
-          "lib/netstandard1.3/Serilog.Extensions.Logging.dll": {}
+          "lib/netstandard2.0/Serilog.Extensions.Logging.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.3/Serilog.Extensions.Logging.dll": {}
+          "lib/netstandard2.0/Serilog.Extensions.Logging.dll": {}
         }
       },
-      "Serilog.Extensions.Logging.File/1.1.0": {
+      "Serilog.Extensions.Logging.File/2.0.0-dev-00023": {
         "type": "package",
         "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "1.0.2",
-          "NETStandard.Library": "1.6.1",
+          "Microsoft.Extensions.Configuration.Abstractions": "2.0.0",
+          "Microsoft.Extensions.Configuration.Binder": "2.0.0",
           "Serilog": "2.5.0",
-          "Serilog.Extensions.Logging": "1.4.0",
+          "Serilog.Extensions.Logging": "2.0.2",
           "Serilog.Formatting.Compact": "1.0.0",
           "Serilog.Sinks.Async": "1.1.0",
           "Serilog.Sinks.RollingFile": "3.3.0"
         },
         "compile": {
-          "lib/netstandard1.3/Serilog.Extensions.Logging.File.dll": {}
+          "lib/netstandard2.0/Serilog.Extensions.Logging.File.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.3/Serilog.Extensions.Logging.File.dll": {}
+          "lib/netstandard2.0/Serilog.Extensions.Logging.File.dll": {}
         }
       },
       "Serilog.Formatting.Compact/1.0.0": {
@@ -5200,7 +5200,7 @@
         "dependencies": {
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "2.0.1",
           "Microsoft.EntityFrameworkCore.SqlServer": "2.0.1",
-          "Serilog.Extensions.Logging.File": "1.1.0"
+          "Serilog.Extensions.Logging.File": "2.0.0-dev-00023"
         },
         "compile": {
           "bin/placeholder/EatListDataService.dll": {}
@@ -5229,12 +5229,12 @@
         "lib/netstandard1.3/AutoMapper.xml"
       ]
     },
-    "IdentityModel/3.0.0": {
-      "sha512": "EKMOOUUqDzBR3goiA8eWJ1aQBz1AMfKVxxR7XnzAf5qq2k9vr6GT91SyHmzC14KINpNNJOrbmowXf5S04gQ0ZA==",
+    "IdentityModel/3.1.0": {
+      "sha512": "r+mZKYQTL33k8ehcma3tmK0qEqM8OzO/cDZvqEorkmTrsnBccvUyNlfDZ+Ozgw9kR+YJP7J9v4+JBLEBekK0aQ==",
       "type": "package",
-      "path": "identitymodel/3.0.0",
+      "path": "identitymodel/3.1.0",
       "files": [
-        "identitymodel.3.0.0.nupkg.sha512",
+        "identitymodel.3.1.0.nupkg.sha512",
         "identitymodel.nuspec",
         "lib/net452/IdentityModel.dll",
         "lib/net452/IdentityModel.xml",
@@ -5246,12 +5246,12 @@
         "lib/netstandard2.0/IdentityModel.xml"
       ]
     },
-    "IdentityServer4/2.1.1": {
-      "sha512": "SeSGMMAT/FEnir5zxDrdDvenxtuPVAxTAUNYtYjVl40sAKsjwJJ9GE9kSv9QI3trU8vLft5ApRFQhOYAt6Itug==",
+    "IdentityServer4/2.1.2": {
+      "sha512": "BZHo3z7AJNc4rGtA8RZy6/d/+tSqBe70AZtiLAh2QuSopsr+PLOM0PT2m6KyJ+KwkiGmyqkFzafEWLMcvJCuqQ==",
       "type": "package",
-      "path": "identityserver4/2.1.1",
+      "path": "identityserver4/2.1.2",
       "files": [
-        "identityserver4.2.1.1.nupkg.sha512",
+        "identityserver4.2.1.2.nupkg.sha512",
         "identityserver4.nuspec",
         "lib/netstandard2.0/IdentityServer4.dll",
         "lib/netstandard2.0/IdentityServer4.pdb",
@@ -8563,31 +8563,35 @@
         "serilog.nuspec"
       ]
     },
-    "Serilog.Extensions.Logging/1.4.0": {
-      "sha512": "nsg2CFYIQsZcNXYajDBNL+Li0EnFibOSLaACcpy+XGyrbmIEhGdLYiMXxadUE10kFfLLLbruZtdbGJ7OOudXlA==",
+    "Serilog.Extensions.Logging/2.0.2": {
+      "sha512": "PYAkzUn/VV16Es7U06BfEhNZEltnYWu0WFCM4d2lLY/dvlA7xMwFXBuGRxR0XvEBPoOxPorjhFLy9txwiMO6rg==",
       "type": "package",
-      "path": "serilog.extensions.logging/1.4.0",
+      "path": "serilog.extensions.logging/2.0.2",
       "files": [
         "lib/net45/Serilog.Extensions.Logging.dll",
         "lib/net45/Serilog.Extensions.Logging.xml",
         "lib/net46/Serilog.Extensions.Logging.dll",
         "lib/net46/Serilog.Extensions.Logging.xml",
+        "lib/net461/Serilog.Extensions.Logging.dll",
+        "lib/net461/Serilog.Extensions.Logging.xml",
         "lib/netstandard1.3/Serilog.Extensions.Logging.dll",
         "lib/netstandard1.3/Serilog.Extensions.Logging.xml",
-        "serilog.extensions.logging.1.4.0.nupkg.sha512",
+        "lib/netstandard2.0/Serilog.Extensions.Logging.dll",
+        "lib/netstandard2.0/Serilog.Extensions.Logging.xml",
+        "serilog.extensions.logging.2.0.2.nupkg.sha512",
         "serilog.extensions.logging.nuspec"
       ]
     },
-    "Serilog.Extensions.Logging.File/1.1.0": {
-      "sha512": "Y6twiu+BC1z99v7EEisOVLOppG/GTr8PusAzRXNY0R/RzcledjSRfOfp7jRfXj/VJEyx0nlrQtY8QxBtiVFsCg==",
+    "Serilog.Extensions.Logging.File/2.0.0-dev-00023": {
+      "sha512": "wyGksw6HcQLynB2rfYQhqlyH1yTZcCPKvCB7N+48N+I5KrebETdChQCOZVwpxTO4nmBqM1zHON7yBEcHCSUw3Q==",
       "type": "package",
-      "path": "serilog.extensions.logging.file/1.1.0",
+      "path": "serilog.extensions.logging.file/2.0.0-dev-00023",
       "files": [
-        "lib/net45/Serilog.Extensions.Logging.File.dll",
-        "lib/net45/Serilog.Extensions.Logging.File.xml",
-        "lib/netstandard1.3/Serilog.Extensions.Logging.File.dll",
-        "lib/netstandard1.3/Serilog.Extensions.Logging.File.xml",
-        "serilog.extensions.logging.file.1.1.0.nupkg.sha512",
+        "lib/net461/Serilog.Extensions.Logging.File.dll",
+        "lib/net461/Serilog.Extensions.Logging.File.xml",
+        "lib/netstandard2.0/Serilog.Extensions.Logging.File.dll",
+        "lib/netstandard2.0/Serilog.Extensions.Logging.File.xml",
+        "serilog.extensions.logging.file.2.0.0-dev-00023.nupkg.sha512",
         "serilog.extensions.logging.file.nuspec"
       ]
     },
@@ -13489,14 +13493,14 @@
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.0": [
       "EatListDataService >= 1.0.0",
-      "IdentityServer4 >= 2.1.1",
+      "IdentityServer4 >= 2.1.2",
       "IdentityServer4.AspNetIdentity >= 2.1.0",
       "IdentityServer4.EntityFramework >= 2.1.1",
       "Microsoft.AspNetCore.All >= 2.0.5",
       "Microsoft.EntityFrameworkCore.Tools >= 2.0.1",
       "Microsoft.NETCore.App >= 2.0.0",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 2.0.2",
-      "Serilog.Extensions.Logging.File >= 1.1.0"
+      "Serilog.Extensions.Logging.File >= 2.0.0-dev-00023"
     ]
   },
   "packageFolders": {
@@ -13509,11 +13513,11 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "C:\\Users\\jhay\\source\\repos\\EatListN\\IdentityServerWithAspNetIdentity\\IdentityServerWithAspNetIdentity.csproj",
+      "projectUniqueName": "\\\\192.168.10.10\\wwwroot\\EatListN\\IdentityServerWithAspNetIdentity\\IdentityServerWithAspNetIdentity.csproj",
       "projectName": "IdentityServerWithAspNetIdentity",
-      "projectPath": "C:\\Users\\jhay\\source\\repos\\EatListN\\IdentityServerWithAspNetIdentity\\IdentityServerWithAspNetIdentity.csproj",
+      "projectPath": "\\\\192.168.10.10\\wwwroot\\EatListN\\IdentityServerWithAspNetIdentity\\IdentityServerWithAspNetIdentity.csproj",
       "packagesPath": "C:\\Users\\jhay\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\jhay\\source\\repos\\EatListN\\IdentityServerWithAspNetIdentity\\obj\\",
+      "outputPath": "\\\\192.168.10.10\\wwwroot\\EatListN\\IdentityServerWithAspNetIdentity\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -13532,8 +13536,8 @@
       "frameworks": {
         "netcoreapp2.0": {
           "projectReferences": {
-            "C:\\Users\\jhay\\source\\repos\\EatListN\\EatListDataService\\EatListDataService.csproj": {
-              "projectPath": "C:\\Users\\jhay\\source\\repos\\EatListN\\EatListDataService\\EatListDataService.csproj"
+            "\\\\192.168.10.10\\wwwroot\\EatListN\\EatListDataService\\EatListDataService.csproj": {
+              "projectPath": "\\\\192.168.10.10\\wwwroot\\EatListN\\EatListDataService\\EatListDataService.csproj"
             }
           }
         }
@@ -13549,7 +13553,7 @@
         "dependencies": {
           "IdentityServer4": {
             "target": "Package",
-            "version": "[2.1.1, )"
+            "version": "[2.1.2, )"
           },
           "IdentityServer4.AspNetIdentity": {
             "target": "Package",
@@ -13580,7 +13584,7 @@
           },
           "Serilog.Extensions.Logging.File": {
             "target": "Package",
-            "version": "[1.1.0, )"
+            "version": "[2.0.0-dev-00023, )"
           }
         },
         "imports": [

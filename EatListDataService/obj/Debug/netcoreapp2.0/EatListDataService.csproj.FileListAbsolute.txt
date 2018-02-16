@@ -29,3 +29,12 @@ C:\Users\jhay\source\repos\EatListN\EatListDataService\obj\Debug\netcoreapp2.0\E
 C:\Users\jhay\source\repos\EatListN\EatListDataService\obj\Debug\netcoreapp2.0\EatListDataService.AssemblyInfo.cs
 C:\Users\jhay\source\repos\EatListN\EatListDataService\obj\Debug\netcoreapp2.0\EatListDataService.dll
 C:\Users\jhay\source\repos\EatListN\EatListDataService\obj\Debug\netcoreapp2.0\EatListDataService.pdb
+\\192.168.10.10\wwwroot\EatListN\EatListDataService\bin\Debug\netcoreapp2.0\EatListDataService.deps.json
+\\192.168.10.10\wwwroot\EatListN\EatListDataService\bin\Debug\netcoreapp2.0\EatListDataService.dll
+\\192.168.10.10\wwwroot\EatListN\EatListDataService\bin\Debug\netcoreapp2.0\EatListDataService.pdb
+\\192.168.10.10\wwwroot\EatListN\EatListDataService\obj\Debug\netcoreapp2.0\EatListDataService.csproj.CoreCompileInputs.cache
+\\192.168.10.10\wwwroot\EatListN\EatListDataService\obj\Debug\netcoreapp2.0\EatListDataService.AssemblyInfoInputs.cache
+\\192.168.10.10\wwwroot\EatListN\EatListDataService\obj\Debug\netcoreapp2.0\EatListDataService.AssemblyInfo.cs
+\\192.168.10.10\wwwroot\EatListN\EatListDataService\obj\Debug\netcoreapp2.0\EatListDataService.dll
+\\192.168.10.10\wwwroot\EatListN\EatListDataService\obj\Debug\netcoreapp2.0\EatListDataService.pdb
+\\192.168.10.10\wwwroot\EatListN\EatListDataService\obj\Debug\netcoreapp2.0\EatListDataService.csprojResolveAssemblyReference.cache

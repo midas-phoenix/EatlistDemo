@@ -99,6 +99,34 @@ namespace IdentityServerWithAspNetIdentity
                         "apiApp"
                     },
 
+                },
+
+                new Client
+                {
+                    ClientName = "OIDC demo mobile",
+                    ClientId = "oidcdemomobile",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AccessTokenType = AccessTokenType.Jwt,
+                    AllowAccessTokensViaBrowser = true,
+                    AllowedScopes = {
+                       IdentityServerConstants.StandardScopes.OpenId,
+                       IdentityServerConstants.StandardScopes.Profile,
+                       "apiApp"
+                    },
+                    AllowRememberConsent = true,
+                    RedirectUris = new List<string>
+                    {
+                        "http://localhost/",
+                    },
+                    PostLogoutRedirectUris = new List<string>
+                    {
+                        "http://localhost/",
+                    },
+                    AllowedCorsOrigins = new List<string>
+                    {
+                        "file://\\*",
+                        "http://localhost/"
+                    }
                 }
 
             };

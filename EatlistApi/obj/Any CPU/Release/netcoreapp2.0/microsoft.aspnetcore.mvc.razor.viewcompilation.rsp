@@ -1,0 +1,6 @@
+\\192.168.10.10\wwwroot\EatListN\EatlistApi
+--output-path=obj\Any CPU\Release\netcoreapp2.0\
+--application-name=EatlistApi
+--content-root=\\192.168.10.10\wwwroot\EatListN\EatlistApi
+--file=\\192.168.10.10\wwwroot\EatListN\EatlistApi\_ViewImports.cshtml
+--file=\\192.168.10.10\wwwroot\EatListN\EatlistApi\_ViewStart.cshtml
