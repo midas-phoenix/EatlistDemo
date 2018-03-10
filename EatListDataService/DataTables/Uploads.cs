@@ -12,7 +12,7 @@ namespace EatListDataService.DataTables
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UploadID { get; set; }
 
-        public Guid UserID { get; set; }
+        public string UserID { get; set; }
 
         public string FileUrl { get; set; }
 

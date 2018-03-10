@@ -17,16 +17,17 @@ using EatlistApi.ViewsModel;
 namespace EatlistApi.Controllers
 {
     [Route("api/[controller]")]
-    public class PostController : Controller
+    public class PostController : BaseController
     {
-        private static readonly ApplicationDbContext _post = new ApplicationDbContext();
-        private readonly PostRepository _postRepo = new PostRepository(_post);
-        readonly ILogger<PostController> _log;
-        private Posts _Posts = null;
+        //private static readonly ApplicationDbContext _post = new ApplicationDbContext();
+        //private readonly PostRepository _postRepo = new PostRepository(_post);
+        //readonly ILogger<PostController> _log;
+        private Posts _Posts = new Posts();
+        private PostsMedia _Media = new PostsMedia();
         //UserID will be changed
-        string UserID = "03503819-15ce-489c-946e-ff86a5324189";
+        //string UserID = "03503819-15ce-489c-946e-ff86a5324189";
 
-        public PostController(ILogger<PostController> log)
+        public PostController(ILogger<dynamic> log)
         {
             _log = log;
         }
@@ -48,7 +49,7 @@ namespace EatlistApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{id}"),Route("getuserpost")]
+        [HttpGet,Route("getuserpost")]
         public List<Posts> Get(string userId)
         {
             return _postRepo.GetAllByUserID(userId).ToList();
@@ -61,19 +62,27 @@ namespace EatlistApi.Controllers
         /// <param name="post"></param>
         /// <returns></returns>
         [HttpPost, Route("create")]
-        public IActionResult Post(Post post)
+        public IActionResult Post([FromBody]Post post)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            _Posts = new Posts();
-            _Posts.FileURL = post.FileURL;
-            _Posts.FileType = post.FileType;
+           
+            //_Posts = new Posts();
+            _Posts.Caption = post.Caption;
+            _Posts.DishID = post.DishID;
             _Posts.DateCreated = DateTime.UtcNow;
             _Posts.CreatedBy = UserID;
+            _Posts.RestaurantID = post.RestaurantID;// UserID;
+            var ret=_postRepo.Insert(_Posts);
 
-            return Ok(_postRepo.Insert(_Posts));
+            foreach (var file in post.PostFiles)
+            {
+                PostsMedia  postEntity = new PostsMedia { FileType = file.FileType, FileURL = file.FileURL ,PostID= ret.PostID};
+                _postRepo.Insert(postEntity);  
+            }
+            return Ok(_postRepo.GetAllbyUserID(UserID));
         }
 
         ///// <summary>
@@ -231,7 +240,7 @@ namespace EatlistApi.Controllers
 
         }
 
-        [HttpGet, Route("comment")]
+        [HttpGet, Route("like")]
         public IActionResult postLikes(int PostID)
         {
             try

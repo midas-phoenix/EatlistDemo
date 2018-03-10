@@ -9,8 +9,9 @@ namespace EatlistApi.ViewsModel
     public class EatList
     {
         [Key]
+        public int ToDoID { get; set; }
         public int DishID { get; set; }
-        public DateTime DateCreated { get; set; }
-        public string CreatedBy { get; set; }
+        //public DateTime DateCreated { get; set; }
+        //public string CreatedBy { get; set; }
     }
 }

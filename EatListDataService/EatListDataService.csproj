@@ -5,28 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\**" />
-    <EmbeddedResource Remove="Migrations\**" />
-    <None Remove="Migrations\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Remove="DataBase\Logger.cs" />
     <Compile Remove="DataBase\TemporaryDbContextFactory.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Migrations\20180206131933_initial6_2_2018.cs" />
-    <Compile Include="Migrations\20180206131933_initial6_2_2018.Designer.cs" />
-    <Compile Include="Migrations\20180207083357_Dishes7_2_2018.cs" />
-    <Compile Include="Migrations\20180207083357_Dishes7_2_2018.Designer.cs" />
-    <Compile Include="Migrations\20180207090717_Dishes2_7_2_2018.cs" />
-    <Compile Include="Migrations\20180207090717_Dishes2_7_2_2018.Designer.cs" />
-    <Compile Include="Migrations\20180207091001_Dishes3_7_2_2018.cs" />
-    <Compile Include="Migrations\20180207091001_Dishes3_7_2_2018.Designer.cs" />
-    <Compile Include="Migrations\20180207091224_Dishes4_7_2_2018.cs" />
-    <Compile Include="Migrations\20180207091224_Dishes4_7_2_2018.Designer.cs" />
-    <Compile Include="Migrations\ApplicationDbContextModelSnapshot.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -35,6 +35,8 @@ namespace EatListDataService.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<string>("FullName");
+
                     b.Property<bool>("IsRestaurant");
 
                     b.Property<bool>("LockoutEnabled");
@@ -75,24 +77,48 @@ namespace EatListDataService.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("EatListDataService.DataTables.BookingDishes", b =>
+                {
+                    b.Property<int>("BookingDishID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("BookingID");
+
+                    b.Property<DateTime?>("DateCreated");
+
+                    b.Property<int>("DishID");
+
+                    b.HasKey("BookingDishID");
+
+                    b.HasIndex("BookingID");
+
+                    b.HasIndex("DishID");
+
+                    b.ToTable("TblBookingDishes");
+                });
+
             modelBuilder.Entity("EatListDataService.DataTables.Bookings", b =>
                 {
                     b.Property<int>("BookingID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("BookingStatusID");
+                    b.Property<int?>("BookingStatusID");
 
                     b.Property<DateTime>("BookingTime");
 
                     b.Property<string>("CreatedBy");
 
-                    b.Property<DateTime>("DateCreated");
+                    b.Property<DateTime?>("DateCreated");
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("DishID");
+                    b.Property<string>("RestaurantID");
+
+                    b.Property<int?>("TableSize");
 
                     b.HasKey("BookingID");
+
+                    b.HasIndex("BookingStatusID");
 
                     b.ToTable("TblBookings");
                 });
@@ -113,6 +139,18 @@ namespace EatListDataService.Migrations
                     b.HasKey("BookingStatusID");
 
                     b.ToTable("TblBookingStatus");
+                });
+
+            modelBuilder.Entity("EatListDataService.DataTables.ChatMessages", b =>
+                {
+                    b.Property<int>("ChatMessageID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Message");
+
+                    b.HasKey("ChatMessageID");
+
+                    b.ToTable("ChatMessages");
                 });
 
             modelBuilder.Entity("EatListDataService.DataTables.Comments", b =>
@@ -144,6 +182,8 @@ namespace EatListDataService.Migrations
 
                     b.Property<DateTime>("DateCreated");
 
+                    b.Property<string>("Description");
+
                     b.Property<string>("Name");
 
                     b.Property<string>("RestaurantID");
@@ -155,16 +195,34 @@ namespace EatListDataService.Migrations
                     b.ToTable("TblDishes");
                 });
 
+            modelBuilder.Entity("EatListDataService.DataTables.DishMedia", b =>
+                {
+                    b.Property<int>("DishMediaID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("DishID");
+
+                    b.Property<string>("Type");
+
+                    b.Property<string>("Url");
+
+                    b.HasKey("DishMediaID");
+
+                    b.HasIndex("DishID");
+
+                    b.ToTable("TblDishMedia");
+                });
+
             modelBuilder.Entity("EatListDataService.DataTables.Friendship", b =>
                 {
                     b.Property<int>("FriendshipID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<string>("CreatedBy");
 
                     b.Property<DateTime>("DateCreated");
 
-                    b.Property<int>("FollowerID");
+                    b.Property<string>("FollowerID");
 
                     b.HasKey("FriendshipID");
 
@@ -264,7 +322,7 @@ namespace EatListDataService.Migrations
 
                     b.Property<bool>("IsProfile");
 
-                    b.Property<Guid>("UserID");
+                    b.Property<string>("UserID");
 
                     b.HasKey("UploadID");
 
@@ -379,11 +437,39 @@ namespace EatListDataService.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("EatListDataService.DataTables.BookingDishes", b =>
+                {
+                    b.HasOne("EatListDataService.DataTables.Bookings", "Bookings")
+                        .WithMany("BookingDish")
+                        .HasForeignKey("BookingID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EatListDataService.DataTables.Dishes", "Dishes")
+                        .WithMany()
+                        .HasForeignKey("DishID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("EatListDataService.DataTables.Bookings", b =>
+                {
+                    b.HasOne("EatListDataService.DataTables.BookingStatus", "BookingStatus")
+                        .WithMany()
+                        .HasForeignKey("BookingStatusID");
+                });
+
             modelBuilder.Entity("EatListDataService.DataTables.Dishes", b =>
                 {
                     b.HasOne("EatListDataService.DataBase.ApplicationUser", "ApplicationUser")
                         .WithMany("Dishes")
                         .HasForeignKey("RestaurantID");
+                });
+
+            modelBuilder.Entity("EatListDataService.DataTables.DishMedia", b =>
+                {
+                    b.HasOne("EatListDataService.DataTables.Dishes", "Dishes")
+                        .WithMany()
+                        .HasForeignKey("DishID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

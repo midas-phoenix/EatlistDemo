@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using EatListDataService.DataBase;
+using EatListDataService.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -44,6 +45,16 @@ namespace EatlistApi
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddTransient<UserRepository>();
+            services.AddTransient<PostRepository>();
+            services.AddTransient<FriendsRepository>();
+            services.AddTransient<CommentRepository>();
+            services.AddTransient<ChatRepository>();
+            services.AddTransient<BookingRepository>();
+            services.AddTransient<DishesRepository>();
+            services.AddTransient<EatListRepository>();
+            //services.AddTransient<Repo>();
             //*******************************
             /*************SwashBuckle*********************/
             services.AddSwaggerGen(c =>

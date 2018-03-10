@@ -48,7 +48,7 @@ namespace EatlistApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{id}"),Route("getuserpost")]
+        [HttpGet, Route("getuserpost")]
         public List<Posts> Get(string userId)
         {
             return _postRepo.GetAllByUserID(userId).ToList();
@@ -169,9 +169,9 @@ namespace EatlistApi.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                   // var comments= _postRepo.FetchComments(PostID);
+                    // var comments= _postRepo.FetchComments(PostID);
                     var res = _postRepo.FetchComments(PostID);
-                    if(res.GetType() == typeof(System.InvalidOperationException) || res.GetType() == typeof(System.ArgumentNullException))
+                    if (res.GetType() == typeof(System.InvalidOperationException) || res.GetType() == typeof(System.ArgumentNullException))
                     {
                         _log.LogInformation("Exception thrown from comments");
                         return StatusCode(500);
@@ -187,7 +187,7 @@ namespace EatlistApi.Controllers
             {
 
                 _log.LogInformation(ex.Message + " : " + ex.InnerException);
-               // _log.LogInformation(" Ends here... ");
+                // _log.LogInformation(" Ends here... ");
 
                 return null;
             }
@@ -200,13 +200,13 @@ namespace EatlistApi.Controllers
             try
             {
                 Posts _postObject = _postRepo.Get(Convert.ToInt64(PostID));
-                if (_postObject!=null)
+                if (_postObject != null)
                 {
                     Likes _likes = new Likes();
                     _likes.PostID = PostID;
                     _likes.CreatedBy = UserID;
                     _likes.DateCreated = DateTime.UtcNow.Date;
-                    
+
                     var res = _postRepo.LikeInsert(_likes);
                     if (res.GetType() == typeof(System.InvalidOperationException) || res.GetType() == typeof(System.ArgumentNullException))
                     {
@@ -231,7 +231,7 @@ namespace EatlistApi.Controllers
 
         }
 
-        [HttpGet, Route("comment")]
+        [HttpGet, Route("like")]
         public IActionResult postLikes(int PostID)
         {
             try
@@ -265,3 +265,4 @@ namespace EatlistApi.Controllers
 
     }
 }
+

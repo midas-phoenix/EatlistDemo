@@ -13,24 +13,21 @@ namespace EatListDataService.Repository
         public string Message { get; set; }
         public string Source { get; set; }
     }
-    public class PostRepository
+    public class PostRepository:BaseRepository
     {
         #region "Declarations and Constructors"
-        private readonly ApplicationDbContext entities;
-        readonly ILogger<PostRepository> _log;
+        //private readonly ApplicationDbContext entities;
+        //readonly ILogger<PostRepository> _log;
 
-        public PostRepository(ILogger<PostRepository> log)
-        {
-            _log = log;
-        }
-        //private List<Posts> entities;
-        string errorMessage = string.Empty;
+        //public PostRepository(ApplicationDbContext context) : base(context)
+        //{
 
-        public PostRepository(ApplicationDbContext context)
-        {
-            //this.context = context;
-            entities = context;
-        }
+        //}
+
+        //public PostRepository(ApplicationDbContext context,ILogger<PostRepository> log):base(context,log)
+        //{
+        //    _log = log;
+        //}
         #endregion
 
         #region "Posts"
@@ -51,11 +48,12 @@ namespace EatListDataService.Repository
                                   join friendsFolld in entities.TblFriendship on users.Id equals friendsFolld.CreatedBy
                                   join friendsFollg in entities.TblFriendship on users.Id equals friendsFollg.FollowerID
                                   join posts in entities.TblPosts on users.Id equals posts.CreatedBy 
-                                  select new DataTables.Posts
+                                  where users.Id==UserID
+                                 select new DataTables.Posts
                                   {
                                       PostID = posts.PostID,
-                                      FileURL = posts.FileURL,
-                                      FileType = posts.FileType,
+                                      //FileURL = posts.FileURL,
+                                      //FileType = posts.FileType,
                                       CreatedBy = posts.CreatedBy
                                   })
                                 .ToList();
@@ -70,6 +68,18 @@ namespace EatListDataService.Repository
                 throw new ArgumentNullException("entity");
             }
             entities.TblPosts.Add(entity);
+            SaveChange();
+            return entity;
+        }
+
+        public DataTables.PostsMedia Insert(DataTables.PostsMedia entity)
+        {
+            if (entity == null)
+            {
+                throw
+                     new ArgumentNullException("entity");
+            }
+            entities.TblPostsMedia.Add(entity);
             SaveChange();
             return entity;
         }
@@ -195,12 +205,73 @@ namespace EatListDataService.Repository
         }
         #endregion
 
-        #region "meta"
-        private void SaveChange()
-        {
-            entities.SaveChanges();
-        }
-        #endregion
+        //#region "meta"
+        //private void SaveChange()
+        //{
+        //    entities.SaveChanges();
+        //}
+        //#endregion
 
+        public dynamic GetAllbyUserID(string UserID)
+        {
+            //var 
+            try
+            {
+                List<dynamic> result = new List<dynamic>();
+                var IDS = entities.TblPosts.Where(x => x.CreatedBy == UserID).Select(x => x.PostID).ToList();
+                foreach (int id in IDS) { result.Add(GetPostmedia(id)); }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _log.LogDebug(ex.Message + ":" + ex.StackTrace);
+                return null;
+            }
+
+        }
+
+        public dynamic GetPostmedia(long id)
+        {
+            try
+            {
+                Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
+
+                var Post = entities.TblPosts.Where(x => x.PostID == id)
+                                    .Select(d => new {d.RestaurantID,entities.Users.Where(x=>x.Id==d.RestaurantID).FirstOrDefault().RestaurantName,
+                                                      d.Caption,d.CreatedBy,
+                                                     createdByname=entities.Users.Where(x => x.Id == d.CreatedBy).FirstOrDefault().FullName})
+                                    .FirstOrDefault();
+                var Postdish = (from pst in entities.TblPosts
+                                    join dsh in entities.TblDishes on pst.DishID equals dsh.DishesID
+                                    where pst.PostID == id
+                                    select new 
+                                    {
+                                        dsh
+                                    })
+                               .ToList();
+                
+                var Media = entities.TblPostsMedia.Where(x => x.PostID == id)
+                                    .Select(d => new { d.FileType,d.FileURL }).ToList();
+
+                //res.AddRange("BookingID",Book.BookingID);
+                //res.Add(Book.BookingStatus);
+                //res.Add(Book.BookingTime);
+                //res.Add(Book.DateCreated);
+                //res.Add(Book.Description);
+                //object vbook = Book.Single()
+                res.Add("Post", Post);
+                res.Add("Postdish", Postdish);
+
+
+                res.Add("Media", Media);
+                return res;
+            }
+            catch (Exception ex)
+            {
+                _log.LogDebug(ex.Message + ":" + ex.StackTrace);
+                return null;
+            }
+
+        }
     }
 }

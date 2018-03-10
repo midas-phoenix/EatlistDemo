@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using IdentityServer4.Services;
 using EatListDataService.DataBase;
 using IdentityServerWithAspNetIdentity.Services;
 using Microsoft.Extensions.Logging;
+using IdentityServerWithAspNetIdentity.Extensions;
 
 namespace IdentityServerWithAspNetIdentity
 {
@@ -55,24 +57,26 @@ namespace IdentityServerWithAspNetIdentity
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients(Configuration))
                 .AddAspNetIdentity<ApplicationUser>();
-                //.AddConfigurationStore(options =>
-                //{
-                //    options.ConfigureDbContext = builder =>
-                //        builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                //            sql => sql.MigrationsAssembly(migrationsAssembly));
-                //})
-                //// this adds the operational data from DB (codes, tokens, consents)
-                //.AddOperationalStore(options =>
-                //{
-                //    options.ConfigureDbContext = builder =>
-                //        builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                //            sql => sql.MigrationsAssembly(migrationsAssembly));
+            //.AddProfileService<IdentityWithAdditionalClaimsProfileService>();
+            //.AddConfigurationStore(options =>
+            //{
+            //    options.ConfigureDbContext = builder =>
+            //        builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+            //            sql => sql.MigrationsAssembly(migrationsAssembly));
+            //})
+            //// this adds the operational data from DB (codes, tokens, consents)
+            //.AddOperationalStore(options =>
+            //{
+            //    options.ConfigureDbContext = builder =>
+            //        builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+            //            sql => sql.MigrationsAssembly(migrationsAssembly));
 
-                //    // this enables automatic token cleanup. this is optional.
-                //    options.EnableTokenCleanup = true;
-                //    options.TokenCleanupInterval = 30;
-                //});
+            //    // this enables automatic token cleanup. this is optional.
+            //    options.EnableTokenCleanup = true;
+            //    options.TokenCleanupInterval = 30;
+            //});
 
+            services.AddTransient<IProfileService, IdentityWithAdditionalClaimsProfileService>();
             services.AddAuthentication().AddGoogle(options =>
             {
                 options.ClientId = "998042782978-s07498t8i8jas7npj4crve1skpromf37.apps.googleusercontent.com";

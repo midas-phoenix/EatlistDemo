@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,6 +9,14 @@ namespace IdentityServerWithAspNetIdentity.Models.AccountViewModels
 {
     public class RegisterViewModel
     {
+        [Required]
+        [Display(Name = "Full Name")]
+        public string Name { get; set; }
+
+        [Required]
+        [Display(Name = "UserName")]
+        public string UserName { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]

@@ -11,7 +11,7 @@ namespace EatlistApi.Models
         //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         //public int UploadID { get; set; }
 
-        public Guid UserID { get; set; }
+        //public Guid UserID { get; set; }
 
         public string FileUrl { get; set; }
 
@@ -20,7 +20,7 @@ namespace EatlistApi.Models
 
     public class Restaurant//:Upload
     {
-        public string UserID { get; set; }
+        public string RestaurantName { get; set; }
 
         public bool IsRestaurant { get; set; }
     }

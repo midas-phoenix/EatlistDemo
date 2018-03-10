@@ -25,7 +25,7 @@ namespace IdentityServerWithAspNetIdentity
 
                 try
                 {
-                    IdentityServerDatabaseInitialization.InitializeDatabase(services);
+                    //IdentityServerDatabaseInitialization.InitializeDatabase(services);
                 }
                 catch (Exception ex)
                 {
@@ -45,7 +45,7 @@ namespace IdentityServerWithAspNetIdentity
             .UseContentRoot(Directory.GetCurrentDirectory())
             .UseIISIntegration()
             .UseStartup<Startup>()
-            .UseUrls("http://localhost:5100/")
+            //.UseUrls("http://localhost:5100/")
             .Build();
     }
 }

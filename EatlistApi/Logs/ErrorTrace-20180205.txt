@@ -1,4 +1,0 @@
-2018-02-05T19:47:42.2813374-08:00 0HLBD2HG15L08:00000001 [INF] Request starting HTTP/1.1 GET http://localhost:60596/   (ca22a1cb)
-2018-02-05T19:47:42.6384449-08:00 0HLBD2HG15L08:00000001 [INF] Request finished in 376.153ms 404  (791a596a)
-2018-02-05T19:47:59.2228754-08:00 0HLBD2HG15L08:00000002 [INF] Request starting HTTP/1.1 PUT http://localhost:60596/api/post/update application/x-www-form-urlencoded 34 (ca22a1cb)
-2018-02-05T19:47:59.4542450-08:00 0HLBD2HG15L08:00000002 [INF] Executing action method "EatlistApi.Controllers.PostController.Update (EatlistApi)" with arguments (["EatlistApi.Models.Update"]) - ModelState is Valid (ba7f4ac2)

@@ -10,7 +10,6 @@ C:\inetpub\wwwroot\EatListN\EatListDataService\obj\Release\netcoreapp2.0\EatList
 \\192.168.10.10\wwwroot\EatListN\EatListDataService\bin\Release\netcoreapp2.0\EatListDataService.deps.json
 \\192.168.10.10\wwwroot\EatListN\EatListDataService\bin\Release\netcoreapp2.0\EatListDataService.dll
 \\192.168.10.10\wwwroot\EatListN\EatListDataService\bin\Release\netcoreapp2.0\EatListDataService.pdb
-\\192.168.10.10\wwwroot\EatListN\EatListDataService\obj\Release\netcoreapp2.0\EatListDataService.csprojResolveAssemblyReference.cache
 \\192.168.10.10\wwwroot\EatListN\EatListDataService\obj\Release\netcoreapp2.0\EatListDataService.csproj.CoreCompileInputs.cache
 \\192.168.10.10\wwwroot\EatListN\EatListDataService\obj\Release\netcoreapp2.0\EatListDataService.AssemblyInfoInputs.cache
 \\192.168.10.10\wwwroot\EatListN\EatListDataService\obj\Release\netcoreapp2.0\EatListDataService.AssemblyInfo.cs

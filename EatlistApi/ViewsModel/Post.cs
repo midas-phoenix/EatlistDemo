@@ -13,18 +13,20 @@ namespace EatlistApi.Models
         public string FileURL { get; set; }
         [Required]
         public string FileType { get; set; }
-
     }
 
     public class Post
     {
-        //public int PostID { get; set; }
+        public string Caption { get; set; }
+        //[Required]
+        public int? DishID { get; set; }
+        //[Required]
+        public string RestaurantID { get; set; }
+        //public DateTime DateCreated { get; set; }
         [Required]
-        public string FileURL { get; set; }
-        [Required]
-        public string FileType { get; set; }
-        [Required]
-        public List<PostFile> PostFiles { get; set; }
+        public string CreatedBy { get; set; }
+        //[Required]
+        public virtual List<PostFile> PostFiles { get; set; }
 
     }
 
@@ -37,6 +39,8 @@ namespace EatlistApi.Models
         [Required]
         public string FileType { get; set; }
     }
+
+
 
 
 

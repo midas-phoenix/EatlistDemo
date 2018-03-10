@@ -18,7 +18,7 @@ namespace IdentityServerWithAspNetIdentity
             return new List<IdentityResource>
             {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile(),
+                new IdentityResources.Profile()
             };
         }
 
@@ -108,6 +108,10 @@ namespace IdentityServerWithAspNetIdentity
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AccessTokenType = AccessTokenType.Jwt,
                     AllowAccessTokensViaBrowser = true,
+                    RequireConsent = false,
+                    UpdateAccessTokenClaimsOnRefresh = true,
+                    RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                    
                     AllowedScopes = {
                        IdentityServerConstants.StandardScopes.OpenId,
                        IdentityServerConstants.StandardScopes.Profile,
@@ -116,16 +120,17 @@ namespace IdentityServerWithAspNetIdentity
                     AllowRememberConsent = true,
                     RedirectUris = new List<string>
                     {
-                        "http://localhost/",
+                        "http://localhost/oidc",
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
-                        "http://localhost/",
+                        "http://localhost/oidc",
                     },
                     AllowedCorsOrigins = new List<string>
                     {
                         "file://\\*",
-                        "http://localhost/"
+                        "http://localhost/",
+                        "http://evil.com/"
                     }
                 }
 

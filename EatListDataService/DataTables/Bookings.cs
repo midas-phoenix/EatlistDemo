@@ -12,21 +12,31 @@ namespace EatListDataService.DataTables
         [Key()]
         public int BookingID { get; set; }
 
-        public int DishID { get; set; }
+        [ForeignKey("ApplicationUser")]
+        public string RestaurantID { get; set; }
+
+        //public int? DishID { get; set; }
 
         public string Description { get; set; }
 
         public DateTime BookingTime { get; set; }
 
-        public int BookingStatusID { get; set; }
+        [ForeignKey("BookingStatus")]
+        public int? BookingStatusID { get; set; }
 
-        public DateTime DateCreated { get; set; }
+        public DateTime? DateCreated { get; set; }
 
+        //[ForeignKey("ApplicationUser")]
         public string CreatedBy { get; set; }
 
-        public int TableSize { get; set; }
+        public int? TableSize { get; set; }
 
-       // public List<BookingStatus> Enrollments { get; set; }
+        public virtual BookingStatus BookingStatus { get; set; }
+
+        //[ForeignKey("BookingDish")]
+        //public int BookingDishID { get; set; }
+        public virtual ICollection<BookingDishes> BookingDish { get; set; }
+
     }
 
     public class BookingStatus
@@ -38,7 +48,25 @@ namespace EatListDataService.DataTables
         public string Description { get; set; }
         public DateTime DateCreated { get; set; }
         public string CreatedBy { get; set; }
+        //public ICollection<Bookings> Bookings { get; set; }
+    }
 
-        //public ICollection<Enrollment> Enrollments { get; set; }
+    public class BookingDishes
+    {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key()]
+        public int BookingDishID { get; set; }
+
+        [ForeignKey("Dishes")]
+        public int DishID { get; set; }
+        public virtual Dishes Dishes { get; set; }
+
+        [ForeignKey("Bookings")]
+        public int BookingID { get; set; }
+
+        public virtual Bookings Bookings { get; set; }
+
+        public DateTime? DateCreated { get; set; }
+
     }
 }

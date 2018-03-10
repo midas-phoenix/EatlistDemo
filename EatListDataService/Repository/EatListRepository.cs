@@ -45,6 +45,35 @@ namespace EatListDataService.Repository
             }
 
         }
+        public DataTables.ToDoMeals Insert(DataTables.ToDoMeals entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
+            entities.TblToDoMeals.Add(entity);
+            SaveChange();
+            return entity;
+        }
+        public DataTables.ToDoMeals Update(DataTables.ToDoMeals entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
+            entities.TblToDoMeals.Update(entity);
+            SaveChange();
+            return entity;
+        }
+        public void Delete(DataTables.ToDoMeals entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
+            entities.TblToDoMeals.Remove(entity);
+            SaveChange();
+        }
         #endregion
 
         #region "meta"

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace EatListDataService.Repository
@@ -26,6 +27,12 @@ namespace EatListDataService.Repository
         }
         #endregion
 
+        #region 'Users'
+        public ApplicationUser Get(string UserID)
+        {
+            return entities.Users.Where(d => d.Id == UserID).FirstOrDefault();
+        }
+        #endregion
 
         #region "meta"
         private void SaveChange()

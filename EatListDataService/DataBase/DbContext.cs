@@ -15,6 +15,7 @@ namespace EatListDataService.DataBase
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+            //Database.cr
         }
 
         public ApplicationDbContext()
@@ -25,8 +26,10 @@ namespace EatListDataService.DataBase
         #region "DbSets"
         public DbSet<Bookings> TblBookings { get; set; }
 
-        public DbSet<Dishes> TblDishes { get; set; }
+        public DbSet<BookingDishes> TblBookingDishes { get; set; }
 
+        public DbSet<Dishes> TblDishes { get; set; }
+        public DbSet<DishMedia> TblDishMedia { get; set; }
         public DbSet<Comments> TblCommennts { get; set; }
 
         public DbSet<BookingStatus> TblBookingStatus { get; set; }
@@ -46,6 +49,8 @@ namespace EatListDataService.DataBase
         public DbSet<Notifications> tblNotification { get; set; }
 
         public DbSet<Upload> tblUploads { get; set; }
+
+        public DbSet<PostsMedia> TblPostsMedia { get; set; }
         #endregion
 
 
@@ -60,7 +65,6 @@ namespace EatListDataService.DataBase
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var connString = "Server=DEV-SERVER\\SQLEXPRESS;Database=Eatlist;User ID=bigdata;pwd=p@33word;MultipleActiveResultSets=true"; // Your connection string logic here
-            //optionsBuilder.UseSqlite("Data Source=blog.db");
             optionsBuilder.UseSqlServer(connString);
         }
     }
