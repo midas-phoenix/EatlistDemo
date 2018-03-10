@@ -64,7 +64,7 @@ namespace EatListDataService.DataBase
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connString = "Server=DEV-SERVER\\SQLEXPRESS;Database=Eatlist;User ID=bigdata;pwd=p@33word;MultipleActiveResultSets=true"; // Your connection string logic here
+            var connString = "Server = tcp:eatlist.database.windows.net,1433; Initial Catalog = Eatlist; Persist Security Info = False; User ID = ibrahim; Password = Incredible23; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;"; // Your connection string logic here
             optionsBuilder.UseSqlServer(connString);
         }
     }
