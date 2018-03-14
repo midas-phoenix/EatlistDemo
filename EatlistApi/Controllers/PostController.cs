@@ -10,27 +10,48 @@ using EatListDataService.Repository;
 using EatListDataService.DataTables;
 using Microsoft.Extensions.Logging;
 using EatlistApi.ViewsModel;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace EatlistApi.Controllers
 {
+    [Authorize()]
     [Route("api/[controller]")]
-    public class PostController : BaseController
+    //Pls, kindly change the TestController to BaseController for IDS
+    public class PostController : Controller
     {
         //private static readonly ApplicationDbContext _post = new ApplicationDbContext();
         //private readonly PostRepository _postRepo = new PostRepository(_post);
         //readonly ILogger<PostController> _log;
         private Posts _Posts = new Posts();
         private PostsMedia _Media = new PostsMedia();
+        public readonly PostRepository _postRepo = new PostRepository();
+        public ILogger<dynamic> _log;
+        private static UserManager<ApplicationUser> _userManager;//= new UserManager<ApplicationUser>();
+
+        //public string UserID
+        //{
+        //    get
+        //    {
+        //        return _userManager.GetUserId(User);
+        //    }
+        //    set { }
+
+        //}
+
         //UserID will be changed
         //string UserID = "03503819-15ce-489c-946e-ff86a5324189";
 
-        public PostController(ILogger<dynamic> log)
+        public PostController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager)
         {
             _log = log;
+            _userManager = userManager;
         }
+
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: api/<controller>
         /// <summary>
@@ -38,9 +59,19 @@ namespace EatlistApi.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet, Route("getviewablepost")]
-        public IEnumerable<Posts> GetViewable(string userId)
+        public async Task<ActionResult> GetViewable()
         {
-            return _postRepo.GetViewableForUser(userId).ToList();
+            try
+            {
+                ApplicationUser userId = await GetCurrentUserAsync();
+                return Ok(_postRepo.GetViewableForUser(userId.Id));
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + ex.StackTrace);
+                return StatusCode(500);
+            }
+
         }
 
         // GET api/<controller>/5
@@ -49,10 +80,45 @@ namespace EatlistApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet,Route("getuserpost")]
-        public List<Posts> Get(string userId)
+        [HttpGet, Route("getuserpost")]
+        public async Task<ActionResult> Get()
         {
-            return _postRepo.GetAllByUserID(userId).ToList();
+            try
+            {
+                ApplicationUser userId = await GetCurrentUserAsync();
+                return Ok(_postRepo.GetAllbyUserID(userId.Id,userId.Id).ToList());
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + ex.StackTrace);
+                return StatusCode(500);
+            }
+
+        }
+
+        // GET api/<controller>/5
+        /// <summary>
+        /// gets a specific post by PostID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet, Route("getpostsbyUserId")]
+        public async Task<ActionResult> Get(string Id)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    ApplicationUser userid = await GetCurrentUserAsync();
+                    return Ok(_postRepo.GetAllbyUserID(Id,userid.Id).ToList());
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + ex.StackTrace);
+                return StatusCode(500);
+            }
         }
 
         // POST api/<controller>
@@ -62,27 +128,42 @@ namespace EatlistApi.Controllers
         /// <param name="post"></param>
         /// <returns></returns>
         [HttpPost, Route("create")]
-        public IActionResult Post([FromBody]Post post)
+        public async Task<IActionResult> Post([FromBody]Post post)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
-            }
-           
-            //_Posts = new Posts();
-            _Posts.Caption = post.Caption;
-            _Posts.DishID = post.DishID;
-            _Posts.DateCreated = DateTime.UtcNow;
-            _Posts.CreatedBy = UserID;
-            _Posts.RestaurantID = post.RestaurantID;// UserID;
-            var ret=_postRepo.Insert(_Posts);
+                ApplicationUser userid = await GetCurrentUserAsync();//await _userManager.GetUserAsync(User);
+                _log.LogInformation(userid.Id);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
-            foreach (var file in post.PostFiles)
-            {
-                PostsMedia  postEntity = new PostsMedia { FileType = file.FileType, FileURL = file.FileURL ,PostID= ret.PostID};
-                _postRepo.Insert(postEntity);  
+                //_Posts = new Posts();
+                _Posts.Caption = post.Caption;
+                _Posts.DishID = post.DishID;
+                _Posts.DateCreated = DateTime.UtcNow;
+                _Posts.CreatedBy = userid.Id;
+                _Posts.RestaurantID = post.RestaurantID;// UserID;
+                var ret = _postRepo.Insert(_Posts);
+
+                if (post.PostFiles != null)
+                {
+                    foreach (var file in post.PostFiles)
+                    {
+                        PostsMedia postEntity = new PostsMedia { FileType = file.FileType, FileURL = file.FileURL, PostID = ret.PostID };
+                        _postRepo.Insert(postEntity);
+                    }
+                }
+
+                return Ok(_postRepo.GetAllbyUserID(userid.Id, userid.Id));
             }
-            return Ok(_postRepo.GetAllbyUserID(UserID));
+            catch (Exception ex)
+            {
+                _log.LogInformation(ModelState.ToString());
+                _log.LogInformation(ex.Message + ex.StackTrace);
+                return StatusCode(500);
+            }
         }
 
         ///// <summary>
@@ -178,9 +259,9 @@ namespace EatlistApi.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                   // var comments= _postRepo.FetchComments(PostID);
+                    // var comments= _postRepo.FetchComments(PostID);
                     var res = _postRepo.FetchComments(PostID);
-                    if(res.GetType() == typeof(System.InvalidOperationException) || res.GetType() == typeof(System.ArgumentNullException))
+                    if (res.GetType() == typeof(System.InvalidOperationException) || res.GetType() == typeof(System.ArgumentNullException))
                     {
                         _log.LogInformation("Exception thrown from comments");
                         return StatusCode(500);
@@ -196,7 +277,7 @@ namespace EatlistApi.Controllers
             {
 
                 _log.LogInformation(ex.Message + " : " + ex.InnerException);
-               // _log.LogInformation(" Ends here... ");
+                // _log.LogInformation(" Ends here... ");
 
                 return null;
             }
@@ -204,18 +285,20 @@ namespace EatlistApi.Controllers
         }
 
         [HttpPost, Route("like")]
-        public IActionResult like(int PostID)
+        public async Task<IActionResult> LikePost(int PostID)
         {
             try
             {
+
+                ApplicationUser userid = await GetCurrentUserAsync();
                 Posts _postObject = _postRepo.Get(Convert.ToInt64(PostID));
-                if (_postObject!=null)
+                if (_postObject != null)
                 {
                     Likes _likes = new Likes();
                     _likes.PostID = PostID;
-                    _likes.CreatedBy = UserID;
+                    _likes.CreatedBy = userid.Id;
                     _likes.DateCreated = DateTime.UtcNow.Date;
-                    
+
                     var res = _postRepo.LikeInsert(_likes);
                     if (res.GetType() == typeof(System.InvalidOperationException) || res.GetType() == typeof(System.ArgumentNullException))
                     {

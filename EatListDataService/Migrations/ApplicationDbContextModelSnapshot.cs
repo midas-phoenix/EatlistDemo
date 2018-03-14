@@ -268,17 +268,35 @@ namespace EatListDataService.Migrations
                     b.Property<int>("PostID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Caption");
+
                     b.Property<string>("CreatedBy");
 
                     b.Property<DateTime>("DateCreated");
+
+                    b.Property<int?>("DishID");
+
+                    b.Property<string>("RestaurantID");
+
+                    b.HasKey("PostID");
+
+                    b.ToTable("TblPosts");
+                });
+
+            modelBuilder.Entity("EatListDataService.DataTables.PostsMedia", b =>
+                {
+                    b.Property<int>("PostMediaID")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("FileType");
 
                     b.Property<string>("FileURL");
 
-                    b.HasKey("PostID");
+                    b.Property<int>("PostID");
 
-                    b.ToTable("TblPosts");
+                    b.HasKey("PostMediaID");
+
+                    b.ToTable("TblPostsMedia");
                 });
 
             modelBuilder.Entity("EatListDataService.DataTables.Tags", b =>

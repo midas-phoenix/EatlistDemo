@@ -1,0 +1,318 @@
+2018-03-10T22:27:09.7518546+01:00  [INF] Entity Framework Core "2.0.1-rtm-125" initialized '"ApplicationDbContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None" (9958f5bb)
+2018-03-10T22:27:54.7491212+01:00  [INF] Entity Framework Core "2.0.1-rtm-125" initialized '"ApplicationDbContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None" (9958f5bb)
+2018-03-10T22:27:56.7654596+01:00  [INF] Executed DbCommand ("191"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'__EFMigrationsHistory');" (0723d8ff)
+2018-03-10T22:27:56.9609640+01:00  [INF] Executed DbCommand ("170"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [__EFMigrationsHistory] (
+    [MigrationId] nvarchar(150) NOT NULL,
+    [ProductVersion] nvarchar(32) NOT NULL,
+    CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+);" (0723d8ff)
+2018-03-10T22:27:57.1622325+01:00  [INF] Executed DbCommand ("200"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'__EFMigrationsHistory');" (0723d8ff)
+2018-03-10T22:27:57.3458587+01:00  [INF] Executed DbCommand ("183"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];" (0723d8ff)
+2018-03-10T22:27:57.3503048+01:00  [INF] Applying migration '"20180219131356_init2"'. (0e2ac64d)
+2018-03-10T22:27:57.8800748+01:00  [INF] Executed DbCommand ("205"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [AspNetRoles] (
+    [Id] nvarchar(450) NOT NULL,
+    [ConcurrencyStamp] nvarchar(max) NULL,
+    [Name] nvarchar(256) NULL,
+    [NormalizedName] nvarchar(256) NULL,
+    CONSTRAINT [PK_AspNetRoles] PRIMARY KEY ([Id])
+);" (0723d8ff)
+2018-03-10T22:27:58.0850528+01:00  [INF] Executed DbCommand ("204"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [AspNetUsers] (
+    [Id] nvarchar(450) NOT NULL,
+    [AccessFailedCount] int NOT NULL,
+    [ConcurrencyStamp] nvarchar(max) NULL,
+    [Email] nvarchar(256) NULL,
+    [EmailConfirmed] bit NOT NULL,
+    [FullName] nvarchar(max) NULL,
+    [IsRestaurant] bit NOT NULL,
+    [LockoutEnabled] bit NOT NULL,
+    [LockoutEnd] datetimeoffset NULL,
+    [NormalizedEmail] nvarchar(256) NULL,
+    [NormalizedUserName] nvarchar(256) NULL,
+    [PasswordHash] nvarchar(max) NULL,
+    [PhoneNumber] nvarchar(max) NULL,
+    [PhoneNumberConfirmed] bit NOT NULL,
+    [RestaurantName] nvarchar(max) NULL,
+    [SecurityStamp] nvarchar(max) NULL,
+    [TwoFactorEnabled] bit NOT NULL,
+    [UserName] nvarchar(256) NULL,
+    CONSTRAINT [PK_AspNetUsers] PRIMARY KEY ([Id])
+);" (0723d8ff)
+2018-03-10T22:27:58.2820917+01:00  [INF] Executed DbCommand ("196"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [ChatMessages] (
+    [ChatMessageID] int NOT NULL IDENTITY,
+    [Message] nvarchar(max) NULL,
+    CONSTRAINT [PK_ChatMessages] PRIMARY KEY ([ChatMessageID])
+);" (0723d8ff)
+2018-03-10T22:27:58.4940708+01:00  [INF] Executed DbCommand ("211"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [TblBookings] (
+    [BookingID] int NOT NULL IDENTITY,
+    [BookingStatusID] int NOT NULL,
+    [BookingTime] datetime2 NOT NULL,
+    [CreatedBy] nvarchar(max) NULL,
+    [DateCreated] datetime2 NOT NULL,
+    [Description] nvarchar(max) NULL,
+    [DishID] int NOT NULL,
+    [TableSize] int NOT NULL,
+    CONSTRAINT [PK_TblBookings] PRIMARY KEY ([BookingID])
+);" (0723d8ff)
+2018-03-10T22:27:58.6983214+01:00  [INF] Executed DbCommand ("204"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [TblBookingStatus] (
+    [BookingStatusID] int NOT NULL IDENTITY,
+    [CreatedBy] nvarchar(max) NULL,
+    [DateCreated] datetime2 NOT NULL,
+    [Description] nvarchar(max) NULL,
+    [StatusName] nvarchar(max) NULL,
+    CONSTRAINT [PK_TblBookingStatus] PRIMARY KEY ([BookingStatusID])
+);" (0723d8ff)
+2018-03-10T22:27:58.9024693+01:00  [INF] Executed DbCommand ("203"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [TblCommennts] (
+    [CommentID] int NOT NULL IDENTITY,
+    [Content] nvarchar(max) NULL,
+    [CreatedBy] int NOT NULL,
+    [DateCreated] datetime2 NOT NULL,
+    [DatePosted] datetime2 NOT NULL,
+    [Image] nvarchar(max) NULL,
+    [PostID] int NOT NULL,
+    CONSTRAINT [PK_TblCommennts] PRIMARY KEY ([CommentID])
+);" (0723d8ff)
+2018-03-10T22:27:59.1088795+01:00  [INF] Executed DbCommand ("206"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [TblFriendship] (
+    [FriendshipID] int NOT NULL IDENTITY,
+    [CreatedBy] nvarchar(max) NULL,
+    [DateCreated] datetime2 NOT NULL,
+    [FollowerID] nvarchar(max) NULL,
+    CONSTRAINT [PK_TblFriendship] PRIMARY KEY ([FriendshipID])
+);" (0723d8ff)
+2018-03-10T22:27:59.2854815+01:00  [INF] Executed DbCommand ("176"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [TblLikes] (
+    [LikeID] int NOT NULL IDENTITY,
+    [CreatedBy] nvarchar(max) NULL,
+    [DateCreated] datetime2 NOT NULL,
+    [PostID] int NOT NULL,
+    CONSTRAINT [PK_TblLikes] PRIMARY KEY ([LikeID])
+);" (0723d8ff)
+2018-03-10T22:27:59.5169575+01:00  [INF] Executed DbCommand ("231"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [tblNotification] (
+    [NotificationID] int NOT NULL IDENTITY,
+    [DateCreated] datetime2 NOT NULL,
+    [Message] nvarchar(max) NULL,
+    [Recipient] nvarchar(max) NULL,
+    [Source] nvarchar(max) NULL,
+    CONSTRAINT [PK_tblNotification] PRIMARY KEY ([NotificationID])
+);" (0723d8ff)
+2018-03-10T22:27:59.7229524+01:00  [INF] Executed DbCommand ("205"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [TblPosts] (
+    [PostID] int NOT NULL IDENTITY,
+    [CreatedBy] nvarchar(max) NULL,
+    [DateCreated] datetime2 NOT NULL,
+    [FileType] nvarchar(max) NULL,
+    [FileURL] nvarchar(max) NULL,
+    CONSTRAINT [PK_TblPosts] PRIMARY KEY ([PostID])
+);" (0723d8ff)
+2018-03-10T22:27:59.9262891+01:00  [INF] Executed DbCommand ("203"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [TblTags] (
+    [TagID] int NOT NULL IDENTITY,
+    [CreatedBy] nvarchar(max) NULL,
+    [DateCreated] datetime2 NOT NULL,
+    [DishID] int NOT NULL,
+    CONSTRAINT [PK_TblTags] PRIMARY KEY ([TagID])
+);" (0723d8ff)
+2018-03-10T22:28:00.1318837+01:00  [INF] Executed DbCommand ("204"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [TblToDoMeals] (
+    [ToDoID] int NOT NULL IDENTITY,
+    [CreatedBy] nvarchar(max) NULL,
+    [DateCreated] datetime2 NOT NULL,
+    [DishID] int NOT NULL,
+    CONSTRAINT [PK_TblToDoMeals] PRIMARY KEY ([ToDoID])
+);" (0723d8ff)
+2018-03-10T22:28:00.3278174+01:00  [INF] Executed DbCommand ("194"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [tblUploads] (
+    [UploadID] int NOT NULL IDENTITY,
+    [FileUrl] nvarchar(max) NULL,
+    [IsProfile] bit NOT NULL,
+    [UserID] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_tblUploads] PRIMARY KEY ([UploadID])
+);" (0723d8ff)
+2018-03-10T22:28:00.5407936+01:00  [INF] Executed DbCommand ("212"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [AspNetRoleClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [ClaimType] nvarchar(max) NULL,
+    [ClaimValue] nvarchar(max) NULL,
+    [RoleId] nvarchar(450) NOT NULL,
+    CONSTRAINT [PK_AspNetRoleClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_AspNetRoleClaims_AspNetRoles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [AspNetRoles] ([Id]) ON DELETE CASCADE
+);" (0723d8ff)
+2018-03-10T22:28:00.7493629+01:00  [INF] Executed DbCommand ("208"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [AspNetUserClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [ClaimType] nvarchar(max) NULL,
+    [ClaimValue] nvarchar(max) NULL,
+    [UserId] nvarchar(450) NOT NULL,
+    CONSTRAINT [PK_AspNetUserClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_AspNetUserClaims_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);" (0723d8ff)
+2018-03-10T22:28:00.9508674+01:00  [INF] Executed DbCommand ("201"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [AspNetUserLogins] (
+    [LoginProvider] nvarchar(450) NOT NULL,
+    [ProviderKey] nvarchar(450) NOT NULL,
+    [ProviderDisplayName] nvarchar(max) NULL,
+    [UserId] nvarchar(450) NOT NULL,
+    CONSTRAINT [PK_AspNetUserLogins] PRIMARY KEY ([LoginProvider], [ProviderKey]),
+    CONSTRAINT [FK_AspNetUserLogins_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);" (0723d8ff)
+2018-03-10T22:28:01.1557865+01:00  [INF] Executed DbCommand ("204"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [AspNetUserRoles] (
+    [UserId] nvarchar(450) NOT NULL,
+    [RoleId] nvarchar(450) NOT NULL,
+    CONSTRAINT [PK_AspNetUserRoles] PRIMARY KEY ([UserId], [RoleId]),
+    CONSTRAINT [FK_AspNetUserRoles_AspNetRoles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [AspNetRoles] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_AspNetUserRoles_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);" (0723d8ff)
+2018-03-10T22:28:01.3266641+01:00  [INF] Executed DbCommand ("170"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [AspNetUserTokens] (
+    [UserId] nvarchar(450) NOT NULL,
+    [LoginProvider] nvarchar(450) NOT NULL,
+    [Name] nvarchar(450) NOT NULL,
+    [Value] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetUserTokens] PRIMARY KEY ([UserId], [LoginProvider], [Name]),
+    CONSTRAINT [FK_AspNetUserTokens_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);" (0723d8ff)
+2018-03-10T22:28:01.5659578+01:00  [INF] Executed DbCommand ("239"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [TblDishes] (
+    [DishesID] int NOT NULL IDENTITY,
+    [DateCreated] datetime2 NOT NULL,
+    [Name] nvarchar(max) NULL,
+    [RestaurantID] nvarchar(450) NULL,
+    CONSTRAINT [PK_TblDishes] PRIMARY KEY ([DishesID]),
+    CONSTRAINT [FK_TblDishes_AspNetUsers_RestaurantID] FOREIGN KEY ([RestaurantID]) REFERENCES [AspNetUsers] ([Id]) ON DELETE NO ACTION
+);" (0723d8ff)
+2018-03-10T22:28:01.7710850+01:00  [INF] Executed DbCommand ("204"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_AspNetRoleClaims_RoleId] ON [AspNetRoleClaims] ([RoleId]);" (0723d8ff)
+2018-03-10T22:28:01.9743736+01:00  [INF] Executed DbCommand ("203"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [RoleNameIndex] ON [AspNetRoles] ([NormalizedName]) WHERE [NormalizedName] IS NOT NULL;" (0723d8ff)
+2018-03-10T22:28:02.1803900+01:00  [INF] Executed DbCommand ("205"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_AspNetUserClaims_UserId] ON [AspNetUserClaims] ([UserId]);" (0723d8ff)
+2018-03-10T22:28:02.3850101+01:00  [INF] Executed DbCommand ("204"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_AspNetUserLogins_UserId] ON [AspNetUserLogins] ([UserId]);" (0723d8ff)
+2018-03-10T22:28:02.5894402+01:00  [INF] Executed DbCommand ("204"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_AspNetUserRoles_RoleId] ON [AspNetUserRoles] ([RoleId]);" (0723d8ff)
+2018-03-10T22:28:02.7951483+01:00  [INF] Executed DbCommand ("205"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [EmailIndex] ON [AspNetUsers] ([NormalizedEmail]);" (0723d8ff)
+2018-03-10T22:28:02.9998435+01:00  [INF] Executed DbCommand ("204"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [UserNameIndex] ON [AspNetUsers] ([NormalizedUserName]) WHERE [NormalizedUserName] IS NOT NULL;" (0723d8ff)
+2018-03-10T22:28:03.2040409+01:00  [INF] Executed DbCommand ("203"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_TblDishes_RestaurantID] ON [TblDishes] ([RestaurantID]);" (0723d8ff)
+2018-03-10T22:28:03.4101972+01:00  [INF] Executed DbCommand ("205"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20180219131356_init2', N'2.0.1-rtm-125');" (0723d8ff)
+2018-03-10T22:28:03.6141510+01:00  [INF] Applying migration '"20180227075456_Booking"'. (0e2ac64d)
+2018-03-10T22:28:04.2277962+01:00  [INF] Executed DbCommand ("409"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""DECLARE @var0 sysname;
+SELECT @var0 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'TblBookings') AND [c].[name] = N'DishID');
+IF @var0 IS NOT NULL EXEC(N'ALTER TABLE [TblBookings] DROP CONSTRAINT [' + @var0 + '];');
+ALTER TABLE [TblBookings] DROP COLUMN [DishID];" (0723d8ff)
+2018-03-10T22:28:04.5357858+01:00  [INF] Executed DbCommand ("307"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""DECLARE @var1 sysname;
+SELECT @var1 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'tblUploads') AND [c].[name] = N'UserID');
+IF @var1 IS NOT NULL EXEC(N'ALTER TABLE [tblUploads] DROP CONSTRAINT [' + @var1 + '];');
+ALTER TABLE [tblUploads] ALTER COLUMN [UserID] nvarchar(max) NULL;" (0723d8ff)
+2018-03-10T22:28:04.8428456+01:00  [INF] Executed DbCommand ("306"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""DECLARE @var2 sysname;
+SELECT @var2 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'TblBookings') AND [c].[name] = N'TableSize');
+IF @var2 IS NOT NULL EXEC(N'ALTER TABLE [TblBookings] DROP CONSTRAINT [' + @var2 + '];');
+ALTER TABLE [TblBookings] ALTER COLUMN [TableSize] int NULL;" (0723d8ff)
+2018-03-10T22:28:05.1510969+01:00  [INF] Executed DbCommand ("308"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""DECLARE @var3 sysname;
+SELECT @var3 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'TblBookings') AND [c].[name] = N'DateCreated');
+IF @var3 IS NOT NULL EXEC(N'ALTER TABLE [TblBookings] DROP CONSTRAINT [' + @var3 + '];');
+ALTER TABLE [TblBookings] ALTER COLUMN [DateCreated] datetime2 NULL;" (0723d8ff)
+2018-03-10T22:28:05.4597476+01:00  [INF] Executed DbCommand ("307"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""DECLARE @var4 sysname;
+SELECT @var4 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'TblBookings') AND [c].[name] = N'BookingStatusID');
+IF @var4 IS NOT NULL EXEC(N'ALTER TABLE [TblBookings] DROP CONSTRAINT [' + @var4 + '];');
+ALTER TABLE [TblBookings] ALTER COLUMN [BookingStatusID] int NULL;" (0723d8ff)
+2018-03-10T22:28:05.6615312+01:00  [INF] Executed DbCommand ("201"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [TblBookingDishes] (
+    [BookingDishID] int NOT NULL IDENTITY,
+    [BookingID] int NOT NULL,
+    [DateCreated] datetime2 NULL,
+    [DishID] int NOT NULL,
+    CONSTRAINT [PK_TblBookingDishes] PRIMARY KEY ([BookingDishID]),
+    CONSTRAINT [FK_TblBookingDishes_TblBookings_BookingID] FOREIGN KEY ([BookingID]) REFERENCES [TblBookings] ([BookingID]) ON DELETE CASCADE,
+    CONSTRAINT [FK_TblBookingDishes_TblDishes_DishID] FOREIGN KEY ([DishID]) REFERENCES [TblDishes] ([DishesID]) ON DELETE CASCADE
+);" (0723d8ff)
+2018-03-10T22:28:05.8666332+01:00  [INF] Executed DbCommand ("204"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_TblBookings_BookingStatusID] ON [TblBookings] ([BookingStatusID]);" (0723d8ff)
+2018-03-10T22:28:06.0741280+01:00  [INF] Executed DbCommand ("207"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_TblBookingDishes_BookingID] ON [TblBookingDishes] ([BookingID]);" (0723d8ff)
+2018-03-10T22:28:06.2756857+01:00  [INF] Executed DbCommand ("201"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_TblBookingDishes_DishID] ON [TblBookingDishes] ([DishID]);" (0723d8ff)
+2018-03-10T22:28:06.4806641+01:00  [INF] Executed DbCommand ("204"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE [TblBookings] ADD CONSTRAINT [FK_TblBookings_TblBookingStatus_BookingStatusID] FOREIGN KEY ([BookingStatusID]) REFERENCES [TblBookingStatus] ([BookingStatusID]) ON DELETE NO ACTION;" (0723d8ff)
+2018-03-10T22:28:06.6849216+01:00  [INF] Executed DbCommand ("203"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20180227075456_Booking', N'2.0.1-rtm-125');" (0723d8ff)
+2018-03-10T22:28:06.8931611+01:00  [INF] Applying migration '"20180301113625_TestMarch1"'. (0e2ac64d)
+2018-03-10T22:28:07.2845027+01:00  [INF] Executed DbCommand ("189"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE [TblBookings] ADD [RestaurantID] nvarchar(max) NULL;" (0723d8ff)
+2018-03-10T22:28:07.5045557+01:00  [INF] Executed DbCommand ("219"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20180301113625_TestMarch1', N'2.0.1-rtm-125');" (0723d8ff)
+2018-03-10T22:28:07.7124653+01:00  [INF] Applying migration '"20180302151540_March2"'. (0e2ac64d)
+2018-03-10T22:28:08.2862643+01:00  [INF] Executed DbCommand ("371"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE [TblDishes] ADD [Description] nvarchar(max) NULL;" (0723d8ff)
+2018-03-10T22:28:08.5288461+01:00  [INF] Executed DbCommand ("242"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [TblDishMedia] (
+    [DishMediaID] int NOT NULL IDENTITY,
+    [DishID] int NOT NULL,
+    [Type] nvarchar(max) NULL,
+    [Url] nvarchar(max) NULL,
+    CONSTRAINT [PK_TblDishMedia] PRIMARY KEY ([DishMediaID]),
+    CONSTRAINT [FK_TblDishMedia_TblDishes_DishID] FOREIGN KEY ([DishID]) REFERENCES [TblDishes] ([DishesID]) ON DELETE CASCADE
+);" (0723d8ff)
+2018-03-10T22:28:08.7347408+01:00  [INF] Executed DbCommand ("205"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_TblDishMedia_DishID] ON [TblDishMedia] ([DishID]);" (0723d8ff)
+2018-03-10T22:28:08.9383261+01:00  [INF] Executed DbCommand ("203"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20180302151540_March2', N'2.0.1-rtm-125');" (0723d8ff)
+2018-03-10T22:28:09.1456810+01:00  [INF] Applying migration '"20180310212709_init"'. (0e2ac64d)
+2018-03-10T22:28:12.2155036+01:00  [INF] Executed DbCommand ("906"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""EXEC sp_rename N'TblPosts.FileURL', N'RestaurantID', N'COLUMN';" (0723d8ff)
+2018-03-10T22:28:12.4206186+01:00  [INF] Executed DbCommand ("204"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""EXEC sp_rename N'TblPosts.FileType', N'Caption', N'COLUMN';" (0723d8ff)
+2018-03-10T22:28:12.6246662+01:00  [INF] Executed DbCommand ("203"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE [TblPosts] ADD [DishID] int NULL;" (0723d8ff)
+2018-03-10T22:28:12.8308875+01:00  [INF] Executed DbCommand ("206"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [TblPostsMedia] (
+    [PostMediaID] int NOT NULL IDENTITY,
+    [FileType] nvarchar(max) NULL,
+    [FileURL] nvarchar(max) NULL,
+    [PostID] int NOT NULL,
+    CONSTRAINT [PK_TblPostsMedia] PRIMARY KEY ([PostMediaID])
+);" (0723d8ff)
+2018-03-10T22:28:13.0350834+01:00  [INF] Executed DbCommand ("203"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20180310212709_init', N'2.0.1-rtm-125');" (0723d8ff)

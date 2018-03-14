@@ -64,8 +64,10 @@ namespace EatListDataService.DataBase
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connString = "Server = tcp:eatlist.database.windows.net,1433; Initial Catalog = Eatlist; Persist Security Info = False; User ID = ibrahim; Password = Incredible23; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;"; // Your connection string logic here
+            var connString = "Data Source=tcp:eatlist.database.windows.net,1433;Initial Catalog=Eatlist;User Id=ibrahim@eatlist.database.windows.net;Password=Incredible23;"; // Your connection string logic here
             optionsBuilder.UseSqlServer(connString);
         }
     }
 }
+//Web deployment task failed. ( Could not connect to the remote computer 
+//Data Source=tcp:eatlist.database.windows.net,1433;Initial Catalog=Eatlist;User Id=null@eatlist.database.windows.net;Password=Incredible23;

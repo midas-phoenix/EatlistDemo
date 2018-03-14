@@ -20,34 +20,36 @@ namespace EatlistApi.Controllers
     public class BaseController : Controller
     {
         #region "Constructor and Declaration"
-        //private static readonly ApplicationDbContext _post = new ApplicationDbContext();
-        public readonly PostRepository _postRepo = new PostRepository();
+        //private static    ApplicationDbContext _post = new ApplicationDbContext();
+        public PostRepository _postRepo = new PostRepository();
 
-        public readonly BookingRepository _bookRepo = new BookingRepository();
-        public readonly DishesRepository _dishRepo = new DishesRepository();
-        public readonly EatListRepository _eatRepo = new EatListRepository(new ApplicationDbContext());
-        public readonly FriendsRepository _friendRepo = new FriendsRepository(new ApplicationDbContext());
-        public readonly UserRepository _userRepo = new UserRepository(new ApplicationDbContext());
+        public BookingRepository _bookRepo = new BookingRepository();
+        public DishesRepository _dishRepo = new DishesRepository();
+        public EatListRepository _eatRepo = new EatListRepository(new ApplicationDbContext());
+        public FriendsRepository _friendRepo = new FriendsRepository(new ApplicationDbContext());
+        public UserRepository _userRepo = new UserRepository(new ApplicationDbContext());
         public bool IsRestaurant;
-        private static UserManager<ApplicationUser> _userManager;
-        public ILogger<dynamic> _log;
+        public static UserManager<ApplicationUser> _userManager;
+        //public ILogger<dynamic> _log;
 
 
-        public BaseController()
+        public BaseController(UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
+            UserID = _userManager.GetUserId(User);
             IsRestaurant = _userRepo.Get(UserID).IsRestaurant;
             //AppUser =_userManager.(UserID);
         }
-        
-        public string UserID
-        {
-            get
-            {
-                return _userManager.GetUserId(User);
-            }
-            set { }
 
-        }
+        public string UserID;
+        //{
+        //    get
+        //    {
+        //        return _userManager.GetUserId(User);
+        //    }
+        //    set { }
+
+        //}
 
         #endregion
 

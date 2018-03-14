@@ -23,10 +23,10 @@ namespace EatlistApi.Models
         //[Required]
         public string RestaurantID { get; set; }
         //public DateTime DateCreated { get; set; }
-        [Required]
-        public string CreatedBy { get; set; }
         //[Required]
-        public virtual List<PostFile> PostFiles { get; set; }
+        //public string CreatedBy { get; set; }
+        [Required]
+        public List<PostFile> PostFiles { get; set; }
 
     }
 

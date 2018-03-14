@@ -21,6 +21,9 @@ namespace EatListDataService.Repository
         ////private List<Posts> entities;
         ////public string errorMessage = string.Empty;
 
+        public BaseRepository()
+        {
+        }
         //public BaseRepository(ApplicationDbContext context)
         //{
         //    //this.context = context;
@@ -30,7 +33,7 @@ namespace EatListDataService.Repository
 
         #region "Base"
 
-        
+
 
         #endregion
         #region "meta"

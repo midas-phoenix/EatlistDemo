@@ -80,6 +80,9 @@ namespace EatlistApi
                     policy.WithOrigins(Configuration["ClientAddress"])
                         .AllowAnyHeader()
                         .AllowAnyMethod();
+                    policy.WithOrigins("file://")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
                 });
             });
 

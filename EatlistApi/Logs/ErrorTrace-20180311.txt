@@ -1,0 +1,7 @@
+2018-03-11T20:55:18.3839774+01:00 0HLC7H81U9240:00000001 [INF] Request starting HTTP/1.1 POST http://localhost:60597/api/Post/create application/json-patch+json 86 (ca22a1cb)
+2018-03-11T20:55:18.4064720+01:00 0HLC7H81U9240:00000001 [INF] Policy execution failed. (12a644ed)
+2018-03-11T20:55:18.4067825+01:00 0HLC7H81U9240:00000001 [INF] Request origin "http://localhost:60597" does not have permission to access the resource. (a03d560b)
+2018-03-11T20:55:18.6824824+01:00 0HLC7H81U9240:00000001 [INF] Executing action method "EatlistApi.Controllers.PostController.Post (EatlistApi)" with arguments (["EatlistApi.Models.Post"]) - ModelState is Valid (ba7f4ac2)
+2018-03-11T20:55:19.6088622+01:00 0HLC7H81U9240:00000001 [INF] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext". (4e968210)
+2018-03-11T20:55:19.6873881+01:00 0HLC7H81U9240:00000001 [INF] Executed action "EatlistApi.Controllers.PostController.Post (EatlistApi)" in 1148.5092ms (afa2e885)
+2018-03-11T20:55:19.6906677+01:00 0HLC7H81U9240:00000001 [INF] Request finished in 1313.165ms 200 application/json; charset=utf-8 (791a596a)

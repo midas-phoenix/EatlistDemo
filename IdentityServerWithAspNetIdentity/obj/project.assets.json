@@ -13510,11 +13510,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "\\\\192.168.10.10\\wwwroot\\EatListN\\IdentityServerWithAspNetIdentity\\IdentityServerWithAspNetIdentity.csproj",
+      "projectUniqueName": "C:\\Users\\adebolaakindele\\Documents\\Dev\\ASP.NET\\EatListN\\IdentityServerWithAspNetIdentity\\IdentityServerWithAspNetIdentity.csproj",
       "projectName": "IdentityServerWithAspNetIdentity",
-      "projectPath": "\\\\192.168.10.10\\wwwroot\\EatListN\\IdentityServerWithAspNetIdentity\\IdentityServerWithAspNetIdentity.csproj",
+      "projectPath": "C:\\Users\\adebolaakindele\\Documents\\Dev\\ASP.NET\\EatListN\\IdentityServerWithAspNetIdentity\\IdentityServerWithAspNetIdentity.csproj",
       "packagesPath": "C:\\Users\\adebolaakindele\\.nuget\\packages\\",
-      "outputPath": "\\\\192.168.10.10\\wwwroot\\EatListN\\IdentityServerWithAspNetIdentity\\obj\\",
+      "outputPath": "C:\\Users\\adebolaakindele\\Documents\\Dev\\ASP.NET\\EatListN\\IdentityServerWithAspNetIdentity\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -13533,8 +13533,8 @@
       "frameworks": {
         "netcoreapp2.0": {
           "projectReferences": {
-            "\\\\192.168.10.10\\wwwroot\\EatListN\\EatListDataService\\EatListDataService.csproj": {
-              "projectPath": "\\\\192.168.10.10\\wwwroot\\EatListN\\EatListDataService\\EatListDataService.csproj"
+            "C:\\Users\\adebolaakindele\\Documents\\Dev\\ASP.NET\\EatListN\\EatListDataService\\EatListDataService.csproj": {
+              "projectPath": "C:\\Users\\adebolaakindele\\Documents\\Dev\\ASP.NET\\EatListN\\EatListDataService\\EatListDataService.csproj"
             }
           }
         }

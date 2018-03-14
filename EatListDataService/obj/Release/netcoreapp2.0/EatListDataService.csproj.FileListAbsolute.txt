@@ -15,3 +15,12 @@ C:\inetpub\wwwroot\EatListN\EatListDataService\obj\Release\netcoreapp2.0\EatList
 \\192.168.10.10\wwwroot\EatListN\EatListDataService\obj\Release\netcoreapp2.0\EatListDataService.AssemblyInfo.cs
 \\192.168.10.10\wwwroot\EatListN\EatListDataService\obj\Release\netcoreapp2.0\EatListDataService.dll
 \\192.168.10.10\wwwroot\EatListN\EatListDataService\obj\Release\netcoreapp2.0\EatListDataService.pdb
+C:\Users\adebolaakindele\Documents\Dev\ASP.NET\EatListN\EatListDataService\bin\Release\netcoreapp2.0\EatListDataService.deps.json
+C:\Users\adebolaakindele\Documents\Dev\ASP.NET\EatListN\EatListDataService\bin\Release\netcoreapp2.0\EatListDataService.dll
+C:\Users\adebolaakindele\Documents\Dev\ASP.NET\EatListN\EatListDataService\bin\Release\netcoreapp2.0\EatListDataService.pdb
+C:\Users\adebolaakindele\Documents\Dev\ASP.NET\EatListN\EatListDataService\obj\Release\netcoreapp2.0\EatListDataService.csprojResolveAssemblyReference.cache
+C:\Users\adebolaakindele\Documents\Dev\ASP.NET\EatListN\EatListDataService\obj\Release\netcoreapp2.0\EatListDataService.csproj.CoreCompileInputs.cache
+C:\Users\adebolaakindele\Documents\Dev\ASP.NET\EatListN\EatListDataService\obj\Release\netcoreapp2.0\EatListDataService.AssemblyInfoInputs.cache
+C:\Users\adebolaakindele\Documents\Dev\ASP.NET\EatListN\EatListDataService\obj\Release\netcoreapp2.0\EatListDataService.AssemblyInfo.cs
+C:\Users\adebolaakindele\Documents\Dev\ASP.NET\EatListN\EatListDataService\obj\Release\netcoreapp2.0\EatListDataService.dll
+C:\Users\adebolaakindele\Documents\Dev\ASP.NET\EatListN\EatListDataService\obj\Release\netcoreapp2.0\EatListDataService.pdb

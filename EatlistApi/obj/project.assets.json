@@ -13218,11 +13218,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "\\\\192.168.10.10\\wwwroot\\EatListN\\EatlistApi\\EatlistApi.csproj",
+      "projectUniqueName": "C:\\Users\\adebolaakindele\\Documents\\Dev\\ASP.NET\\EatListN\\EatlistApi\\EatlistApi.csproj",
       "projectName": "EatlistApi",
-      "projectPath": "\\\\192.168.10.10\\wwwroot\\EatListN\\EatlistApi\\EatlistApi.csproj",
+      "projectPath": "C:\\Users\\adebolaakindele\\Documents\\Dev\\ASP.NET\\EatListN\\EatlistApi\\EatlistApi.csproj",
       "packagesPath": "C:\\Users\\adebolaakindele\\.nuget\\packages\\",
-      "outputPath": "\\\\192.168.10.10\\wwwroot\\EatListN\\EatlistApi\\obj\\",
+      "outputPath": "C:\\Users\\adebolaakindele\\Documents\\Dev\\ASP.NET\\EatListN\\EatlistApi\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -13241,8 +13241,8 @@
       "frameworks": {
         "netcoreapp2.0": {
           "projectReferences": {
-            "\\\\192.168.10.10\\wwwroot\\EatListN\\EatListDataService\\EatListDataService.csproj": {
-              "projectPath": "\\\\192.168.10.10\\wwwroot\\EatListN\\EatListDataService\\EatListDataService.csproj"
+            "C:\\Users\\adebolaakindele\\Documents\\Dev\\ASP.NET\\EatListN\\EatListDataService\\EatListDataService.csproj": {
+              "projectPath": "C:\\Users\\adebolaakindele\\Documents\\Dev\\ASP.NET\\EatListN\\EatListDataService\\EatListDataService.csproj"
             }
           }
         }
