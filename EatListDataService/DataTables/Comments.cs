@@ -16,7 +16,7 @@ namespace EatListDataService.DataTables
         public string Image { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DatePosted { get; set; }
-        public int CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
         
     }
 }

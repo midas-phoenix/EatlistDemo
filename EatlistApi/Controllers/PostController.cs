@@ -234,7 +234,7 @@ namespace EatlistApi.Controllers
                         _log.LogInformation(res.ToString());
                         return StatusCode(500);
                     }
-                    return Ok(res);
+                    return Ok(_postRepo.FetchComments(_comment.PostID));
                 }
                 else
                 {
