@@ -40,7 +40,7 @@ namespace EatListDataService.Repository
             return entities.TblPosts.Where(x => x.CreatedBy == UserID).ToList();
         }
 
-        public DataTables.Posts Get(long id)
+        public DataTables.Posts Get(int id)
         {
             return entities.TblPosts.Find(id);
         }
@@ -192,7 +192,7 @@ namespace EatListDataService.Repository
 
         }
 
-        public dynamic FetchLikes(int PostID)
+        public dynamic FetchLikes(long PostID)
         {
             try
             {
