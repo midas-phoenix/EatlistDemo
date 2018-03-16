@@ -234,10 +234,11 @@ namespace EatlistApi.Controllers
         }
 
         [HttpPost, Route("addcomment")]
-        public IActionResult comment(VM_Comment _vmComment)
+        public async Task<IActionResult> commentAsync([FromBody]VM_Comment _vmComment)
         {
             try
             {
+                ApplicationUser userid = await GetCurrentUserAsync();
                 if (ModelState.IsValid)
                 {
                     Comments _comment = new Comments();
@@ -245,6 +246,8 @@ namespace EatlistApi.Controllers
                     _comment.Content = _vmComment.Content;
                     _comment.Image = _vmComment.Image;
                     _comment.PostID = _vmComment.PostID;
+                    _comment.CreatedBy = userid.Id;
+                    _comment.DateCreated = DateTime.Now;
 
                     var res = _postRepo.CommentInsert(_comment);
                     if (res.GetType() == typeof(System.InvalidOperationException))
