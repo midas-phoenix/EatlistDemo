@@ -192,7 +192,7 @@ namespace EatListDataService.Repository
 
         }
 
-        public dynamic FetchLikes(int PostID)
+        public dynamic FetchLikes(long PostID)
         {
             try
             {

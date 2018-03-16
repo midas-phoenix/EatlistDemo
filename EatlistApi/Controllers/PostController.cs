@@ -121,6 +121,24 @@ namespace EatlistApi.Controllers
             }
         }
 
+        [HttpGet, Route("GetPostByID")]
+        public async Task<ActionResult> GetPost(long Id)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    ApplicationUser userid = await GetCurrentUserAsync();
+                    return Ok(_postRepo.GetPostmedia(Id, userid.Id).ToList());
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + ex.StackTrace);
+                return StatusCode(500);
+            }
+        }
         // POST api/<controller>
         /// <summary>
         /// endpoint to create new posts
@@ -215,7 +233,7 @@ namespace EatlistApi.Controllers
         {
         }
 
-        [HttpPost, Route("comment")]
+        [HttpPost, Route("addcomment")]
         public IActionResult comment(VM_Comment _vmComment)
         {
             try
@@ -247,12 +265,12 @@ namespace EatlistApi.Controllers
                 _log.LogInformation(ex.Message + " : " + ex.InnerException);
                 _log.LogInformation(" Ends here... ");
 
-                return null;
+                return StatusCode(500);
             }
 
         }
 
-        [HttpGet, Route("comment")]
+        [HttpGet, Route("getcomments")]
         public IActionResult postComment(int PostID)
         {
             try
@@ -279,19 +297,25 @@ namespace EatlistApi.Controllers
                 _log.LogInformation(ex.Message + " : " + ex.InnerException);
                 // _log.LogInformation(" Ends here... ");
 
-                return null;
+                return StatusCode(500);
             }
 
         }
 
-        [HttpPost, Route("like")]
+        [HttpPost, Route("addlike/{PostID}")]
         public async Task<IActionResult> LikePost(int PostID)
         {
             try
             {
+
                 dynamic res="";
                 ApplicationUser userid = await GetCurrentUserAsync();
                 Posts _postObject = _postRepo.Get(Convert.ToInt32(PostID));
+
+                //_log.LogInformation(PostID.ToString());
+                ApplicationUser userid = await GetCurrentUserAsync();
+                Posts _postObject = _postRepo.Get(PostID);
+
                 if (_postObject != null)
                 {
                     if (!_postRepo.LikeExist(_postObject.PostID, userid.Id))
@@ -310,12 +334,17 @@ namespace EatlistApi.Controllers
                         }
                         return Ok(res);
                     }
+
                     else if(!_postRepo.LikeDelete(_postObject.PostID, userid.Id))
                     {
                         return StatusCode(500, "Operation could not be completed");
                     }
                     //success delete
-                    return Ok(_postRepo.Get(PostID));
+                    //return Ok(_postRepo.Get(PostID));
+
+                    //return Ok(_postRepo.FetchLikes(PostID));
+                    return Ok(_postRepo.GetPostmedia(PostID, userid.Id));
+
                 }
                 else
                 {
@@ -325,15 +354,14 @@ namespace EatlistApi.Controllers
             catch (Exception ex)
             {
 
-                _log.LogInformation(ex.Message + " : " + ex.InnerException);
-                _log.LogInformation(" Ends here... ");
+                _log.LogInformation(ex.Message + " : " + ex.InnerException + " : " + ex.StackTrace);
 
-                return null;
+                return StatusCode(500);
             }
         }
 
-        [HttpGet, Route("like")]
-        public IActionResult postLikes(int PostID)
+        [HttpGet, Route("getlikes")]
+        public IActionResult postLikes(long PostID)
         {
             try
             {
@@ -359,7 +387,7 @@ namespace EatlistApi.Controllers
                 _log.LogInformation(ex.Message + " : " + ex.InnerException);
                 // _log.LogInformation(" Ends here... ");
 
-                return null;
+                return StatusCode(500);
             }
 
         }
