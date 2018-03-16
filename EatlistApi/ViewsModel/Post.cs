@@ -42,6 +42,10 @@ namespace EatlistApi.Models
 
 
 
-
+    public class LikePost
+    {
+        [Required]
+        public int PostID { get; set; }
+    }
 
 }
