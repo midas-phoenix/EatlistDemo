@@ -289,23 +289,33 @@ namespace EatlistApi.Controllers
         {
             try
             {
-
+                dynamic res="";
                 ApplicationUser userid = await GetCurrentUserAsync();
-                Posts _postObject = _postRepo.Get(Convert.ToInt64(PostID));
+                Posts _postObject = _postRepo.Get(Convert.ToInt32(PostID));
                 if (_postObject != null)
                 {
-                    Likes _likes = new Likes();
-                    _likes.PostID = PostID;
-                    _likes.CreatedBy = userid.Id;
-                    _likes.DateCreated = DateTime.UtcNow.Date;
-                    _likes.IsLiked = !_likes.IsLiked;
-                    var res = _postRepo.LikeInsert(_likes);
-                    if (res.GetType() == typeof(System.InvalidOperationException) || res.GetType() == typeof(System.ArgumentNullException))
+                    if (!_postRepo.LikeExist(_postObject.PostID, userid.Id))
                     {
-                        _log.LogInformation(res.ToString());
-                        return StatusCode(500);
+                        Likes _likes = new Likes();
+                        _likes.PostID = PostID;
+                        _likes.CreatedBy = userid.Id;
+                        _likes.DateCreated = DateTime.UtcNow.Date;
+                        //_likes.IsLiked = !_likes.IsLiked;
+                        //success insert
+                        res = _postRepo.LikeInsert(_likes);
+                        if (res.GetType() == typeof(System.InvalidOperationException) || res.GetType() == typeof(System.ArgumentNullException))
+                        {
+                            _log.LogInformation((string)res);
+                            return StatusCode(500);
+                        }
+                        return Ok(res);
                     }
-                    return Ok(res);
+                    else if(!_postRepo.LikeDelete(_postObject.PostID, userid.Id))
+                    {
+                        return StatusCode(500, "Operation could not be completed");
+                    }
+                    //success delete
+                    return Ok(_postRepo.Get(PostID));
                 }
                 else
                 {
@@ -320,7 +330,6 @@ namespace EatlistApi.Controllers
 
                 return null;
             }
-
         }
 
         [HttpGet, Route("like")]

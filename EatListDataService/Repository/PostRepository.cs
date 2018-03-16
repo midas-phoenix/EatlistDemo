@@ -40,7 +40,7 @@ namespace EatListDataService.Repository
             return entities.TblPosts.Where(x => x.CreatedBy == UserID).ToList();
         }
 
-        public DataTables.Posts Get(long id)
+        public DataTables.Posts Get(int id)
         {
             return entities.TblPosts.Find(id);
         }
@@ -170,7 +170,7 @@ namespace EatListDataService.Repository
         #endregion
 
         #region "likes"
-        public object LikeInsert(DataTables.Likes entity)
+        public DataTables.Likes LikeInsert(DataTables.Likes entity)
         {
             try
             {
@@ -187,7 +187,7 @@ namespace EatListDataService.Repository
             {
                 _log.LogInformation(ex.Message + " : " + ex.InnerException);
 
-                return ex;
+                return null;
             }
 
         }
@@ -214,6 +214,48 @@ namespace EatListDataService.Repository
             }
 
         }
+
+        public bool LikeExist(int PostID, string UserID)
+        {
+            try
+            {
+                //throw new FormatException("here");
+                if (entities.TblLikes.Where(x=>x.PostID==PostID &&x.CreatedBy==UserID).Count()>0)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + " : " + ex.InnerException);
+
+                return false;
+            }
+
+        }
+
+        public bool LikeDelete(int PostID, string UserID)
+        {
+            try
+            {
+                entities.TblLikes.Remove(entities.TblLikes.Where(x => x.PostID == PostID && x.CreatedBy == UserID).First());
+                SaveChange();
+                if (entities.TblLikes.Where(x => x.PostID == PostID && x.CreatedBy == UserID).Count() == 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + " : " + ex.InnerException);
+
+                return false;
+            }
+
+        }
+
         #endregion
 
         //#region "meta"
