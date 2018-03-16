@@ -316,7 +316,7 @@ namespace EatlistApi.Controllers
                     _likes.PostID = PostID;
                     _likes.CreatedBy = userid.Id;
                     _likes.DateCreated = DateTime.UtcNow.Date;
-
+                    _likes.IsLiked = !_likes.IsLiked;
                     var res = _postRepo.LikeInsert(_likes);
                     if (res.GetType() == typeof(System.InvalidOperationException) || res.GetType() == typeof(System.ArgumentNullException))
                     {

@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\BookingController.cs" />
-    <Compile Remove="Controllers\DishesController.cs" />
-    <Compile Remove="Controllers\EatListController.cs" />
-    <Compile Remove="Controllers\FriendsController.cs" />
     <Compile Remove="Controllers\SampleDataController.cs" />
     <Compile Remove="Controllers\ValuesController.cs" />
   </ItemGroup>
