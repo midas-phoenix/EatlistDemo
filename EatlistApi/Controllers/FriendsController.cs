@@ -9,6 +9,7 @@ using EatListDataService.Repository;
 using EatListDataService.DataTables;
 using Microsoft.Extensions.Logging;
 using EatlistApi.ViewsModel;
+using Microsoft.AspNetCore.Identity;
 
 
 
@@ -22,24 +23,28 @@ namespace EatlistApi.Controllers
         #region "Declaration"
         private static readonly ApplicationDbContext _friend = new ApplicationDbContext();
         private readonly FriendsRepository _friendsRepo = new FriendsRepository(_friend);
-        readonly ILogger<FriendsController> _log;
+        //readonly ILogger<FriendsController> _log;
         private Friendship _Friends = null;
-        //UserID will be changed
-        string UserID = "03503819-15ce-489c-946e-ff86a5324189";
+        
+        public ILogger<dynamic> _log;
+        private static UserManager<ApplicationUser> _userManager;//= new UserManager<ApplicationUser>();
 
-
-        public FriendsController(ILogger<FriendsController> log)
+       
+        public FriendsController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager)
         {
             _log = log;
+            _userManager = userManager;
         }
+
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
         #endregion
 
         // GET: api/<controller>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        //[HttpGet]
+        //public IEnumerable<string> Get()
+        //{
+        //    return new string[] { "value1", "value2" };
+        //}
 
         //// GET api/<controller>/5
         //[HttpGet, Route("follower/{FollowerID}")]
@@ -51,20 +56,21 @@ namespace EatlistApi.Controllers
         // GET: api/<controller>
 
         // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+        //[HttpGet("{id}")]
+        //public string Get(int id)
+        //{
+        //    return "value";
+        //}
         [HttpPost, Route("create")]
-        public IActionResult Friends(string FollowerID)
+        public async Task<IActionResult> Friends(string FollowerID)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            ApplicationUser userId = await GetCurrentUserAsync();
 
-            var prevRelationship = _friendsRepo.FetchMyFollow(FollowerID, UserID);//userID=Createdby,FollowerID=FollowerID,
+            var prevRelationship = _friendsRepo.FetchMyFollow(FollowerID, userId.Id);//userID=Createdby,FollowerID=FollowerID,
 
             if (prevRelationship.GetType() == typeof(EatListError))
             {
@@ -85,7 +91,7 @@ namespace EatlistApi.Controllers
             _Friends = new Friendship();
             _Friends.FollowerID = FollowerID;
             _Friends.DateCreated = DateTime.UtcNow;
-            _Friends.CreatedBy = UserID;
+            _Friends.CreatedBy = userId.Id;
 
             return Ok(_friendsRepo.Insert(_Friends));
 

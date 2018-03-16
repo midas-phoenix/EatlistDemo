@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using EatlistApi.Models;
 using EatListDataService.DataBase;
 using EatListDataService.DataTables;
 using EatListDataService.Repository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -12,7 +14,7 @@ using Microsoft.Extensions.Logging;
 namespace EatlistApi.Controllers
 {
     [Route("api/[controller]")]
-    public class DishesController : BaseController
+    public class DishesController : Controller
     {
         #region "Declaration"
         //private static readonly ApplicationDbContext _dish = new ApplicationDbContext();
@@ -20,14 +22,19 @@ namespace EatlistApi.Controllers
         //readonly ILogger<DishesController> _log;
         private Dishes _Dishes = new Dishes();
         public readonly DishesRepository _dishRepo = new DishesRepository();
-        //UserID will be changed
-        //string UserID = "03503819-15ce-489c-946e-ff86a5324189";
+        public ILogger<dynamic> _log;
+        private static UserManager<ApplicationUser> _userManager;//= new UserManager<ApplicationUser>();
 
 
-        public DishesController(ILogger<DishesController> log)
+
+        public DishesController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager)
         {
             _log = log;
+            _userManager = userManager;
         }
+
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
         #endregion
 
         // GET: api/<controller>
@@ -48,11 +55,12 @@ namespace EatlistApi.Controllers
 
         // GET api/<controller>/5
         [HttpGet, Route("user")]
-        public IActionResult Get()
+        public async  Task<IActionResult> Get()
         {
             try
             {
-                return Ok(_dishRepo.GetDishesByUserID(UserID));
+                ApplicationUser userId = await GetCurrentUserAsync();
+                return Ok(_dishRepo.GetDishesByUserID(userId.Id));
             }
             catch (Exception ex)
             {
@@ -79,7 +87,7 @@ namespace EatlistApi.Controllers
 
         // GET api/<controller>/5
         [HttpPost, Route("create")]
-        public IActionResult Post([FromBody]Dish model)
+        public async  Task<IActionResult> Post([FromBody]Dish model)
         {
             try
             {
@@ -87,11 +95,12 @@ namespace EatlistApi.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                
+                ApplicationUser userId = await GetCurrentUserAsync();
+
                 _Dishes.Name = model.Name;
                 _Dishes.Description = model.Description;
                 _Dishes.DateCreated = DateTime.UtcNow;
-                _Dishes.RestaurantID = UserID;// model.RestaurantID;
+                _Dishes.RestaurantID = userId.Id;// model.RestaurantID;
                 var result = _dishRepo.Insert(_Dishes);
                 if (result == null)
                 {
@@ -117,7 +126,7 @@ namespace EatlistApi.Controllers
         }
 
         [HttpPost, Route("update")]
-        public IActionResult UpdateDish([FromBody]DishUpd model)
+        public async Task<IActionResult> UpdateDish([FromBody]DishUpd model)
         { 
             try
             {
@@ -125,7 +134,9 @@ namespace EatlistApi.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                if(_dishRepo.GetMedia(model.DishID).Count>0 && !_dishRepo.DeleteMedia(model.DishID))
+                ApplicationUser userId = await GetCurrentUserAsync();
+
+                if (_dishRepo.GetMedia(model.DishID).Count>0 && !_dishRepo.DeleteMedia(model.DishID))
                 {
                     return StatusCode(500,"Media Not Deleted");
                 }
@@ -134,7 +145,7 @@ namespace EatlistApi.Controllers
                 _Dishes.Name = model.Name;
                 _Dishes.Description = model.Description;
                 //_Dishes.DateCreated = DateTime.UtcNow;
-                _Dishes.RestaurantID = UserID;// model.RestaurantID;
+                _Dishes.RestaurantID = userId.Id;// model.RestaurantID;
 
                 var result = _dishRepo.Update(_Dishes);
                 if (result == null)
