@@ -37,6 +37,7 @@ namespace EatListDataService.Repository
                 return entities.Users.Where(d => d.Id == UserID).Select(u => new
                 {
                     u.Id,
+                    u.Bio,
                     u.Email,
                     u.FullName,
                     u.UserName,
