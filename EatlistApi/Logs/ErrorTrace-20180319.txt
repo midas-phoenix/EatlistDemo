@@ -1,0 +1,43 @@
+2018-03-19T01:56:53.1434962+01:00  [INF] Entity Framework Core "2.0.1-rtm-125" initialized '"ApplicationDbContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None" (9958f5bb)
+2018-03-19T01:57:26.3120255+01:00  [INF] Entity Framework Core "2.0.1-rtm-125" initialized '"ApplicationDbContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None" (9958f5bb)
+2018-03-19T01:57:55.1545609+01:00  [INF] Entity Framework Core "2.0.1-rtm-125" initialized '"ApplicationDbContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None" (9958f5bb)
+2018-03-19T01:58:02.6126552+01:00  [INF] Executed DbCommand ("211"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'__EFMigrationsHistory');" (0723d8ff)
+2018-03-19T01:58:02.8044835+01:00  [INF] Executed DbCommand ("189"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'__EFMigrationsHistory');" (0723d8ff)
+2018-03-19T01:58:03.0106591+01:00  [INF] Executed DbCommand ("204"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];" (0723d8ff)
+2018-03-19T01:58:03.0155996+01:00  [INF] Applying migration '"20180319005726_UserInfo mod"'. (0e2ac64d)
+2018-03-19T01:58:03.3880646+01:00  [INF] Executed DbCommand ("171"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE [TblLikes] ADD [IsLiked] bit NOT NULL DEFAULT 0;" (0723d8ff)
+2018-03-19T01:58:03.6245275+01:00  [INF] Executed DbCommand ("236"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE [AspNetUsers] ADD [Address] nvarchar(max) NULL;" (0723d8ff)
+2018-03-19T01:58:03.9311135+01:00  [INF] Executed DbCommand ("305"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE [AspNetUsers] ADD [Bio] nvarchar(max) NULL;" (0723d8ff)
+2018-03-19T01:58:04.1359450+01:00  [INF] Executed DbCommand ("204"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE [AspNetUsers] ADD [Dob] datetime2 NOT NULL DEFAULT '0001-01-01T00:00:00.000';" (0723d8ff)
+2018-03-19T01:58:04.3408324+01:00  [INF] Executed DbCommand ("204"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE [AspNetUsers] ADD [Doi] datetime2 NOT NULL DEFAULT '0001-01-01T00:00:00.000';" (0723d8ff)
+2018-03-19T01:58:04.5456980+01:00  [INF] Executed DbCommand ("204"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE [AspNetUsers] ADD [Gender] int NOT NULL DEFAULT 0;" (0723d8ff)
+2018-03-19T01:58:04.7513166+01:00  [INF] Executed DbCommand ("205"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20180319005726_UserInfo mod', N'2.0.1-rtm-125');" (0723d8ff)
+2018-03-19T03:52:35.2518238+01:00  [INF] Entity Framework Core "2.0.1-rtm-125" initialized '"ApplicationDbContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None" (9958f5bb)
+2018-03-19T03:54:31.8563079+01:00  [INF] Entity Framework Core "2.0.1-rtm-125" initialized '"ApplicationDbContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None" (9958f5bb)
+2018-03-19T03:54:36.7985619+01:00  [INF] Executed DbCommand ("189"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'__EFMigrationsHistory');" (0723d8ff)
+2018-03-19T03:54:36.9724185+01:00  [INF] Executed DbCommand ("170"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'__EFMigrationsHistory');" (0723d8ff)
+2018-03-19T03:54:37.1904062+01:00  [INF] Executed DbCommand ("215"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];" (0723d8ff)
+2018-03-19T03:54:37.1971485+01:00  [INF] Applying migration '"20180319025235_profilepic"'. (0e2ac64d)
+2018-03-19T03:54:37.5995681+01:00  [INF] Executed DbCommand ("199"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE [AspNetUsers] ADD [profilepic] nvarchar(max) NULL;" (0723d8ff)
+2018-03-19T03:54:37.8051619+01:00  [INF] Executed DbCommand ("205"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20180319025235_profilepic', N'2.0.1-rtm-125');" (0723d8ff)

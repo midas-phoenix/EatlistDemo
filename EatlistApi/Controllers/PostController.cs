@@ -265,7 +265,7 @@ namespace EatlistApi.Controllers
             catch (Exception ex)
             {
 
-                _log.LogInformation(ex.Message + " : " + ex.InnerException);
+                _log.LogInformation(ex.Message + " : " + ex.InnerException + ex.StackTrace);
                 _log.LogInformation(" Ends here... ");
 
                 return StatusCode(500);
@@ -273,7 +273,7 @@ namespace EatlistApi.Controllers
 
         }
 
-        [HttpGet, Route("getcomments")]
+        [HttpGet, Route("getcomments/{PostID}")]
         public IActionResult postComment(int PostID)
         {
             try
@@ -297,7 +297,7 @@ namespace EatlistApi.Controllers
             catch (Exception ex)
             {
 
-                _log.LogInformation(ex.Message + " : " + ex.InnerException);
+                _log.LogInformation(ex.Message + " : " + ex.InnerException + " : " +  ex.StackTrace);
                 // _log.LogInformation(" Ends here... ");
 
                 return StatusCode(500);
