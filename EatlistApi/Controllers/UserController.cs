@@ -11,18 +11,21 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using EatListDataService.Repository;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace EatlistApi.Controllers
 {
+    [Authorize()]
     [Route("api/[controller]")]
     public class UserController : Controller
     {
 
         //private  ApplicationUser _user = new ApplicationUser();
-        private readonly ApplicationDbContext _context = new ApplicationDbContext();
+        //  private readonly ApplicationDbContext _context = new ApplicationDbContext();
         private UserManager<ApplicationUser> _userManager;
         readonly ILogger<UserController> _log;
+        public readonly UserRepository _userRepo = new UserRepository();
 
         //class constructor
         public UserController(UserManager<ApplicationUser> userManager, ILogger<UserController> log)
@@ -31,83 +34,104 @@ namespace EatlistApi.Controllers
             _log = log;
         }
 
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
         //private readonly UserManager<ApplicationUser> _userManager;
         //private readonly SignInManager<ApplicationUser> _signInManager;
-        private Upload _upload;
+        //private Upload _upload;
         private Restaurant _restaurant;
-        //string UserID = "03503819-15ce-489c-946e-ff86a5324189";
+        //string userId = "03503819-15ce-489c-946e-ff86a5324189";
 
-        // GET: api/<controller>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        // GET api/<controller>/5
+        [HttpGet, Route("GetUserInfo")]
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                ApplicationUser userId = await GetCurrentUserAsync();
+                return Ok(_userRepo.GetUser(userId.Id));
+            }
+            catch (Exception ex)
+            {
+
+                _log.LogInformation(ex.Message + ex.StackTrace);
+                return StatusCode(500);
+            }
         }
 
         // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet, Route("GetUserById")]
+        public async Task<IActionResult> Get(string UserId)
         {
-            return "value";
+            try
+            {
+                return Ok(_userRepo.GetUser(UserId));
+            }
+            catch (Exception ex)
+            {
+
+                _log.LogInformation(ex.Message + ex.StackTrace);
+                return StatusCode(500);
+            }
         }
 
         // POST api/<controller>
         //[Route("Upload")]
-        [HttpPost]
-        [HttpPost, Route("profileX")]
-        public async Task<IActionResult> Uploads(ProfileUpload upload)
-        {
-            var identity = (ClaimsIdentity)User.Identity;
-            var userName = identity.Name;
-            //upload.UserID = Guid.Parse(identity.FindFirst(ClaimTypes.GivenName).ToString());//?? identity.GetUserName();
-            var userid = await _userManager.GetUserAsync(User);
+        //[HttpPost]
+        //[HttpPost, Route("profileX")]
+        //public async Task<IActionResult> Uploads(ProfileUpload upload)
+        //{
+        //    var identity = (ClaimsIdentity)User.Identity;
+        //    var userName = identity.Name;
+        //    //upload.userId = Guid.Parse(identity.FindFirst(ClaimTypes.GivenName).ToString());//?? identity.GetUserName();
+        //    var userId = await _userManager.GetUserAsync(User);
 
-            if (ModelState.IsValid)
-            {
-                //= new Upload();
+        //    if (ModelState.IsValid)
+        //    {
+        //        Upload _upload= new Upload();
 
-                _upload.IsProfile = true;
-                _upload.UserID = userid.Id;// Guid.Parse(identity.FindFirst(ClaimTypes.GivenName).ToString());
-                _upload.FileUrl = upload.FileUrl;
+        //        _upload.IsProfile = true;
+        //        _upload.userId = userId.Id;// Guid.Parse(identity.FindFirst(ClaimTypes.GivenName).ToString());
+        //        _upload.FileUrl = upload.FileUrl;
 
-                await _context.tblUploads.AddAsync(_upload);
-                await _context.SaveChangesAsync();
-                return Ok();
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
+        //        return Ok();
+        //    }
+        //    else
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
 
         // POST api/<controller>
         // [Route("Post")]
         [HttpPost, Route("profileUp")]
         public async Task<IActionResult> Post(ProfileUpload upload)
         {
-            var identity = (ClaimsIdentity)User.Identity;
-            var userid = await _userManager.GetUserAsync(User);
-
-            if (ModelState.IsValid)
+            try
             {
-                _upload.IsProfile = true;
-                _upload.UserID = userid.Id;// Guid.Parse(identity.FindFirst(ClaimTypes.GivenName).ToString());
-                _upload.FileUrl = upload.FileUrl;
+                ApplicationUser userId = await GetCurrentUserAsync();
 
-                var setFalse=_context.tblUploads.Where(x=>x.UserID== userid.Id).AsEnumerable().All(x=> { x.IsProfile = false;return true; });
-
-                var ret = setFalse ? _context.SaveChanges() : -1;
-                if (ret>0)
+                if (ModelState.IsValid)
                 {
-                    return StatusCode(500);
+                    Upload _upload = new Upload();
+                    _upload.IsProfile = true;
+                    _upload.UserID = userId.Id;// Guid.Parse(identity.FindFirst(ClaimTypes.GivenName).ToString());
+                    _upload.FileUrl = upload.FileUrl;
+
+                    userId.profilepic = upload.FileUrl;
+                    await _userManager.UpdateAsync(userId);
+
+                    return Ok(_userRepo.GetUser(userId.Id));
                 }
-                await _context.tblUploads.AddAsync(_upload);
-                await _context.SaveChangesAsync();
-                return Ok();
+                else
+                {
+                    return BadRequest();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest();
+                _log.LogInformation(ex.Message + ex.StackTrace);
+                return StatusCode(500);
             }
         }
 
@@ -124,25 +148,21 @@ namespace EatlistApi.Controllers
             {
                 if (ModelState.IsValid)
                 {
-
-
-
-                    var identity = (ClaimsIdentity)User.Identity;
-                    var userid = await _userManager.GetUserAsync(User);
-                    _log.LogInformation("RestaurantName : " + userid.RestaurantName);
-                    _log.LogInformation("IsRestaurant : " + userid.IsRestaurant);
+                    ApplicationUser userId = await GetCurrentUserAsync();
+                    _log.LogInformation("RestaurantName : " + userId.RestaurantName);
+                    _log.LogInformation("IsRestaurant : " + userId.IsRestaurant);
                     //var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
                     //var ctx = store.Context;
                     //var manager = new UserManager<ApplicationUser>(store);
-                    userid.IsRestaurant = true;
-                    userid.RestaurantName = restaurant.RestaurantName;
-                    await _userManager.UpdateAsync(userid);
+                    userId.IsRestaurant = true;
+                    userId.RestaurantName = restaurant.RestaurantName;
+                    await _userManager.UpdateAsync(userId);
 
                     //await _context.tblUploads.AddAsync(_upload);
                     //_userManager.UpdateAsync()
                     //await _context.SaveChangesAsync();
                     //await ctx.SaveChangesAsync();
-                    return Ok(userid);
+                    return Ok(userId);
                 }
                 else
                 {
@@ -152,7 +172,7 @@ namespace EatlistApi.Controllers
             catch (Exception ex)
             {
 
-                return StatusCode(500,new { message=ex.Message});
+                return StatusCode(500, new { message = ex.Message });
             }
         }
 
@@ -167,38 +187,14 @@ namespace EatlistApi.Controllers
         {
             try
             {
-                if (id == "0")
-                {
-                    return Ok(_context.Users.Where(x => x.IsRestaurant == true).ToList());
-                }
-                else
-                {
-                    return Ok(_context.Users.Where(x => x.IsRestaurant == true && x.Id == id).ToList());
-                }
-
-                //return Ok();
+                return Ok(await _userRepo.FetchRestaurants(id));
             }
             catch (Exception ex)
             {
-                return BadRequest();
+                _log.LogInformation(ex.Message + ex.StackTrace);
+                return StatusCode(500);
             }
         }
 
-
-
-
-
-
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

@@ -85,14 +85,23 @@ namespace EatListDataService.Repository
 
         public DataTables.PostsMedia Insert(DataTables.PostsMedia entity)
         {
-            if (entity == null)
+            try
             {
-                throw
-                     new ArgumentNullException("entity");
+
+                if (entity == null)
+                {
+                    throw
+                         new ArgumentNullException("entity");
+                }
+                entities.TblPostsMedia.Add(entity);
+                SaveChange();
+                return entity;
             }
-            entities.TblPostsMedia.Add(entity);
-            SaveChange();
-            return entity;
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + " : " + ex.InnerException + ex.StackTrace);
+                throw ex;
+            }
         }
 
         public DataTables.Posts Update(DataTables.Posts entity)
@@ -138,7 +147,7 @@ namespace EatListDataService.Repository
             }
             catch (Exception ex)
             {
-                _log.LogInformation(ex.Message + " : " + ex.InnerException);
+                _log.LogInformation(ex.Message + " : " + ex.InnerException + ex.StackTrace);
 
                 return ex;
             }
@@ -149,8 +158,15 @@ namespace EatListDataService.Repository
         {
             try
             {
-                var Comments = entities.TblCommennts.Where(x => x.PostID == PostID).Select(c=>new {
-                    c.PostID, c.CommentID, c.Content, c.DateCreated, c.Image, c.CreatedBy, CreatedByName = entities.Users.Where(x => x.Id == c.CreatedBy).FirstOrDefault().FullName
+                var Comments = entities.TblCommennts.Where(x => x.PostID == PostID).Select(c => new
+                {
+                    c.PostID,
+                    c.CommentID,
+                    c.Content,
+                    c.DateCreated,
+                    c.Image,
+                    c.CreatedBy,
+                    CreatedByName = entities.Users.Where(x => x.Id == c.CreatedBy).FirstOrDefault().FullName
                 }).ToList();
                 //if (Comments.Count > 0)
                 //{
@@ -185,7 +201,7 @@ namespace EatListDataService.Repository
             }
             catch (Exception ex)
             {
-                _log.LogInformation(ex.Message + " : " + ex.InnerException);
+                _log.LogInformation(ex.Message + " : " + ex.InnerException + ex.StackTrace);
 
                 return ex;
             }
@@ -196,19 +212,24 @@ namespace EatListDataService.Repository
         {
             try
             {
-                var Likes = entities.TblLikes.Where(x => x.PostID == PostID).Select(x=>new {
-                x.LikeID, x.PostID, x.DateCreated, x.CreatedBy,CreatedByName = entities.Users.Where(l => l.Id == x.CreatedBy).FirstOrDefault().FullName
+                var Likes = entities.TblLikes.Where(x => x.PostID == PostID).Select(x => new
+                {
+                    x.LikeID,
+                    x.PostID,
+                    x.DateCreated,
+                    x.CreatedBy,
+                    CreatedByName = entities.Users.Where(l => l.Id == x.CreatedBy).FirstOrDefault().FullName
                 }).ToList();
                 //if (Likes.Count > 0)
                 //{
-                    return Likes;
+                return Likes;
                 //}
 
                 //return "Not Found";
             }
             catch (Exception ex)
             {
-                _log.LogInformation(ex.Message + " : " + ex.InnerException);
+                _log.LogInformation(ex.Message + " : " + ex.InnerException + ex.StackTrace);
 
                 return ex;
             }
@@ -235,7 +256,7 @@ namespace EatListDataService.Repository
             }
             catch (Exception ex)
             {
-                _log.LogDebug(ex.Message + ":" + ex.StackTrace);
+                _log.LogDebug(ex.Message + ":" + ex.StackTrace + ex.StackTrace);
                 return ex;
             }
 
@@ -289,7 +310,7 @@ namespace EatListDataService.Repository
             }
             catch (Exception ex)
             {
-                _log.LogDebug(ex.Message + ":" + ex.StackTrace);
+                _log.LogDebug(ex.Message + ":" + ex.StackTrace + ex.StackTrace);
                 return ex;
             }
 

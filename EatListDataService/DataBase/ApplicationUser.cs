@@ -10,7 +10,13 @@ namespace EatListDataService.DataBase
     {
         public string FullName { get; set; }
         public bool IsRestaurant { get; set; }
+        public string Bio { get; set; }
+        public string Address { get; set; }
+        public int Gender { get; set; }
+        public DateTime Dob { get; set; }
+        public DateTime Doi { get; set; }
         public string RestaurantName { get; set; }
+        public string profilepic { get; set; }
         public ICollection<Dishes> Dishes { get; set; }
 
 

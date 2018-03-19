@@ -23,7 +23,7 @@ namespace EatlistApi.Controllers
         public readonly DishesRepository _dishRepo = new DishesRepository();
         public readonly EatListRepository _eatRepo = new EatListRepository(new ApplicationDbContext());
         public readonly FriendsRepository _friendRepo = new FriendsRepository(new ApplicationDbContext());
-        public readonly UserRepository _userRepo = new UserRepository(new ApplicationDbContext());
+        //public readonly UserRepository _userRepo = new UserRepository(new ApplicationDbContext());
         public bool IsRestaurant;
         private static UserManager<ApplicationUser> _userManager;
         public ILogger<dynamic> _log;

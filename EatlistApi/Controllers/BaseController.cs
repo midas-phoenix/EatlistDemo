@@ -27,7 +27,7 @@ namespace EatlistApi.Controllers
         public DishesRepository _dishRepo = new DishesRepository();
         public EatListRepository _eatRepo = new EatListRepository(new ApplicationDbContext());
         public FriendsRepository _friendRepo = new FriendsRepository(new ApplicationDbContext());
-        public UserRepository _userRepo = new UserRepository(new ApplicationDbContext());
+        //public UserRepository _userRepo = new UserRepository(new ApplicationDbContext());
         public bool IsRestaurant;
         public static UserManager<ApplicationUser> _userManager;
         //public ILogger<dynamic> _log;
@@ -37,7 +37,7 @@ namespace EatlistApi.Controllers
         {
             _userManager = userManager;
             UserID = _userManager.GetUserId(User);
-            IsRestaurant = _userRepo.Get(UserID).IsRestaurant;
+            //IsRestaurant = _userRepo.Get(UserID).IsRestaurant;
             //AppUser =_userManager.(UserID);
         }
 
