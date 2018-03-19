@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "oidc-client": "^1.4.1",
+    "oidc-client-fetch": "^1.2.2-fetch1"
+  }
+}
