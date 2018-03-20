@@ -113,10 +113,10 @@ namespace EatlistApi.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    Upload _upload = new Upload();
-                    _upload.IsProfile = true;
-                    _upload.UserID = userId.Id;// Guid.Parse(identity.FindFirst(ClaimTypes.GivenName).ToString());
-                    _upload.FileUrl = upload.FileUrl;
+                    //Upload _upload = new Upload();
+                    //_upload.IsProfile = true;
+                    //_upload.UserID = userId.Id;// Guid.Parse(identity.FindFirst(ClaimTypes.GivenName).ToString());
+                    //_upload.FileUrl = upload.FileUrl;
 
                     userId.profilepic = upload.FileUrl;
                     await _userManager.UpdateAsync(userId);
@@ -141,7 +141,6 @@ namespace EatlistApi.Controllers
         /// <param name="restaurant"></param>
         /// <returns></returns>
         [HttpPost, Route("makeRestaurant")]
-        [Authorize()]
         public async Task<IActionResult> Post([FromBody]Restaurant restaurant)
         {
             try
@@ -180,9 +179,8 @@ namespace EatlistApi.Controllers
         /// 
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns></returns>Gender
         [HttpGet, Route("getRestaurant")]
-        [Authorize()]
         public async Task<IActionResult> GetRestaurant(string id)
         {
             try
@@ -196,5 +194,33 @@ namespace EatlistApi.Controllers
             }
         }
 
+        [HttpGet, Route("UpdateAccount")]
+        public async Task<IActionResult> Update([FromBody]UserData userinfo) {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    ApplicationUser userId = await GetCurrentUserAsync();
+                    userId.Email = userinfo.Email;
+                    userId.FullName = userinfo.FullName;
+                    userId.RestaurantName = userinfo.RestaurantName;
+                    userId.Address = userinfo.Address;
+                    userId.Bio = userinfo.Bio;
+                    userId.Dob = userinfo.Dob;
+                    userId.Doi = userinfo.Doi;
+                    userId.PhoneNumber = userinfo.PhoneNumber;
+                    userId.Gender = userinfo.Gender == 0 ? "Male" : "Female";
+
+                    await _userManager.UpdateAsync(userId);
+                    return Ok(_userRepo.GetUser(userId.Id));
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                _log.LogError(ex.Message + ex.StackTrace);
+                return StatusCode(500,new { message="an error occurred"});
+            }
+        }
     }
 }

@@ -24,4 +24,25 @@ namespace EatlistApi.Models
 
         public bool IsRestaurant { get; set; }
     }
+
+    public class UserData
+    {
+        public string Email { get; set; }
+
+        public string FullName { get; set; }
+
+        public string PhoneNumber { get; set; }
+
+        public string Bio { get; set; }
+
+        public string Address { get; set; }
+
+        public int Gender { get; set; }
+
+        public DateTime Dob { get; set; }
+
+        public string RestaurantName { get; set; }
+
+        public DateTime Doi { get; set; }
+    }
 }
