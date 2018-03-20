@@ -316,8 +316,8 @@ namespace EatlistApi.Controllers
                 Posts _postObject = _postRepo.Get(Convert.ToInt32(PostID));
 
                 //_log.LogInformation(PostID.ToString());
-                ApplicationUser userid = await GetCurrentUserAsync();
-                Posts _postObject = _postRepo.Get(PostID);
+                //ApplicationUser userid = await GetCurrentUserAsync();
+                //Posts _postObject = _postRepo.Get(PostID);
 
                 if (_postObject != null)
                 {

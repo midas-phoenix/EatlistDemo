@@ -12,7 +12,7 @@ namespace EatListDataService.DataBase
         public bool IsRestaurant { get; set; }
         public string Bio { get; set; }
         public string Address { get; set; }
-        public int Gender { get; set; }
+        public string Gender { get; set; }
         public DateTime Dob { get; set; }
         public DateTime Doi { get; set; }
         public string RestaurantName { get; set; }

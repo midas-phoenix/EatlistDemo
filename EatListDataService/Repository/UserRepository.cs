@@ -56,7 +56,7 @@ namespace EatListDataService.Repository
             }
             catch (Exception ex)
             {
-                _log.LogDebug(ex.Message + ":" + ex.StackTrace + ex.StackTrace);
+                _log.LogError(ex.Message + ":" + ex.StackTrace + ex.StackTrace);
                 return ex;
             }
         }
