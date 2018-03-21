@@ -116,11 +116,11 @@ namespace EatlistApi.Controllers
                     var ret=_dishRepo.MediaInsert(media);
                     if (ret.Count < 1){ throw new InvalidOperationException(); }
                 }
-                return Ok(_dishRepo.GetDishMedia(result.DishesID));
+                return Ok(_dishRepo.GetDishesByUserID(userId.Id));
             }
             catch (Exception ex)
             {
-                _log.LogInformation(ex.Source + " : " + ex.Message);
+                _log.LogInformation(ex.Message + " : " + ex.StackTrace);
                 return StatusCode(500, "Error,Creating Record");
             }
         }

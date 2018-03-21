@@ -86,7 +86,7 @@ namespace EatlistApi.Controllers
             try
             {
                 ApplicationUser userId = await GetCurrentUserAsync();
-                return Ok(_postRepo.GetAllbyUserID(userId.Id,userId.Id).ToList());
+                return Ok(_postRepo.GetAllbyUserID(userId.Id,userId.Id));
             }
             catch (Exception ex)
             {
