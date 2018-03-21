@@ -44,7 +44,28 @@ namespace IdentityServerWithAspNetIdentity
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
-            
+
+            //add services to configureservices pipeline
+           // services.AddAuthentication("Bearer")
+           //.AddIdentityServerAuthentication(options =>
+           //{
+           //    options.Authority = "http://localhost:5000";
+           //    options.RequireHttpsMetadata = false;
+
+           //    options.ApiName = "api1";
+           //});
+
+            services.AddCors(options =>
+            {
+                // this defines a CORS policy called "default"
+                options.AddPolicy("default", policy =>
+                {
+                    policy.WithOrigins("http://localhost:5003")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
