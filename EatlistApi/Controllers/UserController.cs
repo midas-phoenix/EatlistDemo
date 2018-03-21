@@ -194,7 +194,7 @@ namespace EatlistApi.Controllers
             }
         }
 
-        [HttpGet, Route("UpdateAccount")]
+        [HttpPost, Route("UpdateAccount")]
         public async Task<IActionResult> Update([FromBody]UserData userinfo) {
             try
             {

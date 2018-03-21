@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text; 
+using System.Text;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using EatListDataService.DataBase;
@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace EatListDataService.Repository
 {
-    public class DishesRepository:BaseRepository
+    public class DishesRepository : BaseRepository
     {
         #region "Declarations"
 
@@ -49,27 +49,34 @@ namespace EatListDataService.Repository
                           join usr in entities.Users on dsh.RestaurantID equals usr.Id
                           //join med in entities.TblDishMedia on dsh.DishesID equals med.DishID
                           where dsh.DishesID == id
-                          select new {dsh.DishesID,dsh.Name,
-                                      dsh.Description, dsh.RestaurantID,
-                                      usr.UserName, usr.FullName,
-                                      usr.IsRestaurant, usr.RestaurantName,};
+                          select new
+                          {
+                              dsh.DishesID,
+                              dsh.Name,
+                              dsh.Description,
+                              dsh.RestaurantID,
+                              usr.UserName,
+                              usr.FullName,
+                              usr.IsRestaurant,
+                              usr.RestaurantName,
+                          };
                 var media = entities.TblDishMedia.Where(x => x.DishID == id).Select(dm => new { dm.Url, dm.Type, }).ToList();
-                var tagIDs=entities.TblTags.Where(x => x.DishID == id).Select(dm =>  dm.DishID ).ToList();
+                var tagIDs = entities.TblTags.Where(x => x.DishID == id).Select(dm => dm.DishID).ToList();
                 List<dynamic> tags = new List<dynamic>();
-                foreach(var ids in tagIDs)
+                foreach (var ids in tagIDs)
                 {
-                    tags.Add( entities.TblDishes.Where(x => x.DishesID == ids).Select(dm => new { dm.Name,dm.Description }).First());
+                    tags.Add(entities.TblDishes.Where(x => x.DishesID == ids).Select(dm => new { dm.Name, dm.Description }).First());
                 }
                 result.Add("id", res.First().DishesID);
-                result.Add("name", res.First().Name!=null? res.First().Name:" ");
+                result.Add("name", res.First().Name != null ? res.First().Name : " ");
                 result.Add("description", res.First().Description);
                 result.Add("fullName", res.First().FullName);
                 result.Add("restaurantName", res.First().RestaurantName);
                 result.Add("createdBy", res.First().RestaurantID);
-                result.Add("tags", tags!=null?tags: new List<dynamic>());
+                result.Add("tags", tags != null ? tags : new List<dynamic>());
                 result.Add("media", media);
                 return result;
-                
+
             }
             catch (Exception ex)
             {
@@ -99,7 +106,8 @@ namespace EatListDataService.Repository
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                return null;
+                //return null;
+                throw ex;
             }
 
         }
@@ -109,25 +117,34 @@ namespace EatListDataService.Repository
             try
             {
                 Dictionary<string, dynamic> result = new Dictionary<string, dynamic>();
-                //var products = entities.TblDishes.Where(p => p.CategoryId == 1);
-                var user = entities.TblDishes
-                                    .Where(x => x.RestaurantID == UserID)
-                                    .Include(d => d.ApplicationUser)
-                                    .Select(d=>new { d.ApplicationUser.FullName, d.ApplicationUser.UserName, d.ApplicationUser.RestaurantName })
-                                    .FirstOrDefault();
-                var dishes = entities.TblDishes.Where(x => x.RestaurantID == UserID).Select(d => new { d.Name, d.RestaurantID, d.DateCreated }).ToList();
+                //var user = entities.TblDishes
+                //                    .Where(x => x.RestaurantID == UserID)
+                //                    .Include(d => d.ApplicationUser)
+                //                    .Select(d=>new { d.ApplicationUser.FullName, d.ApplicationUser.UserName, d.ApplicationUser.RestaurantName })
+                //                    .FirstOrDefault();
+                dynamic dishes = entities.TblDishes.Where(x => x.RestaurantID == UserID).Select(d => new
+                {
+                    d.DishesID,
+                    d.Name,
+                    d.RestaurantID,
+                    d.DateCreated,
+                    d.Description,
+                    CreatedBy = d.RestaurantID,
+                    RestaurantName = d.ApplicationUser.RestaurantName,
+                    dishmedias = entities.TblDishMedia.Where(dm => dm.DishID == d.DishesID).Select(m => new { m.Url, m.Type }).ToList()
+                }).ToList();
 
-                result.Add("user", user);
-                result.Add("dish", dishes);
-                return result;
-                
+                //result.Add("user", user);
+                //result.Add("dish", dishes);
+                //return result;
+                return dishes;
+
             }
             catch (Exception ex)
             {
-                //_log.LogInformation("Abeg joor");
                 _log.LogInformation(ex.Message + " : " + ex.InnerException);
 
-                return null;
+                return ex;
             }
 
         }
@@ -195,7 +212,7 @@ namespace EatListDataService.Repository
                 return entities.TblDishMedia
                                 .Where(e => e.DishID == entity.DishID)
                                 .ToList();
-                
+
             }
             catch (Exception ex)
             {
@@ -210,7 +227,7 @@ namespace EatListDataService.Repository
             try
             {
                 //var ret = DeleteDishesByBookingID(entity.BookingID);
-                entities.TblDishMedia.RemoveRange(entities.TblDishMedia.Where(dm=>dm.DishID==DishID).ToList());
+                entities.TblDishMedia.RemoveRange(entities.TblDishMedia.Where(dm => dm.DishID == DishID).ToList());
                 SaveChange();
                 return true;
 
