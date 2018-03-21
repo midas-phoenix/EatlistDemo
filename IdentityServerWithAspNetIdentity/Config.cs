@@ -133,7 +133,43 @@ namespace IdentityServerWithAspNetIdentity
                         "http://evil.com/"
                     }
                 }
+                ,
+                new Client
+                {
+                    ClientName = "React Web",
+                    ClientId = "oidcreactwev",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AccessTokenType = AccessTokenType.Jwt,
+                    AllowAccessTokensViaBrowser = true,
+                    RequireConsent = false,
+                    UpdateAccessTokenClaimsOnRefresh = true,
+                    RefreshTokenUsage = TokenUsage.OneTimeOnly,
 
+                    AllowedScopes = {
+                       IdentityServerConstants.StandardScopes.OpenId,
+                       IdentityServerConstants.StandardScopes.Profile,
+                       "apiApp"
+                    },
+                    AllowRememberConsent = true,
+                    RedirectUris =           { "http://http://localhost:51540/callback" },
+                    PostLogoutRedirectUris = { "http://http://localhost:51540/callback" },
+                    AllowedCorsOrigins =     { "http://localhost:51540" },
+                    //RedirectUris = new List<string>
+                    //{
+                    //    //"http://localhost/oidc",
+                    //    "http://localhost/callback",
+                    //},
+                    //PostLogoutRedirectUris = new List<string>
+                    //{
+                    //    "http://localhost/oidc",
+                    //},
+                    //AllowedCorsOrigins = new List<string>
+                    //{
+                    //    "file://\\*",
+                    //    "http://localhost:51540/",
+                    //    "http://evil.com/"
+                    //}
+                }
             };
         }
 

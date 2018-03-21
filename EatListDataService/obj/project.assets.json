@@ -2872,7 +2872,7 @@
       ]
     },
     "System.Collections.NonGeneric/4.0.1": {
-      "sha512": "v5djqbad+TXmbn7TQ3uTkC0p/gjIJZPQYkHmtXAqhdKMlhGfwgLozkOb7zQNnOO3Ok1d1lvXNQivqWd3SpiTtw==",
+      "sha512": "hMxFT2RhhlffyCdKLDXjx8WEC5JfCvNozAZxCablAuFRH74SCV4AgzE8yJCh/73bFnEoZgJ9MJmkjQ0dJmnKqA==",
       "type": "package",
       "path": "system.collections.nongeneric/4.0.1",
       "files": [
@@ -3695,7 +3695,7 @@
       ]
     },
     "System.Linq.Queryable/4.0.1": {
-      "sha512": "f8Da9EIXDLFCOBMzDYy2Ylu4Eb0XuzjKJ91NcfL3rgg9rhIhEwZXccpaf5jius51jE4ZORR/Zx31JNf966cnJQ==",
+      "sha512": "Yn/WfYe9RoRfmSLvUt2JerP0BTGGykCZkQPgojaxgzF2N0oPo+/AhB8TXOpdCcNlrG3VRtsamtK2uzsp3cqRVw==",
       "type": "package",
       "path": "system.linq.queryable/4.0.1",
       "files": [
@@ -5090,23 +5090,26 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\adebolaakindele\\.nuget\\packages\\": {},
+    "C:\\Users\\jhay\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
+    "restoreSettings": {
+      "hideWarningsAndErrors": true
+    },
     "restore": {
-      "projectUniqueName": "C:\\Users\\adebolaakindele\\Documents\\Dev\\ASP.NET\\EatListN\\EatListDataService\\EatListDataService.csproj",
+      "projectUniqueName": "C:\\Users\\jhay\\Desktop\\GitEatList\\EatList\\EatListDataService\\EatListDataService.csproj",
       "projectName": "EatListDataService",
-      "projectPath": "C:\\Users\\adebolaakindele\\Documents\\Dev\\ASP.NET\\EatListN\\EatListDataService\\EatListDataService.csproj",
-      "packagesPath": "C:\\Users\\adebolaakindele\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\adebolaakindele\\Documents\\Dev\\ASP.NET\\EatListN\\EatListDataService\\obj\\",
+      "projectPath": "C:\\Users\\jhay\\Desktop\\GitEatList\\EatList\\EatListDataService\\EatListDataService.csproj",
+      "packagesPath": "C:\\Users\\jhay\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\jhay\\Desktop\\GitEatList\\EatList\\EatListDataService\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\adebolaakindele\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\jhay\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

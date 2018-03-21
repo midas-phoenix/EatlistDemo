@@ -1,15 +1,27 @@
-﻿import { createUserManager } from 'redux-oidc';
+﻿//import { createUserManager } from 'redux-oidc';
+import React from 'react';
+import ReactDOM from 'react-dom';
+//import { applyMiddleware, compose, combineReducers } from 'redux';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import { Provider } from 'react-redux';
+import createOidcMiddleware, { createUserManager, OidcProvider, reducer } from 'redux-oidc';
 
 const userManagerConfig = {
-    client_id: '581912277515-8pqeloei552og7pa13iufb57iug8vu9k.apps.googleusercontent.com',
-    redirect_uri: `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}/callback`,
-    response_type: 'token id_token',
-    scope: 'openid profile https://www.googleapis.com/auth/youtube.readonly',
-    authority: 'https://accounts.google.com',
-    silent_redirect_uri: `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}/silent_renew.html`,
+   
+
+    authority: 'http:http://localhost:5100/',
+    client_id: 'oidcreactwev',
     automaticSilentRenew: true,
+
+    //This doesn't work
+    redirect_uri: "http://localhost:51540/callback",
+    post_logout_redirect_uri: "http://localhost:51540/callback",
+    silent_redirect_uri: "http://localhost/callback",
+    scope: "openid profile apiApp",
+    response_type: "id_token token",
     filterProtocolClaims: true,
-    loadUserInfo: true,
+    loadUserInfo: true
+   
 };
 
 const userManager = createUserManager(userManagerConfig);
