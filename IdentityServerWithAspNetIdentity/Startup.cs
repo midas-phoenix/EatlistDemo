@@ -64,6 +64,18 @@ namespace IdentityServerWithAspNetIdentity
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
+                options.AddPolicy("React", policy =>
+                {
+                    policy.WithOrigins("http://localhost:51540")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+                options.AddPolicy("ReactStandAlone", policy =>
+                {
+                    policy.WithOrigins("http://localhost:53684")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
             });
 
             // Add application services.

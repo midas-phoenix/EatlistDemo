@@ -151,8 +151,8 @@ namespace IdentityServerWithAspNetIdentity
                        "apiApp"
                     },
                     AllowRememberConsent = true,
-                    RedirectUris =           { "http://http://localhost:51540/callback" },
-                    PostLogoutRedirectUris = { "http://http://localhost:51540/callback" },
+                    RedirectUris =           { "http://localhost:51540/callback" },
+                    PostLogoutRedirectUris = { "http://localhost:51540/home" },
                     AllowedCorsOrigins =     { "http://localhost:51540" },
                     //RedirectUris = new List<string>
                     //{
