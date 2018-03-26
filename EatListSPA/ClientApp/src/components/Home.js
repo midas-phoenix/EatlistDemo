@@ -1,7 +1,22 @@
 import React, { Component } from 'react';
+import userManager from '../utils/userManager';
+import { connect } from 'react-redux'
 
-export class Home extends Component {
-  displayName = Home.name
+ class Post extends Component {
+    displayName = Home.name
+
+
+    componentWillMount() {
+        // userManager.getUser().then(function (user) {
+            if (user) {
+                console.log("User logged in", user.profile);
+            }
+            else {
+                console.log("User not logged in");
+            }
+        }//);
+    // }
+
 
   render() {
     return (
@@ -24,3 +39,30 @@ export class Home extends Component {
     );
   }
 }
+
+
+const mapStateToProps = state => {
+  return {
+    user: userManager.getUser(),
+    post:["Hello","Thanks"],
+  }
+}
+ 
+const mapDispatchToProps = dispatch => {
+  return {
+    dispatch
+    // onTodoClick: id => {
+    //   //console.log("b4 props:",JSON.stringify(this.props))
+    //   dispatch(toggleTodo(id))
+    //   //console.log("afta props:",JSON.stringify(this.props))
+    // }
+  }
+}
+ 
+const Home = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Post)
+
+export default Home;
+ 

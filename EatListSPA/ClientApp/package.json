@@ -5,6 +5,7 @@
   "dependencies": {
     "babel-polyfill": "6.9.1",
     "bootstrap": "^3.3.7",
+    "history": "^4.7.2",
     "oidc-client": "^1.4.1",
     "oidc-client-fetch": "^1.2.2-fetch1",
     "prop-types": "^15.6.1",

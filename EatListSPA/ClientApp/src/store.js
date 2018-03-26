@@ -30,20 +30,15 @@
 
 //import React from 'react';
 //import ReactDOM from 'react-dom';
-import { createStore,applyMiddleware, compose, combineReducers } from 'redux';
-import { Provider } from 'react-redux';
-import createOidcMiddleware, { createUserManager, OidcProvider, reducer } from 'redux-oidc';
+import { createStore,applyMiddleware, } from 'redux';
+//import { Provider } from 'react-redux';
+import createOidcMiddleware from 'redux-oidc';
 import reducers from './reducer/index';
 import userManager from './utils/userManager';
 
 // create the middleware
-const oidcMiddleware = createOidcMiddleware(userManager, () => true, false, '/callback');
-
-//// configure your reducers
-//const reducers = combineReducers({
-//    oidc: reducer,
-//    // your other reducers
-//});
+//const oidcMiddleware = createOidcMiddleware(userManager, () => true, false, '/callback');
+const oidcMiddleware = createOidcMiddleware(userManager, () => true, true, '/callback');
 
 // configure your redux store
 const store = createStore(

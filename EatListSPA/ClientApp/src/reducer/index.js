@@ -14,13 +14,16 @@
 //export default reducer;
 
 
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
-import {  Provider } from 'react-redux';
-import createOidcMiddleware, { createUserManager, OidcProvider, reducer } from 'redux-oidc';
+import { combineReducers } from 'redux';
+//import {  Provider } from 'react-redux';
+import  { reducer } from 'redux-oidc';
+import {routerReducer } from 'react-router-redux'
+
 
 // configure your reducers
 const reducers = combineReducers({
     oidc: reducer,
+    routing:routerReducer,
     // your other reducers
 });
 
