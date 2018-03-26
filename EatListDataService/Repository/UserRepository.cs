@@ -1,5 +1,6 @@
 ﻿using EatListDataService.DataBase;
 using EatListDataService.DataTables;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -30,11 +31,11 @@ namespace EatListDataService.Repository
         #endregion
 
         #region 'Users'
-        public dynamic GetUser(string UserID)
+        public async Task<dynamic> GetUser(string UserID, string me)
         {
             try
             {
-                return entities.Users.Where(d => d.Id == UserID).Select(u => new
+                return await entities.Users.Where(d => d.Id == UserID).Select(u => new
                 {
                     u.Id,
                     u.Bio,
@@ -51,12 +52,14 @@ namespace EatListDataService.Repository
                     u.profilepic,
                     PostCount = entities.TblPosts.Count(p => p.CreatedBy == u.Id),
                     FollowingCount = entities.TblFriendship.Count(f => f.CreatedBy == u.Id),
-                    FollowersCount = entities.TblFriendship.Count(fo => fo.FollowerID == u.Id)
-                }).FirstOrDefault();
+                    FollowersCount = entities.TblFriendship.Count(fo => fo.FollowerID == u.Id),
+                    following = entities.TblFriendship.Any(f => f.CreatedBy == me && f.FollowerID == u.Id),
+                    follower = entities.TblFriendship.Any(f => f.CreatedBy == u.Id && f.FollowerID == me)
+                }).FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {
-                _log.LogError(ex.Message + ":" + ex.StackTrace + ex.StackTrace);
+                _log.LogError(ex.Message + ":" + ex.InnerException + ex.StackTrace);
                 return ex;
             }
         }

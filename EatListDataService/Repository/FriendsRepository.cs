@@ -16,33 +16,43 @@ namespace EatListDataService.Repository
 
         public DateTime ErrorTime { get; set; }
     }
-    public class FriendsRepository
+    public class FriendsRepository : BaseRepository
     {
         #region "Declarations"
-        private readonly ApplicationDbContext entities;
-        readonly ILogger<FriendsRepository> _log;
+        //private readonly ApplicationDbContext entities;
+        //readonly ILogger<FriendsRepository> _log;
 
-        public FriendsRepository(ILogger<FriendsRepository> log)
-        {
-            _log = log;
-            //entities = context;
-        }
-        public FriendsRepository(ApplicationDbContext context)
-        {
-            //_log = log;
-            entities = context;
-        }
+        //public FriendsRepository(ILogger<FriendsRepository> log)
+        //{
+        //    _log = log;
+        //    //entities = context;
+        //}
+        //public FriendsRepository(ApplicationDbContext context)
+        //{
+        //    //_log = log;
+        //    entities = context;
+        //}
         //private List<Posts> entities;
         string errorMessage = string.Empty;
         #endregion
 
         #region "Friends"
-        public List<Friendship> FetchUserFollowers(string UserID)
+        public dynamic FetchUserFollowers(string UserID)
         {
             try
             {
-           
-                return entities.TblFriendship.Where(x => x.FollowerID == UserID).ToList();
+
+                return entities.TblFriendship.Where(x => x.FollowerID == UserID)
+                    .Select(x => new
+                    {
+                        x.FriendshipID,
+                        x.FollowerID,
+                        x.CreatedBy,
+                        x.DateCreated,
+                        FollowerName = entities.Users.Where(u => u.Id == x.FollowerID).FirstOrDefault().FullName,
+                        CreatedByname = entities.Users.Where(c => c.Id == x.CreatedBy).FirstOrDefault().FullName
+                    })
+                    .ToList();
 
             }
             catch (Exception ex)
@@ -57,12 +67,21 @@ namespace EatListDataService.Repository
         #endregion
 
         #region "Following"
-        public List<Friendship> FetchUserFollowing(string UserID)
+        public dynamic FetchUserFollowing(string UserID)
         {
             try
             {
 
-                return entities.TblFriendship.Where(x =>x.CreatedBy == UserID).ToList();
+                return entities.TblFriendship.Where(x => x.CreatedBy == UserID)
+                                        .Select(x => new
+                                        {
+                                            x.FriendshipID,
+                                            x.FollowerID,
+                                            x.CreatedBy,
+                                            x.DateCreated,
+                                            FollowerName = entities.Users.Where(u => u.Id == x.FollowerID).FirstOrDefault().FullName,
+                                            CreatedByname = entities.Users.Where(c => c.Id == x.CreatedBy).FirstOrDefault().FullName
+                                        }).ToList();
 
             }
             catch (Exception ex)
@@ -86,7 +105,7 @@ namespace EatListDataService.Repository
         }
 
 
-        public dynamic FetchMyFollow(string followerID , string UserID)
+        public dynamic FetchMyFollow(string followerID, string UserID)
         {
             try
             {
@@ -107,9 +126,9 @@ namespace EatListDataService.Repository
 
             }
             catch (Exception ex)
-           {
+            {
                 //_log.LogInformation("Abeg joor");
-                    _log.LogInformation(ex.Message + " : " + ex.InnerException);
+                _log.LogInformation(ex.Message + " : " + ex.InnerException);
 
                 return null;
             }
@@ -153,5 +172,5 @@ namespace EatListDataService.Repository
 
     }
 }
-    
+
 

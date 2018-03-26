@@ -22,7 +22,7 @@ namespace EatlistApi.Controllers
     {
         #region "Declaration"
         private static readonly ApplicationDbContext _friend = new ApplicationDbContext();
-        private readonly FriendsRepository _friendsRepo = new FriendsRepository(_friend);
+        private readonly FriendsRepository _friendsRepo = new FriendsRepository();
         //readonly ILogger<FriendsController> _log;
         private Friendship _Friends = null;
         
@@ -47,20 +47,34 @@ namespace EatlistApi.Controllers
         //}
 
         //// GET api/<controller>/5
-        //[HttpGet, Route("follower/{FollowerID}")]
-        //public IActionResult Get(string FollowerID)
-        //{
+        [HttpGet, Route("Userfollowers/{FollowerID}")]
+        public IActionResult Get(string FollowerID)
+        {
 
-        //    return Ok(_friendsRepo.GetFriendsByFollowerID(FollowerID));
-        //}
-        // GET: api/<controller>
+            return Ok(_friendsRepo.FetchUserFollowers(FollowerID));
+        }
 
-        // GET api/<controller>/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
+        [HttpGet, Route("Myfollowers")]
+        public async Task<IActionResult> Get()
+        {
+            ApplicationUser userId = await GetCurrentUserAsync();
+            return Ok(_friendsRepo.FetchUserFollowers(userId.Id));
+        }
+
+        [HttpGet, Route("Userfollowings/{FollowingID}")]
+        public IActionResult ffgGet(string FollowingID)
+        {
+
+            return Ok(_friendsRepo.FetchUserFollowing(FollowingID));
+        }
+
+        [HttpGet, Route("Myfollowings")]
+        public async Task<IActionResult> ffgGet()
+        {
+            ApplicationUser userId = await GetCurrentUserAsync();
+            return Ok(_friendsRepo.FetchUserFollowing(userId.Id));
+        }
+
         [HttpPost, Route("create")]
         public async Task<IActionResult> Friends(string FollowerID)
         {
@@ -85,7 +99,7 @@ namespace EatlistApi.Controllers
                 {
                     _friendsRepo.Delete(prev);
                 }
-                return Ok();
+                return Ok(new {status="unfollowed" });
             }
 
             _Friends = new Friendship();
@@ -93,22 +107,22 @@ namespace EatlistApi.Controllers
             _Friends.DateCreated = DateTime.UtcNow;
             _Friends.CreatedBy = userId.Id;
 
-            return Ok(_friendsRepo.Insert(_Friends));
+            return Ok(new { status = "followed" });
 
         }
 
 
 
         // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
+        //[HttpPut("{id}")]
+        //public void Put(int id, [FromBody]string value)
+        //{
+        //}
 
         // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        //[HttpDelete("{id}")]
+        //public void Delete(int id)
+        //{
+        //}
     }
 }

@@ -49,7 +49,7 @@ namespace EatlistApi.Controllers
             try
             {
                 ApplicationUser userId = await GetCurrentUserAsync();
-                return Ok(_userRepo.GetUser(userId.Id));
+                return Ok(_userRepo.GetUser(userId.Id, userId.Id));
             }
             catch (Exception ex)
             {
@@ -60,12 +60,13 @@ namespace EatlistApi.Controllers
         }
 
         // GET api/<controller>/5
-        [HttpGet, Route("GetUserById")]
+        [HttpGet, Route("GetUserById/{UserId}")]
         public async Task<IActionResult> Get(string UserId)
         {
             try
             {
-                return Ok(_userRepo.GetUser(UserId));
+                ApplicationUser userId = await GetCurrentUserAsync();
+                return Ok(await _userRepo.GetUser(UserId, userId.Id));
             }
             catch (Exception ex)
             {
@@ -121,7 +122,7 @@ namespace EatlistApi.Controllers
                     userId.profilepic = upload.FileUrl;
                     await _userManager.UpdateAsync(userId);
 
-                    return Ok(_userRepo.GetUser(userId.Id));
+                    return Ok(_userRepo.GetUser(userId.Id, userId.Id));
                 }
                 else
                 {
@@ -212,7 +213,7 @@ namespace EatlistApi.Controllers
                     userId.Gender = userinfo.Gender == 0 ? "Male" : "Female";
 
                     await _userManager.UpdateAsync(userId);
-                    return Ok(_userRepo.GetUser(userId.Id));
+                    return Ok(_userRepo.GetUser(userId.Id, userId.Id));
                 }
                 return BadRequest();
             }
