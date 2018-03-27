@@ -25,11 +25,11 @@ namespace EatlistApi.Controllers
         private readonly FriendsRepository _friendsRepo = new FriendsRepository();
         //readonly ILogger<FriendsController> _log;
         private Friendship _Friends = null;
-        
+
         public ILogger<dynamic> _log;
         private static UserManager<ApplicationUser> _userManager;//= new UserManager<ApplicationUser>();
 
-       
+
         public FriendsController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager)
         {
             _log = log;
@@ -99,14 +99,18 @@ namespace EatlistApi.Controllers
                 {
                     _friendsRepo.Delete(prev);
                 }
-                return Ok(new {status="unfollowed" });
+                return Ok(new { status = "unfollowed" });
             }
 
             _Friends = new Friendship();
             _Friends.FollowerID = FollowerID;
             _Friends.DateCreated = DateTime.UtcNow;
             _Friends.CreatedBy = userId.Id;
-
+            var result = _friendsRepo.Insert(_Friends);
+            if (result == null)
+            {
+                return StatusCode(500, "Not Saved Successfully");
+            }
             return Ok(new { status = "followed" });
 
         }

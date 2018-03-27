@@ -31,11 +31,11 @@ namespace EatListDataService.Repository
         #endregion
 
         #region 'Users'
-        public async Task<dynamic> GetUser(string UserID, string me)
+        public dynamic GetUser(string UserID, string me)
         {
             try
             {
-                return await entities.Users.Where(d => d.Id == UserID).Select(u => new
+                return entities.Users.Where(d => d.Id == UserID).Select(u => new
                 {
                     u.Id,
                     u.Bio,
@@ -55,7 +55,7 @@ namespace EatListDataService.Repository
                     FollowersCount = entities.TblFriendship.Count(fo => fo.FollowerID == u.Id),
                     following = entities.TblFriendship.Any(f => f.CreatedBy == me && f.FollowerID == u.Id),
                     follower = entities.TblFriendship.Any(f => f.CreatedBy == u.Id && f.FollowerID == me)
-                }).FirstOrDefaultAsync();
+                }).FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -79,17 +79,17 @@ namespace EatListDataService.Repository
             }
         }
 
-        public async Task<dynamic> FetchRestaurants(string Id)
+        public dynamic FetchRestaurants(string Id)
         {
             try
             {
                 if (Id == "0")
                 {
-                    return entities.Users.Where(x => x.IsRestaurant == true).ToList();
+                    return entities.Users.Where(x => x.IsRestaurant == true).ToListAsync();
                 }
                 else
                 {
-                    return entities.Users.Where(x => x.IsRestaurant == true && x.Id == Id).ToList();
+                    return entities.Users.Where(x => x.IsRestaurant == true && x.Id == Id).ToListAsync();
                 }
             }
             catch (Exception ex)

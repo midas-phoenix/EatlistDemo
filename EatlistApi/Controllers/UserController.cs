@@ -49,7 +49,7 @@ namespace EatlistApi.Controllers
             try
             {
                 ApplicationUser userId = await GetCurrentUserAsync();
-                return Ok(_userRepo.GetUser(userId.Id, userId.Id));
+                return Ok(value: _userRepo.GetUser(userId.Id, userId.Id));
             }
             catch (Exception ex)
             {
@@ -66,7 +66,7 @@ namespace EatlistApi.Controllers
             try
             {
                 ApplicationUser userId = await GetCurrentUserAsync();
-                return Ok(await _userRepo.GetUser(UserId, userId.Id));
+                return Ok(_userRepo.GetUser(UserId, userId.Id));
             }
             catch (Exception ex)
             {
@@ -181,7 +181,7 @@ namespace EatlistApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>Gender
-        [HttpGet, Route("getRestaurant")]
+        [HttpGet, Route("getRestaurant/{id}")]
         public async Task<IActionResult> GetRestaurant(string id)
         {
             try

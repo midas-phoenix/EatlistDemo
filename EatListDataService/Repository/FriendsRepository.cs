@@ -164,10 +164,10 @@ namespace EatListDataService.Repository
         #endregion
 
         #region "meta"
-        private void SaveChange()
-        {
-            entities.SaveChanges();
-        }
+        // private void SaveChange()
+        // {
+        //     entities.SaveChanges();
+        // }
         #endregion
 
     }
