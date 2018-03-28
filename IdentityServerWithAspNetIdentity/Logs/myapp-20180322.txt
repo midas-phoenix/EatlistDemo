@@ -2638,3 +2638,4 @@ Error Number:15248,State:1,Class:11 ---> System.Data.SqlClient.SqlException: Eit
    at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
    at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.<Invoke>d__7.MoveNext()
 2018-03-22T21:47:48.0979463+01:00 0HLCG6O9H80J0:00000003 [INF] Request finished in 181.8489ms 500 text/html; charset=utf-8 (791a596a)
+2018-03-22T22:57:38.8528509+01:00  [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation. (553c312b)

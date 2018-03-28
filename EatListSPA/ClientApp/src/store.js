@@ -30,25 +30,37 @@
 
 //import React from 'react';
 //import ReactDOM from 'react-dom';
-import { createStore,applyMiddleware, compose, combineReducers } from 'redux';
-import { Provider } from 'react-redux';
-import createOidcMiddleware, { createUserManager, OidcProvider, reducer } from 'redux-oidc';
+import { createStore,applyMiddleware,compose } from 'redux';
+//import { Provider } from 'react-redux';
+import createOidcMiddleware,{loadUser} from 'redux-oidc';
 import reducers from './reducer/index';
 import userManager from './utils/userManager';
-
+import thunk from 'redux-thunk';
+import composeWithDevTools from 'redux-devtools-extension'
 // create the middleware
-const oidcMiddleware = createOidcMiddleware(userManager, () => true, false, '/callback');
-
-//// configure your reducers
-//const reducers = combineReducers({
-//    oidc: reducer,
-//    // your other reducers
-//});
+//const oidcMiddleware = createOidcMiddleware(userManager, () => true, false, '/callback');
+const oidcMiddleware = createOidcMiddleware(userManager, () => true, true, '/callback');
 
 // configure your redux store
+// const store = createStore(
+//     reducers,
+//     applyMiddleware(oidcMiddleware)
+// );
 const store = createStore(
     reducers,
-    applyMiddleware(oidcMiddleware)
-);
+    compose(
+      applyMiddleware(oidcMiddleware,thunk.withExtraArgument()),
+      window.devToolsExtension ? window.devToolsExtension() : f => f
+    )
+  )
 
+//   const store = createStore(
+//     reducers,
+//     getInitialState(),
+//     composeWithDevTools(
+//       applyMiddleware(thunk.withExtraArgument(api), router),
+//       window.devToolsExtension ? window.devToolsExtension() : f => f
+//     )
+//   )
+loadUser(store, userManager);
 export default store;
