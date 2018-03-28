@@ -26,7 +26,7 @@ namespace EatlistApi.Controllers
         public BookingRepository _bookRepo = new BookingRepository();
         public DishesRepository _dishRepo = new DishesRepository();
         public EatListRepository _eatRepo = new EatListRepository(new ApplicationDbContext());
-        public FriendsRepository _friendRepo = new FriendsRepository(new ApplicationDbContext());
+        public FriendsRepository _friendRepo = new FriendsRepository();
         //public UserRepository _userRepo = new UserRepository(new ApplicationDbContext());
         public bool IsRestaurant;
         public static UserManager<ApplicationUser> _userManager;

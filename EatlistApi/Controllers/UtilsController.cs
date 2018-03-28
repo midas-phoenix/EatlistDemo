@@ -21,8 +21,14 @@ namespace EatlistApi.Controllers
         public readonly UtilRepository _utilRepo = new UtilRepository();
         private static UserManager<ApplicationUser> _userManager;//= new UserManager<ApplicationUser>();
 
-        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
+        public UtilsController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager)
+        {
+            _log = log;
+            _userManager = userManager;
+        }
+
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
         // GET: api/<controller>
         /// <summary>
         /// searches the db for text

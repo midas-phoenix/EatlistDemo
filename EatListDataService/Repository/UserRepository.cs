@@ -1,5 +1,6 @@
 ﻿using EatListDataService.DataBase;
 using EatListDataService.DataTables;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace EatListDataService.Repository
         #endregion
 
         #region 'Users'
-        public dynamic GetUser(string UserID)
+        public dynamic GetUser(string UserID, string me)
         {
             try
             {
@@ -51,12 +52,14 @@ namespace EatListDataService.Repository
                     u.profilepic,
                     PostCount = entities.TblPosts.Count(p => p.CreatedBy == u.Id),
                     FollowingCount = entities.TblFriendship.Count(f => f.CreatedBy == u.Id),
-                    FollowersCount = entities.TblFriendship.Count(fo => fo.FollowerID == u.Id)
+                    FollowersCount = entities.TblFriendship.Count(fo => fo.FollowerID == u.Id),
+                    following = entities.TblFriendship.Any(f => f.CreatedBy == me && f.FollowerID == u.Id),
+                    follower = entities.TblFriendship.Any(f => f.CreatedBy == u.Id && f.FollowerID == me)
                 }).FirstOrDefault();
             }
             catch (Exception ex)
             {
-                _log.LogError(ex.Message + ":" + ex.StackTrace + ex.StackTrace);
+                _log.LogError(ex.Message + ":" + ex.InnerException + ex.StackTrace);
                 return ex;
             }
         }
@@ -76,17 +79,17 @@ namespace EatListDataService.Repository
             }
         }
 
-        public async Task<dynamic> FetchRestaurants(string Id)
+        public dynamic FetchRestaurants(string Id)
         {
             try
             {
                 if (Id == "0")
                 {
-                    return entities.Users.Where(x => x.IsRestaurant == true).ToList();
+                    return entities.Users.Where(x => x.IsRestaurant == true).ToListAsync();
                 }
                 else
                 {
-                    return entities.Users.Where(x => x.IsRestaurant == true && x.Id == Id).ToList();
+                    return entities.Users.Where(x => x.IsRestaurant == true && x.Id == Id).ToListAsync();
                 }
             }
             catch (Exception ex)
