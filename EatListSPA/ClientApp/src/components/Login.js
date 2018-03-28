@@ -44,17 +44,20 @@ export class Login extends Component {
       //console.log("appUser :");
   }
 
-    componentWillMount() {
-       userManager.getUser().then(()=>function (user) {
+    async componentWillMount() {
+        console.log("mounting ....");
+      await userManager.getUser().then(()=>function (user) {
+        console.log("mounting ....",JSON.stringify(user));
            if (user) {
                console.log("User logged in", user.profile);
-               this.props.navigateTo('/fetchdata');
+               this.props.history.push('/fetchdata');
               //  push("/fetchdata");
            }
            else {
                console.log("User not logged in");
            }
        });
+       console.log("done ....");
     }
  
   render() {

@@ -40,15 +40,9 @@ class CallbackPage extends React.Component {
         // redirection was triggered passed into its state
         // when triggerAuthFlow is set to `true`
         console.log("calling..."+JSON.stringify(user));
-        //const urlBeforeRedirection = user.state.redirectUrl;
-        //console.log("redirectUrl..."+JSON.stringify(urlBeforeRedirection));
-        //this.props.dispatch(push(urlBeforeRedirection));
-        //this.props.navigateTo(user.state.path);
-        //this.props.navigateTo('/fetchdata');
-        this.props.history.push("/counter");
+        //this.props.history.push("/fetchData");
+        this.props.history.push("/home");
         console.log("props :"+JSON.stringify(this.props));
-        //<Redirect to='/fetchdata'/>
-        //this.props.dispatch(push("/fetchdata"));
         console.log("dispatched...");
     };
     errorCallback = (error) => {
@@ -58,8 +52,7 @@ class CallbackPage extends React.Component {
         console.log(error);
         this.props.dispatch(push("/"))
     };
-
-
+    
     render() {
         return (
             <div>
