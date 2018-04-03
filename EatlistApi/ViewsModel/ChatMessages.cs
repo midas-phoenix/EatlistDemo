@@ -10,12 +10,12 @@ namespace EatlistApi.Models
     {
      [Key()]
       [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ChatMessageID { get; set; }
-        //public int SocialID { get; set; }
+        //public int ChatMessageID { get; set; }
+        //public string MessageSenderID { get; set; }
         public string Message { get; set; }
-        public int CreatedBy { get; set; }
-        public DateTime DateCreated { get; set; }
-        public int MessageToID { get; set; }
+        //public string CreatedBy { get; set; }
+        //public DateTime DateCreated { get; set; }
+        public string MessageToID { get; set; }
 
     }
 }

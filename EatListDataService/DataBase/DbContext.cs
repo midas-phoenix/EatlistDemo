@@ -32,6 +32,10 @@ namespace EatListDataService.DataBase
         public DbSet<DishMedia> TblDishMedia { get; set; }
         public DbSet<Comments> TblCommennts { get; set; }
 
+        public DbSet<Notifications> tblNotification { get; set; }
+        public DbSet<Orders> TblOrders { get; set; }
+        public DbSet<OrderDish> TblOrderDish { get; set; }
+
         public DbSet<BookingStatus> TblBookingStatus { get; set; }
 
         public DbSet<Friendship> TblFriendship { get; set; }
@@ -46,7 +50,7 @@ namespace EatListDataService.DataBase
 
         public DbSet<ToDoMeals> TblToDoMeals { get; set; }
 
-        public DbSet<Notifications> tblNotification { get; set; }
+        //public DbSet<Notifications> tblNotification { get; set; }
 
         public DbSet<Upload> tblUploads { get; set; }
 

@@ -10289,7 +10289,7 @@
       ]
     },
     "System.Linq.Queryable/4.0.1": {
-      "sha512": "f8Da9EIXDLFCOBMzDYy2Ylu4Eb0XuzjKJ91NcfL3rgg9rhIhEwZXccpaf5jius51jE4ZORR/Zx31JNf966cnJQ==",
+      "sha512": "Yn/WfYe9RoRfmSLvUt2JerP0BTGGykCZkQPgojaxgzF2N0oPo+/AhB8TXOpdCcNlrG3VRtsamtK2uzsp3cqRVw==",
       "type": "package",
       "path": "system.linq.queryable/4.0.1",
       "files": [
@@ -10543,7 +10543,7 @@
       ]
     },
     "System.Net.Security/4.3.0": {
-      "sha512": "BAj9HP3wCIXQC1zpaLhNm3SvSyfWyPd9UE3Ajh9de2lMlufc83LCDpjoVYxqZpzde0YAK0dbFhK9JimsQvdQpg==",
+      "sha512": "IgJKNfALqw7JRWp5LMQ5SWHNKvXVz094U6wNE3c1i8bOkMQvgBL+MMQuNt3xl9Qg9iWpj3lFxPZEY6XHmROjMQ==",
       "type": "package",
       "path": "system.net.security/4.3.0",
       "files": [
@@ -10728,7 +10728,7 @@
       ]
     },
     "System.Private.DataContractSerialization/4.1.1": {
-      "sha512": "GSJHjhrs4GQiogjAWxXso3OXTqy5b2qII8T0+Owmx8dYj2egVdWg1hNAH5VaKrw7odaEjqEDMwrpKHEopwptNQ==",
+      "sha512": "lcqFBUaCZxPiUkA4dlSOoPZGtZsAuuElH2XHgLwGLxd7ZozWetV5yiz0qGAV2AUYOqw97MtZBjbLMN16Xz4vXA==",
       "type": "package",
       "path": "system.private.datacontractserialization/4.1.1",
       "files": [
@@ -13029,7 +13029,7 @@
       ]
     },
     "System.Xml.XmlSerializer/4.0.11": {
-      "sha512": "ZnQpdL1gPCSYt2UccTfyBjclxXWUgQ3Sm5PzBAKhCVmB7FyuJe4ZPi9PwvnoxYTD/p/EMD4GfhM8vIHWbYNWEg==",
+      "sha512": "FrazwwqfIXTfq23mfv4zH+BjqkSFNaNFBtjzu3I9NRmG8EELYyrv/fJnttCIwRMFRR/YKXF1hmsMmMEnl55HGw==",
       "type": "package",
       "path": "system.xml.xmlserializer/4.0.11",
       "files": [
@@ -13212,27 +13212,27 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\adebolaakindele\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\": {},
+    "C:\\Users\\jhay\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
+    "restoreSettings": {
+      "hideWarningsAndErrors": true
+    },
     "restore": {
-      "projectUniqueName": "C:\\Users\\adebolaakindele\\Documents\\Dev\\ASP.NET\\EatListN\\EatlistApi\\EatlistApi.csproj",
+      "projectUniqueName": "C:\\Users\\jhay\\Desktop\\GitEatList\\EatList\\EatlistApi\\EatlistApi.csproj",
       "projectName": "EatlistApi",
-      "projectPath": "C:\\Users\\adebolaakindele\\Documents\\Dev\\ASP.NET\\EatListN\\EatlistApi\\EatlistApi.csproj",
-      "packagesPath": "C:\\Users\\adebolaakindele\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\adebolaakindele\\Documents\\Dev\\ASP.NET\\EatListN\\EatlistApi\\obj\\",
+      "projectPath": "C:\\Users\\jhay\\Desktop\\GitEatList\\EatList\\EatlistApi\\EatlistApi.csproj",
+      "packagesPath": "C:\\Users\\jhay\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\jhay\\Desktop\\GitEatList\\EatList\\EatlistApi\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\adebolaakindele\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config"
+        "C:\\Users\\jhay\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.0"
@@ -13244,8 +13244,8 @@
       "frameworks": {
         "netcoreapp2.0": {
           "projectReferences": {
-            "C:\\Users\\adebolaakindele\\Documents\\Dev\\ASP.NET\\EatListN\\EatListDataService\\EatListDataService.csproj": {
-              "projectPath": "C:\\Users\\adebolaakindele\\Documents\\Dev\\ASP.NET\\EatListN\\EatListDataService\\EatListDataService.csproj"
+            "C:\\Users\\jhay\\Desktop\\GitEatList\\EatList\\EatListDataService\\EatListDataService.csproj": {
+              "projectPath": "C:\\Users\\jhay\\Desktop\\GitEatList\\EatList\\EatListDataService\\EatListDataService.csproj"
             }
           }
         }
