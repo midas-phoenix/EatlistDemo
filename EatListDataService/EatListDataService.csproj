@@ -7,6 +7,7 @@
   <ItemGroup>
     <Compile Remove="DataBase\Logger.cs" />
     <Compile Remove="DataBase\TemporaryDbContextFactory.cs" />
+    <Compile Remove="DataTables\ChatMessagesX.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -13,7 +13,7 @@ namespace EatListDataService.DataTables
         [Key()]
         public int NotificationID { get; set; }
         public string Message { get; set; }
-        public string Source { get; set; }
+        public string CreatedBy { get; set; }
         public string Recipient { get; set; }
         public DateTime DateCreated { get; set; }
     }

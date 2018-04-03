@@ -5,26 +5,32 @@ using System.Text;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 
+
 namespace EatListDataService.Repository
 {
-    public class ChatRepository
+    public class ChatRepository:BaseRepository
     {
         #region "Declarations and Constructors"
-        private readonly ApplicationDbContext entities;
-        readonly ILogger<ChatRepository> _log;
+        //private readonly ApplicationDbContext entities;
+        //readonly ILogger<ChatRepository> _log;
+       // ApplicationDbContext entities;
 
-        public ChatRepository(ILogger<ChatRepository> log)
-        {
-            _log = log;
-        }
-        //private List<Posts> entities;
-        string errorMessage = string.Empty;
+        //public ChatRepository(ILogger<ChatRepository> log)
+        //{
+        //    _log = log;
+        //}
+        ////private List<Posts> entities;
+        //string errorMessage = string.Empty;
 
-        public ChatRepository(ApplicationDbContext context)
-        {
-            //this.context = context;
-            entities = context;
-        }
+        //public ChatRepository(ApplicationDbContext context)
+        //{
+        //    //this.context = context;
+        //    entities = context;
+        //}
+
+        //public ChatRepository()
+        //{
+        //}
         #endregion
 
         #region "Chats"
@@ -56,6 +62,21 @@ namespace EatListDataService.Repository
             return entity;
         }
 
+        //public object Insert(Models.ChatMessages chatMessage)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public object Insert(global::EatlistApi.Models.ChatMessages chatMessage)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public object Insert(global::EatlistApi.Models.ChatMessages chatMessage)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
         public DataTables.ChatMessages Update(DataTables.ChatMessages entity)
         {
             if (entity == null)
@@ -77,39 +98,28 @@ namespace EatListDataService.Repository
             SaveChange();
         }
 
-        #endregion
-
-        #region "comments"
-        public object CommentInsert(DataTables.Comments entity)
+        public dynamic fetchChatMessage(string UserID, string MessageToID)
         {
             try
             {
-                //throw new FormatException("here");
-                if (entity == null)
+                using (entities = new ApplicationDbContext())
                 {
-                    throw new ArgumentNullException("entity");
+                    var provider = entities.ChatMessages.Where(p => p.CreatedBy == UserID && p.MessageToID == MessageToID || p.MessageToID == UserID && p.CreatedBy == UserID)
+                                                   .OrderBy(m => m.DateCreated).ToList();
+                    return provider;
                 }
-                entities.TblCommennts.Add(entity);
-                SaveChange();
-                return entity;
             }
             catch (Exception ex)
             {
-                //_log.LogInformation("Abeg joor");
-                //_log.LogInformation(ex.Message + " : " + ex.InnerException);
-
-                return ex;
+                _log.LogError(ex.Message + " : " + ex.StackTrace);
+                return null;
             }
-
+            //return new string[] { "value1", "value2" };
         }
+
         #endregion
 
-        #region "meta"
-        private void SaveChange()
-        {
-            entities.SaveChanges();
-        }
-        #endregion
+       
 
     }
 }
