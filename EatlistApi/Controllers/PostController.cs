@@ -12,6 +12,10 @@ using Microsoft.Extensions.Logging;
 using EatlistApi.ViewsModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -31,7 +35,7 @@ namespace EatlistApi.Controllers
         public readonly PostRepository _postRepo = new PostRepository();
         public ILogger<dynamic> _log;
         private static UserManager<ApplicationUser> _userManager;//= new UserManager<ApplicationUser>();
-
+        public static IConfiguration Configuration;
         //public string UserID
         //{
         //    get
@@ -45,11 +49,13 @@ namespace EatlistApi.Controllers
         //UserID will be changed
         //string UserID = "03503819-15ce-489c-946e-ff86a5324189";
 
-        public PostController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager)
+        public PostController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
             _log = log;
             _userManager = userManager;
+            Configuration = configuration;
         }
+        //private Account acc = new Account(Configuration["my_cloud_name"], Configuration["my_api_key"], Configuration["my_api_secret"]);
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
@@ -86,7 +92,7 @@ namespace EatlistApi.Controllers
             try
             {
                 ApplicationUser userId = await GetCurrentUserAsync();
-                return Ok(_postRepo.GetAllbyUserID(userId.Id,userId.Id));
+                return Ok(_postRepo.GetAllbyUserID(userId.Id, userId.Id));
             }
             catch (Exception ex)
             {
@@ -110,7 +116,7 @@ namespace EatlistApi.Controllers
                 if (ModelState.IsValid)
                 {
                     ApplicationUser userid = await GetCurrentUserAsync();
-                    return Ok(_postRepo.GetAllbyUserID(Id,userid.Id).ToList());
+                    return Ok(_postRepo.GetAllbyUserID(Id, userid.Id).ToList());
                 }
                 return BadRequest();
             }
@@ -150,6 +156,8 @@ namespace EatlistApi.Controllers
         {
             try
             {
+                Account acc = new Account(Configuration["my_cloud_name"], Configuration["my_api_key"], Configuration["my_api_secret"]);
+                Cloudinary cloudinary = new Cloudinary(acc);
                 ApplicationUser userid = await GetCurrentUserAsync();//await _userManager.GetUserAsync(User);
                 _log.LogInformation(userid.Id);
                 if (!ModelState.IsValid)
@@ -169,7 +177,16 @@ namespace EatlistApi.Controllers
                 {
                     foreach (var file in post.PostFiles)
                     {
-                        PostsMedia postEntity = new PostsMedia { FileType = file.FileType, FileURL = file.FileURL, PostID = ret.PostID };
+                        var uploadParams = new ImageUploadParams()
+                        {
+                            File = new FileDescription(file.FileURL),
+                            Folder="Eatlist/Posts/"
+                        };
+                        var uploadResult = cloudinary.Upload(uploadParams);
+                        var user = JsonConvert.SerializeObject(uploadResult);
+                        _log.LogInformation(user);
+
+                        PostsMedia postEntity = new PostsMedia { FileType = file.FileType, FileURL = uploadResult.SecureUri.AbsoluteUri, PostID = ret.PostID, FileName=uploadResult.PublicId };
                         _postRepo.Insert(postEntity);
                     }
                 }
@@ -178,7 +195,6 @@ namespace EatlistApi.Controllers
             }
             catch (Exception ex)
             {
-                _log.LogInformation(ModelState.ToString());
                 _log.LogInformation(ex.Message + ex.StackTrace);
                 return StatusCode(500);
             }
@@ -297,7 +313,7 @@ namespace EatlistApi.Controllers
             catch (Exception ex)
             {
 
-                _log.LogInformation(ex.Message + " : " + ex.InnerException + " : " +  ex.StackTrace);
+                _log.LogInformation(ex.Message + " : " + ex.InnerException + " : " + ex.StackTrace);
                 // _log.LogInformation(" Ends here... ");
 
                 return StatusCode(500);
@@ -311,7 +327,7 @@ namespace EatlistApi.Controllers
             try
             {
 
-                dynamic res="";
+                dynamic res = "";
                 ApplicationUser userid = await GetCurrentUserAsync();
                 Posts _postObject = _postRepo.Get(Convert.ToInt32(PostID));
 
@@ -338,7 +354,7 @@ namespace EatlistApi.Controllers
                         return Ok(res);
                     }
 
-                    else if(!_postRepo.LikeDelete(_postObject.PostID, userid.Id))
+                    else if (!_postRepo.LikeDelete(_postObject.PostID, userid.Id))
                     {
                         return StatusCode(500, "Operation could not be completed");
                     }

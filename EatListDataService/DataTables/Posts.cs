@@ -17,7 +17,6 @@ namespace EatListDataService.DataTables
         public string RestaurantID { get; set; }
         public DateTime DateCreated { get; set; }
         public string CreatedBy { get; set; }
-        //public App
 
     }
 
@@ -28,6 +27,7 @@ namespace EatListDataService.DataTables
         public int PostMediaID { get; set; }
         public int PostID { get; set; }
         public string FileURL { get; set; }
+        public string FileName { get; set; }
         public string FileType { get; set; }
 
 

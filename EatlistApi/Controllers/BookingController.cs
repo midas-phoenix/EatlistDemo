@@ -106,7 +106,7 @@ namespace EatlistApi.Controllers
                 var result = _bookRepo.Insert(_Bookings);
                 if (result == null)
                 {
-                    return null;
+                    return StatusCode(500, new {message= "Your booking failed." });
                 }
                 else
                 {
@@ -132,7 +132,7 @@ namespace EatlistApi.Controllers
             catch (Exception ex)
             {
                 _log.LogInformation(ex.Source + " : " + ex.Message);
-                return null;
+                return StatusCode(500, new { message = "An error occured while creating your booking." });
             }
         }
 

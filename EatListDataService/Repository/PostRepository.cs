@@ -330,12 +330,16 @@ namespace EatListDataService.Repository
                                 where pst.PostID == id
                                 select new
                                 {
-                                    dsh
+                                    dsh.DishesID,
+                                    dsh.Description,
+                                    dsh.Name,
+                                    CreatedBy = dsh.RestaurantID,
+                                    Mediafiles = entities.TblDishMedia.Where(p=>p.DishID==dsh.DishesID)
                                 })
                                .ToList();
 
                 var Media = entities.TblPostsMedia.Where(x => x.PostID == id)
-                                    .Select(d => new { d.FileType, d.FileURL }).ToList();
+                                    .Select(d => new { d.FileType, d.FileURL, d.FileName }).ToList();
 
                 //res.AddRange("BookingID",Book.BookingID);
                 //res.Add(Book.BookingStatus);

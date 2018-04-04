@@ -1,15 +1,3 @@
-\\192.168.10.10\wwwroot\EatListN\EatlistApi\bin\Release\netcoreapp2.0\EatlistApi.deps.json
-\\192.168.10.10\wwwroot\EatListN\EatlistApi\bin\Release\netcoreapp2.0\EatlistApi.runtimeconfig.json
-\\192.168.10.10\wwwroot\EatListN\EatlistApi\bin\Release\netcoreapp2.0\EatlistApi.runtimeconfig.dev.json
-\\192.168.10.10\wwwroot\EatListN\EatlistApi\bin\Release\netcoreapp2.0\EatlistApi.dll
-\\192.168.10.10\wwwroot\EatListN\EatlistApi\bin\Release\netcoreapp2.0\EatlistApi.pdb
-\\192.168.10.10\wwwroot\EatListN\EatlistApi\bin\Release\netcoreapp2.0\EatListDataService.dll
-\\192.168.10.10\wwwroot\EatListN\EatlistApi\bin\Release\netcoreapp2.0\EatListDataService.pdb
-\\192.168.10.10\wwwroot\EatListN\EatlistApi\obj\Release\netcoreapp2.0\EatlistApi.csproj.CoreCompileInputs.cache
-\\192.168.10.10\wwwroot\EatListN\EatlistApi\obj\Release\netcoreapp2.0\EatlistApi.AssemblyInfoInputs.cache
-\\192.168.10.10\wwwroot\EatListN\EatlistApi\obj\Release\netcoreapp2.0\EatlistApi.AssemblyInfo.cs
-\\192.168.10.10\wwwroot\EatListN\EatlistApi\obj\Release\netcoreapp2.0\EatlistApi.dll
-\\192.168.10.10\wwwroot\EatListN\EatlistApi\obj\Release\netcoreapp2.0\EatlistApi.pdb
 C:\Users\adebolaakindele\Documents\Dev\ASP.NET\EatListN\EatlistApi\bin\Release\netcoreapp2.0\EatlistApi.deps.json
 C:\Users\adebolaakindele\Documents\Dev\ASP.NET\EatListN\EatlistApi\bin\Release\netcoreapp2.0\EatlistApi.runtimeconfig.json
 C:\Users\adebolaakindele\Documents\Dev\ASP.NET\EatListN\EatlistApi\bin\Release\netcoreapp2.0\EatlistApi.runtimeconfig.dev.json

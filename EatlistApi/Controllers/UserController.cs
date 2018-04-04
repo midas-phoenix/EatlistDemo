@@ -12,6 +12,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using EatListDataService.Repository;
+using Microsoft.Extensions.Configuration;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace EatlistApi.Controllers
@@ -27,14 +30,16 @@ namespace EatlistApi.Controllers
         readonly ILogger<UserController> _log;
         public readonly UserRepository _userRepo = new UserRepository();
 
+        public static IConfiguration Configuration;
         //class constructor
-        public UserController(UserManager<ApplicationUser> userManager, ILogger<UserController> log)
+        public UserController(ILogger<UserController> log, UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
-            _userManager = userManager;
             _log = log;
+            _userManager = userManager;
+            Configuration = configuration;
         }
 
-        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+    private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         //private readonly UserManager<ApplicationUser> _userManager;
         //private readonly SignInManager<ApplicationUser> _signInManager;
@@ -110,6 +115,8 @@ namespace EatlistApi.Controllers
         {
             try
             {
+                Account acc = new Account(Configuration["my_cloud_name"], Configuration["my_api_key"], Configuration["my_api_secret"]);
+                Cloudinary cloudinary = new Cloudinary(acc);
                 ApplicationUser userId = await GetCurrentUserAsync();
 
                 if (ModelState.IsValid)
@@ -118,8 +125,14 @@ namespace EatlistApi.Controllers
                     //_upload.IsProfile = true;
                     //_upload.UserID = userId.Id;// Guid.Parse(identity.FindFirst(ClaimTypes.GivenName).ToString());
                     //_upload.FileUrl = upload.FileUrl;
-
-                    userId.profilepic = upload.FileUrl;
+                    var uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(upload.FileUrl),
+                        Folder = "Eatlist/profilepic/"
+                    };
+                    var uploadResult = cloudinary.Upload(uploadParams);
+                    userId.profilepic = uploadResult.SecureUri.AbsolutePath;
+                    userId.profilepicName = uploadResult.PublicId;
                     await _userManager.UpdateAsync(userId);
 
                     return Ok(_userRepo.GetUser(userId.Id, userId.Id));

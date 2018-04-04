@@ -60,7 +60,7 @@ namespace EatListDataService.Repository
                               usr.IsRestaurant,
                               usr.RestaurantName,
                           };
-                var media = entities.TblDishMedia.Where(x => x.DishID == id).Select(dm => new { dm.Url, dm.Type, }).ToList();
+                var media = entities.TblDishMedia.Where(x => x.DishID == id).Select(dm => new { dm.Url, dm.Type, dm.FileName }).ToList();
                 var tagIDs = entities.TblTags.Where(x => x.DishID == id).Select(dm => dm.DishID).ToList();
                 List<dynamic> tags = new List<dynamic>();
                 foreach (var ids in tagIDs)
@@ -130,7 +130,7 @@ namespace EatListDataService.Repository
                     d.DateCreated,
                     d.Description,
                     CreatedBy = d.RestaurantID,
-                    RestaurantName = d.ApplicationUser.RestaurantName,
+                    entities.Users.Where(x => x.Id == d.RestaurantID).FirstOrDefault().RestaurantName,
                     dishmedias = entities.TblDishMedia.Where(dm => dm.DishID == d.DishesID).Select(m => new { m.Url, m.Type }).ToList()
                 }).ToList();
 

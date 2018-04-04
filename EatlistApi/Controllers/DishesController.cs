@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using EatlistApi.Models;
 using EatListDataService.DataBase;
 using EatListDataService.DataTables;
 using EatListDataService.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -24,13 +27,15 @@ namespace EatlistApi.Controllers
         public readonly DishesRepository _dishRepo = new DishesRepository();
         public ILogger<dynamic> _log;
         private static UserManager<ApplicationUser> _userManager;//= new UserManager<ApplicationUser>();
+        public static IConfiguration Configuration;
 
 
 
-        public DishesController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager)
+        public DishesController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
             _log = log;
             _userManager = userManager;
+            Configuration = configuration;
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
@@ -95,6 +100,8 @@ namespace EatlistApi.Controllers
                 {
                     return BadRequest(ModelState);
                 }
+                Account acc = new Account(Configuration["my_cloud_name"], Configuration["my_api_key"], Configuration["my_api_secret"]);
+                Cloudinary cloudinary = new Cloudinary(acc);
                 ApplicationUser userId = await GetCurrentUserAsync();
 
                 _Dishes.Name = model.Name;
@@ -108,10 +115,17 @@ namespace EatlistApi.Controllers
                 }
                 foreach(Media md in model.Media)
                 {
-                    DishMedia media = new DishMedia();
+                    var uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(md.Url),
+                        Folder = "Eatlist/Dish/"
+                    };
+                    var uploadResult = cloudinary.Upload(uploadParams);
 
+                    DishMedia media = new DishMedia();
                     media.DishID = result.DishesID;
-                    media.Url = md.Url;
+                    media.Url = uploadResult.SecureUri.AbsoluteUri;
+                    media.FileName = uploadResult.PublicId;
                     media.Type = md.Type.ToString();
                     var ret=_dishRepo.MediaInsert(media);
                     if (ret.Count < 1){ throw new InvalidOperationException(); }
@@ -134,6 +148,8 @@ namespace EatlistApi.Controllers
                 {
                     return BadRequest(ModelState);
                 }
+                Account acc = new Account(Configuration["my_cloud_name"], Configuration["my_api_key"], Configuration["my_api_secret"]);
+                Cloudinary cloudinary = new Cloudinary(acc);
                 ApplicationUser userId = await GetCurrentUserAsync();
 
                 if (_dishRepo.GetMedia(model.DishID).Count>0 && !_dishRepo.DeleteMedia(model.DishID))
@@ -154,9 +170,17 @@ namespace EatlistApi.Controllers
                 }
                 foreach (Media md in model.Media)
                 {
+                    var uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(md.Url),
+                        Folder = "Eatlist/Dish/"
+                    };
+                    var uploadResult = cloudinary.Upload(uploadParams);
+
                     DishMedia media = new DishMedia();
                     media.DishID = result.DishesID;
-                    media.Url = md.Url;
+                    media.Url = uploadResult.SecureUri.AbsoluteUri;
+                    media.FileName = uploadResult.PublicId;
                     media.Type = md.Type.ToString();
                     var ret = _dishRepo.MediaInsert(media);
                     if (ret.Count < 1) { throw new InvalidOperationException(); }
