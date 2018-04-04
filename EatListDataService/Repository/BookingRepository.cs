@@ -31,7 +31,7 @@ namespace EatListDataService.Repository
             catch(Exception ex)
             {
                 _log.LogDebug(ex.Message+ ":" +ex.StackTrace);
-                return null;
+                throw ex;
             }
             
         }
@@ -59,7 +59,7 @@ namespace EatListDataService.Repository
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                return null;
+                throw ex;
             }
 
         }
@@ -95,7 +95,7 @@ namespace EatListDataService.Repository
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                return null;
+                throw ex;
             }
 
         }
@@ -157,7 +157,7 @@ namespace EatListDataService.Repository
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                return null;
+                throw ex;
             }
            
         }
@@ -176,8 +176,8 @@ namespace EatListDataService.Repository
             }
             catch (Exception ex)
             {
-                _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                return null;
+                _log.LogDebug(ex.Message + ":" + ex.InnerException + ":" + ex.StackTrace);
+                throw ex;
             }
             
         }
@@ -192,7 +192,7 @@ namespace EatListDataService.Repository
                 }
                 if (entities.TblBookings.Find(entity.BookingID) == null)
                 {
-                    return null;
+                    throw new NullReferenceException();
                 }
                 entities.TblBookings.Update(entity);
                 SaveChange();
@@ -201,7 +201,7 @@ namespace EatListDataService.Repository
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                return null;
+                throw ex;
             }
         }
 
@@ -240,7 +240,7 @@ namespace EatListDataService.Repository
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                return null;
+                throw ex;
             }
         }
 
@@ -271,7 +271,7 @@ namespace EatListDataService.Repository
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                return null;
+                throw ex;
             }
 
         }
@@ -291,7 +291,7 @@ namespace EatListDataService.Repository
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                return null;
+                throw ex;
             }
         }
 
@@ -313,7 +313,7 @@ namespace EatListDataService.Repository
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                return null;
+                throw ex;
             }
         }
         
@@ -332,7 +332,7 @@ namespace EatListDataService.Repository
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                return null;
+                throw ex;
             }   
         }
         //gets from Booking table
@@ -345,7 +345,7 @@ namespace EatListDataService.Repository
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                return null;
+                throw ex;
             }
         }
         
@@ -360,7 +360,7 @@ namespace EatListDataService.Repository
         //        var entityObj = entities.TblBookings.Find(entity);
         //        if (entityObj == null)
         //        {
-        //            return null;
+        //            throw ex;
         //        }
         //        entityObj.BookingStatusID = BookingStatusID;
         //        entities.TblBookings.Update(entityObj);
@@ -370,7 +370,7 @@ namespace EatListDataService.Repository
         //    catch (Exception ex)
         //    {
         //        _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-        //        return null;
+        //        throw ex;
         //    }
             
             
@@ -383,7 +383,7 @@ namespace EatListDataService.Repository
                 var entityObj = entities.TblBookings.Find(EntityID);
                 if (entityObj == null)
                 {
-                    return null;
+                    throw new NullReferenceException();
                 }
                 entityObj.BookingStatusID = BookingStatusID;
                 entities.TblBookings.Update(entityObj);
@@ -393,7 +393,7 @@ namespace EatListDataService.Repository
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                return null;
+                throw ex;
             }
             
         }

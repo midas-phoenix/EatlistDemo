@@ -17,6 +17,7 @@ namespace EatListDataService.DataBase
         public DateTime Doi { get; set; }
         public string RestaurantName { get; set; }
         public string profilepic { get; set; }
+        public string profilepicName { get; set; }
         public ICollection<Dishes> Dishes { get; set; }
 
 
