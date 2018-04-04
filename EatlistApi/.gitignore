@@ -1,5 +1,8 @@
 obj/
 bin/
 Logs/
+<<<<<<< HEAD
 *.csproj
 *.csproj.user
+=======
+>>>>>>> satFix

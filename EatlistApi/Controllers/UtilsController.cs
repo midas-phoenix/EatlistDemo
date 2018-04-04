@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EatListDataService.DataBase;
 using EatListDataService.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,8 @@ using Microsoft.Extensions.Logging;
 
 namespace EatlistApi.Controllers
 {
-    [Produces("application/json")]
+    //[Produces("application/json")]
+    [Authorize()]
     [Route("api/Utils")]
     public class UtilsController : Controller
     {
