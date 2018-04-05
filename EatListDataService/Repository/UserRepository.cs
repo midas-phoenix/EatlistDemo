@@ -83,14 +83,18 @@ namespace EatListDataService.Repository
         {
             try
             {
-                if (Id == "0")
+                using (entities)
                 {
-                    return entities.Users.Where(x => x.IsRestaurant == true).ToListAsync();
+                    if (Id == "0")
+                    {
+                        return entities.Users.Where(x => x.IsRestaurant == true).ToListAsync();
+                    }
+                    else
+                    {
+                        return entities.Users.Where(x => x.IsRestaurant == true && x.Id == Id).ToListAsync();
+                    }
                 }
-                else
-                {
-                    return entities.Users.Where(x => x.IsRestaurant == true && x.Id == Id).ToListAsync();
-                }
+                
             }
             catch (Exception ex)
             {

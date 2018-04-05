@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using EatListDataService.Repository;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EatlistApi.Controllers
 {
+    [Authorize()]
     [Produces("application/json")]
     [Route("api/Notification")]
     public class NotificationController : Controller
@@ -25,6 +27,7 @@ namespace EatlistApi.Controllers
 
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
         // POST: api/Notification
         [HttpPost, Route("Create")]
         public async Task<IActionResult> Create([FromBody]Notification model)

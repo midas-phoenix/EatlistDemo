@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -65,7 +66,11 @@ namespace EatlistApi.Controllers
             try
             {
                 ApplicationUser userId = await GetCurrentUserAsync();
-                return Ok(_dishRepo.GetDishesByUserID(userId.Id));
+                _log.LogInformation("testing...");
+                var res = await _dishRepo.GetDishesByUserID(userId.Id);
+                string user = JsonConvert.SerializeObject(res);
+                _log.LogInformation("user:"+user);
+                return Ok(res);
             }
             catch (Exception ex)
             {

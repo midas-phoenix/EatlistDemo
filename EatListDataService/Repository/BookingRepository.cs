@@ -11,11 +11,10 @@ namespace EatListDataService.Repository
 {
     public class BookingRepository : BaseRepository
     {
-        //public BookingRepository(ApplicationDbContext context) : base(context)
+        //public BookingRepository() 
         //{
-            
+        //    _log = new ILogger<BookingRepository>()
         //}
-
 
         #region "Bookings"
         public dynamic GetAllByUserID(string UserID)
@@ -31,7 +30,7 @@ namespace EatListDataService.Repository
             catch(Exception ex)
             {
                 _log.LogDebug(ex.Message+ ":" +ex.StackTrace);
-                throw ex;
+                return ex;
             }
             
         }
@@ -59,12 +58,12 @@ namespace EatListDataService.Repository
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                throw ex;
+                return ex;
             }
 
         }
 
-        public Bookings GetSpecific(long id)
+        public dynamic GetSpecific(long id)
         {
             try
             {
@@ -95,7 +94,7 @@ namespace EatListDataService.Repository
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                throw ex;
+                return ex;
             }
 
         }
@@ -124,7 +123,7 @@ namespace EatListDataService.Repository
                                select new
                                {
                                    book.BookingID,
-                                   book.BookingStatus,
+                                   //book.BookingStatus,
                                    book.BookingTime,
                                    book.DateCreated,
                                    book.Description,
@@ -157,12 +156,12 @@ namespace EatListDataService.Repository
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                throw ex;
+                return ex;
             }
            
         }
 
-        public DataTables.Bookings Insert(DataTables.Bookings entity)
+        public dynamic Insert(DataTables.Bookings entity)
         {
             try
             {
@@ -177,12 +176,12 @@ namespace EatListDataService.Repository
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.InnerException + ":" + ex.StackTrace);
-                throw ex;
+                return ex;
             }
             
         }
 
-        public DataTables.Bookings Update(DataTables.Bookings entity)
+        public dynamic Update(DataTables.Bookings entity)
         {
             try
             {
@@ -201,7 +200,7 @@ namespace EatListDataService.Repository
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                throw ex;
+                return ex;
             }
         }
 
@@ -240,7 +239,7 @@ namespace EatListDataService.Repository
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                throw ex;
+                return ex;
             }
         }
 
@@ -271,12 +270,12 @@ namespace EatListDataService.Repository
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                throw ex;
+                return ex;
             }
 
         }
 
-        public DataTables.BookingDishes InsertBookingDish(DataTables.BookingDishes entity)
+        public dynamic InsertBookingDish(DataTables.BookingDishes entity)
         {
             try
             {
@@ -291,14 +290,14 @@ namespace EatListDataService.Repository
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                throw ex;
+                return ex;
             }
         }
 
         #endregion
 
         #region "BookingStatus"
-        public DataTables.BookingStatus InsertBookingStatus(DataTables.BookingStatus entity)
+        public dynamic InsertBookingStatus(DataTables.BookingStatus entity)
         {
             try
             {
@@ -306,48 +305,48 @@ namespace EatListDataService.Repository
                 {
                     throw new ArgumentNullException("entity");
                 }
-                entities.TblBookingStatus.Add(entity);
+                //entities.TblBookingStatus.Add(entity);
                 SaveChange();
                 return entity;
             }
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                throw ex;
+                return ex;
             }
         }
         
         //gets by join
-        public BookingStatus GetBookingStatus(int BookingID)
-        {
-            try
-            {
-                var viewableBookings = (from Booking in entities.TblBookings
-                                        join BStatus in entities.TblBookingStatus on Booking.BookingStatusID equals BStatus.BookingStatusID
-                                        where Booking.BookingID == BookingID
-                                        select BStatus).FirstOrDefault();
-                                     
-                return viewableBookings;
-            }
-            catch (Exception ex)
-            {
-                _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                throw ex;
-            }   
-        }
+        //public dynamic GetBookingStatus(int BookingID)
+        //{
+        //    try
+        //    {
+        //        //    var viewableBookings = (from Booking in entities.TblBookings
+        //        //                            //join BStatus in entities.TblBookingStatus on Booking.BookingStatusID equals BStatus.BookingStatusID
+        //        //                            where Booking.BookingID == BookingID
+        //        //                            select BStatus).FirstOrDefault();
+
+        //        return entities.TblBookings;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _log.LogDebug(ex.Message + ":" + ex.StackTrace);
+        //        return ex;
+        //    }   
+        //}
         //gets from Booking table
-        public dynamic GetBookingStat(int BookingID)
-        {
-            try
-            {
-                return entities.TblBookings.FirstOrDefault(x => x.BookingID == BookingID).BookingStatus;
-            }
-            catch (Exception ex)
-            {
-                _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                throw ex;
-            }
-        }
+        //public dynamic GetBookingStat(int BookingID)
+        //{
+        //    try
+        //    {
+        //        return entities.TblBookings.FirstOrDefault(x => x.BookingID == BookingID).BookingStatus;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _log.LogDebug(ex.Message + ":" + ex.StackTrace);
+        //        return ex;
+        //    }
+        //}
         
         //public dynamic SetBookingStatus(DataTables.Bookings entity,int BookingStatusID)
         //{
@@ -388,12 +387,12 @@ namespace EatListDataService.Repository
                 entityObj.BookingStatusID = BookingStatusID;
                 entities.TblBookings.Update(entityObj);
                 SaveChange();
-                return entities.TblBookings.Where(b => b.BookingID == entityObj.BookingID).Include(b => b.BookingStatus);//.ThenInclude(bs => bs.StatusName);
+                return entities.TblBookings.Where(b => b.BookingID == entityObj.BookingID);//.Include(b => b.BookingStatus);//.ThenInclude(bs => bs.StatusName);
             }
             catch (Exception ex)
             {
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
-                throw ex;
+                return ex;
             }
             
         }

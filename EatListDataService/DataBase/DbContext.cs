@@ -36,7 +36,7 @@ namespace EatListDataService.DataBase
         public DbSet<Orders> TblOrders { get; set; }
         public DbSet<OrderDish> TblOrderDish { get; set; }
 
-        public DbSet<BookingStatus> TblBookingStatus { get; set; }
+        //public DbSet<BookingStatus> TblBookingStatus { get; set; }
 
         public DbSet<Friendship> TblFriendship { get; set; }
 
@@ -68,8 +68,8 @@ namespace EatListDataService.DataBase
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //var connString = "Data Source=tcp:eatlist.database.windows.net,1433;Initial Catalog=Eatlist;User Id=ibrahim@eatlist.database.windows.net;Password=Incredible23;"; // Your connection string logic here
-            var connString = "Data Source=DESKTOP-I6I6G01\\SQLEXPRESS;Initial Catalog=ReactT;User Id=ficitor;Password=p@33w0rd;"; // Your connection string logic 
+            var connString = "Data Source=tcp:eatlist.database.windows.net,1433;Initial Catalog=Eatlist;User Id=ibrahim@eatlist.database.windows.net;Password=Incredible23;"; // Your connection string logic here
+            //var connString = "Data Source=DESKTOP-I6I6G01\\SQLEXPRESS;Initial Catalog=ReactT;User Id=ficitor;Password=p@33w0rd;"; // Your connection string logic 
             optionsBuilder.UseSqlServer(connString);
         }
     }

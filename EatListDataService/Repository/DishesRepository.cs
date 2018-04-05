@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using EatListDataService.DataBase;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace EatListDataService.Repository
 {
@@ -122,6 +123,7 @@ namespace EatListDataService.Repository
                 //                    .Include(d => d.ApplicationUser)
                 //                    .Select(d=>new { d.ApplicationUser.FullName, d.ApplicationUser.UserName, d.ApplicationUser.RestaurantName })
                 //                    .FirstOrDefault();
+                _log.LogInformation("testing...");
                 dynamic dishes = entities.TblDishes.Where(x => x.RestaurantID == UserID).Select(d => new
                 {
                     d.DishesID,
@@ -133,7 +135,8 @@ namespace EatListDataService.Repository
                     entities.Users.Where(x => x.Id == d.RestaurantID).FirstOrDefault().RestaurantName,
                     dishmedias = entities.TblDishMedia.Where(dm => dm.DishID == d.DishesID).Select(m => new { m.Url, m.Type }).ToList()
                 }).ToList();
-
+                string user = JsonConvert.SerializeObject(dishes);
+                _log.LogInformation(user);
                 //result.Add("user", user);
                 //result.Add("dish", dishes);
                 //return result;
@@ -142,7 +145,7 @@ namespace EatListDataService.Repository
             }
             catch (Exception ex)
             {
-                _log.LogInformation(ex.Message + " : " + ex.InnerException);
+                _log.LogInformation(ex.Message + " : " + ex.InnerException + " : " + ex.StackTrace);
 
                 return ex;
             }

@@ -21,7 +21,7 @@ namespace EatListDataService.DataTables
 
         public DateTime BookingTime { get; set; }
 
-        [ForeignKey("BookingStatus")]
+        //[ForeignKey("BookingStatus")]
         public int? BookingStatusID { get; set; }
 
         public DateTime? DateCreated { get; set; }
@@ -31,7 +31,7 @@ namespace EatListDataService.DataTables
 
         public int? TableSize { get; set; }
 
-        public virtual BookingStatus BookingStatus { get; set; }
+       // public virtual BookingStatus BookingStatus { get; set; }
 
         //[ForeignKey("BookingDish")]
         //public int BookingDishID { get; set; }

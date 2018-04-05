@@ -7,6 +7,7 @@ using EatlistApi.ViewsModel;
 using EatListDataService.DataBase;
 using EatListDataService.DataTables;
 using EatListDataService.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.Logging;
 
 namespace EatlistApi.Controllers
 {
+    [Authorize()]
     [Route("api/[controller]")]
     public class BookingController : Controller
     {
@@ -51,21 +53,24 @@ namespace EatlistApi.Controllers
             try
             {
                 ApplicationUser userId = await GetCurrentUserAsync();
+                _log.LogInformation(userId.Id);
                 if (userId.IsRestaurant)
                 {
-                    if (_bookRepo.GetAllByUserID(userId.Id) == null) { return StatusCode(404); }
-                    return Ok(_bookRepo.GetAllByUserID(userId.Id, true));
+                    var result = _bookRepo.GetAllByUserID(userId.Id, true);
+                    if (result== null) { return StatusCode(404); }
+                    return Ok(result);
                 }
                 else
                 {
-                    if (_bookRepo.GetAllByUserID(userId.Id) == null) { return StatusCode(404); }
-                    return Ok(_bookRepo.GetAllByUserID(userId.Id, false));
+                    var result = _bookRepo.GetAllByUserID(userId.Id, false);
+                    if (result == null) { return StatusCode(404); }
+                    return Ok(result);
                 }
                 
             }
             catch(Exception ex)
             {
-                _log.LogInformation(ex.Message);
+                _log.LogInformation(ex.Message + " " + ex.StackTrace);
                 return StatusCode(500);
             }
         }
@@ -219,24 +224,24 @@ namespace EatlistApi.Controllers
             }
         }
 
-        [HttpGet, Route("getStatus")]
-        public IActionResult getBookingStatus(int BookingID)
-        {
-            try
-            {
-                var ret = _bookRepo.GetBookingStatus(BookingID);
-                if (ret == null)
-                {
-                    return StatusCode(404);
-                }
-                return Ok(new { ret.StatusName,ret.Description });
-            }
-            catch (Exception ex)
-            {
-                _log.LogInformation(ex.Message + ":" + ex.InnerException);
-                return StatusCode(500);
-            }
-        }
+        //[HttpGet, Route("getStatus")]
+        //public IActionResult getBookingStatus(int BookingID)
+        //{
+        //    try
+        //    {
+        //        var ret = _bookRepo.GetBookingStatus(BookingID);
+        //        if (ret == null)
+        //        {
+        //            return StatusCode(404);
+        //        }
+        //        return Ok(new { ret.StatusName,ret.Description });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _log.LogInformation(ex.Message + ":" + ex.InnerException);
+        //        return StatusCode(500);
+        //    }
+        //}
 
         #endregion
     }
