@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using IdentityServer4.AccessTokenValidation;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
@@ -39,15 +40,16 @@ namespace EatlistApi
 
             //...............
             var migrationAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<EatlistDAL.ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<EatlistDAL.ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddTransient<UserRepository>();
-            services.AddTransient<PostRepository>();
+            services.AddTransient<BaseRepository>();
+            services.AddScoped<UserRepository>();
+            services.AddScoped<PostRepository>();
             services.AddTransient<FriendsRepository>();
             services.AddTransient<CommentRepository>();
             services.AddTransient<ChatRepository>();
@@ -69,7 +71,7 @@ namespace EatlistApi
             }).AddJwtBearer(o =>
             {
                 o.Authority = Configuration["IdentityServerAddress"];
-                o.Audience = "apiApp";
+                o.Audience = "oidcdemomobile";
                 o.RequireHttpsMetadata = false;
             });
 

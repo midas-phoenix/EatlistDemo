@@ -79,7 +79,7 @@ namespace EatListDataService.Repository
             }
         }
 
-        public dynamic FetchRestaurants(string Id)
+        public async Task<dynamic> FetchRestaurantsAsync(string Id)
         {
             try
             {
@@ -87,11 +87,11 @@ namespace EatListDataService.Repository
                 {
                     if (Id == "0")
                     {
-                        return entities.Users.Where(x => x.IsRestaurant == true).ToListAsync();
+                        return await entities.Users.Where(x => x.IsRestaurant == true).ToListAsync();
                     }
                     else
                     {
-                        return entities.Users.Where(x => x.IsRestaurant == true && x.Id == Id).ToListAsync();
+                        return await entities.Users.Where(x => x.IsRestaurant == true && x.Id == Id).ToListAsync();
                     }
                 }
                 

@@ -12,7 +12,7 @@ namespace EatListDataService.Repository
     {
         #region "Declarations and Constructors"
         public static ApplicationDbContext entities=new ApplicationDbContext();
-        public ILogger<dynamic> _log { get; set; }
+        public ILogger<dynamic> _log { get; }
 
         //public BaseRepository(ApplicationDbContext context,ILogger<dynamic> log)
         //{

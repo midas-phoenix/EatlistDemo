@@ -6,10 +6,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using IdentityServer4.Services;
-using EatListDataService.DataBase;
+//using EatListDataService.DataBase;
 using IdentityServerWithAspNetIdentity.Services;
 using Microsoft.Extensions.Logging;
 using IdentityServerWithAspNetIdentity.Extensions;
+using EatlistDAL;
+using EatlistDAL.Models;
 
 namespace IdentityServerWithAspNetIdentity
 {

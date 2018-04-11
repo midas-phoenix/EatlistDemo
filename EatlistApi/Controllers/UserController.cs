@@ -199,7 +199,7 @@ namespace EatlistApi.Controllers
         {
             try
             {
-                return Ok(await _userRepo.FetchRestaurants(id));
+                return Ok(await _userRepo.FetchRestaurantsAsync(id));
             }
             catch (Exception ex)
             {

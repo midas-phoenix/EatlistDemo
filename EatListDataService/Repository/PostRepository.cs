@@ -20,12 +20,12 @@ namespace EatListDataService.Repository
         //private readonly ApplicationDbContext entities;
         //readonly ILogger<PostRepository> _log;
 
-        //public PostRepository(ApplicationDbContext context) : base(context)
+        //public PostRepository() 
         //{
 
         //}
 
-        //public PostRepository(ApplicationDbContext context,ILogger<PostRepository> log):base(context,log)
+        //public PostRepository(ILogger<PostRepository> log)
         //{
         //    _log = log;
         //}

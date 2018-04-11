@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using EatListDataService.DataBase;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 

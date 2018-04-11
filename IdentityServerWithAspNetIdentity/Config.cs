@@ -111,6 +111,8 @@ namespace IdentityServerWithAspNetIdentity
                     RequireConsent = false,
                     UpdateAccessTokenClaimsOnRefresh = true,
                     RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                    AllowOfflineAccess = true,
+
                     
                     AllowedScopes = {
                        IdentityServerConstants.StandardScopes.OpenId,

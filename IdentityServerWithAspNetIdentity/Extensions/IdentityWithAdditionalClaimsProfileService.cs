@@ -38,7 +38,7 @@ namespace IdentityServerWithAspNetIdentity.Extensions
 
                 claims = claims.Where(claim => context.RequestedClaimTypes.Contains(claim.Type)).ToList();
 
-                claims.Add(new Claim(JwtClaimTypes.Name, user.IsRestaurant ? user.RestaurantName: user.FullName));
+                claims.Add(new Claim("Name", user.IsRestaurant ? user.RestaurantName: user.FullName));
                 claims.Add(new Claim("UserName", user.UserName));
                 //claims.Add(new Claim(JwtClaimTypes.GivenName, user.UserName));
                 claims.Add(new Claim(JwtClaimTypes.Role, user.IsRestaurant? "Restaurant": "user"));
