@@ -11,9 +11,10 @@ using System;
 namespace EatlistDAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180411235044_contextchange")]
+    partial class contextchange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -354,17 +355,17 @@ namespace EatlistDAL.Migrations
 
                     b.Property<DateTime>("DateCreated");
 
-                    b.Property<int?>("DishId");
+                    b.Property<int?>("Dish");
 
-                    b.Property<string>("RestaurantId");
+                    b.Property<string>("RestaurantID");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedBy");
 
-                    b.HasIndex("DishId");
+                    b.HasIndex("Dish");
 
-                    b.HasIndex("RestaurantId");
+                    b.HasIndex("RestaurantID");
 
                     b.ToTable("TblPosts");
                 });
@@ -649,13 +650,13 @@ namespace EatlistDAL.Migrations
                         .WithMany("PCreatedBy")
                         .HasForeignKey("CreatedBy");
 
-                    b.HasOne("EatlistDAL.Models.Dishes", "Dish")
-                        .WithMany("Post")
-                        .HasForeignKey("DishId");
+                    b.HasOne("EatlistDAL.Models.Dishes", "Dishes")
+                        .WithMany()
+                        .HasForeignKey("Dish");
 
-                    b.HasOne("EatlistDAL.Models.ApplicationUser", "Restaurant")
+                    b.HasOne("EatlistDAL.Models.ApplicationUser", "Restaurants")
                         .WithMany("RestaurantInPost")
-                        .HasForeignKey("RestaurantId");
+                        .HasForeignKey("RestaurantID");
                 });
 
             modelBuilder.Entity("EatlistDAL.Models.PostsMedia", b =>

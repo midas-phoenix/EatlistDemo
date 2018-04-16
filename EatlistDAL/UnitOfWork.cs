@@ -12,6 +12,8 @@ namespace EatlistDAL
         readonly ApplicationDbContext _context;
         readonly ILogger<dynamic> _log;
         IUserRepository _user;
+        IPostRepository _post;
+        IDishRepository _dishes;
 
         public UnitOfWork(ApplicationDbContext context, ILogger<dynamic> log)
         {
@@ -26,6 +28,26 @@ namespace EatlistDAL
                     _user = new UserRepository(_context, _log);
 
                 return _user;
+            }
+        }
+
+        public IPostRepository posts {
+            get
+            {
+                if (_post == null)
+                    _post = new PostRepository(_context, _log);
+
+                return _post;
+            }
+        }
+
+        public IDishRepository Dishes
+        {
+            get {
+                if (_dishes == null)
+                    _dishes = new DishRepository(_context, _log);
+
+                return _dishes;
             }
         }
 

@@ -18,8 +18,7 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
-
-
+using EatlistDAL;
 
 namespace EatlistApi
 {
@@ -43,19 +42,19 @@ namespace EatlistApi
             services.AddDbContext<EatlistDAL.ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<EatlistDAL.Models.ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<EatlistDAL.ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddTransient<BaseRepository>();
-            services.AddScoped<UserRepository>();
-            services.AddScoped<PostRepository>();
-            services.AddTransient<FriendsRepository>();
-            services.AddTransient<CommentRepository>();
-            services.AddTransient<ChatRepository>();
-            services.AddTransient<BookingRepository>();
-            services.AddTransient<DishesRepository>();
-            services.AddTransient<EatListRepository>();
+            //services.AddTransient<BaseRepository>();
+            //services.AddScoped<UserRepository>();
+            //services.AddScoped<PostRepository>();
+            //services.AddTransient<FriendsRepository>();
+            //services.AddTransient<CommentRepository>();
+            //services.AddTransient<ChatRepository>();
+            //services.AddTransient<BookingRepository>();
+            //services.AddTransient<DishesRepository>();
+            //services.AddTransient<EatListRepository>();
             //services.AddTransient<Repo>();
             //*******************************
             /*************SwashBuckle*********************/
@@ -88,6 +87,7 @@ namespace EatlistApi
                 });
             });
 
+            services.AddScoped<IUnitOfWork, HttpUnitOfWork>();
             services.AddMvc();
         }
 

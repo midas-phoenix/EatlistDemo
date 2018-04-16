@@ -15,6 +15,7 @@ using EatListDataService.Repository;
 using Microsoft.Extensions.Configuration;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using EatlistDAL;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace EatlistApi.Controllers
@@ -24,22 +25,22 @@ namespace EatlistApi.Controllers
     public class UserController : Controller
     {
 
-        //private  ApplicationUser _user = new ApplicationUser();
-        //  private readonly ApplicationDbContext _context = new ApplicationDbContext();
-        private UserManager<ApplicationUser> _userManager;
+        private IUnitOfWork _unitOfWork;
+        private UserManager<EatlistDAL.Models.ApplicationUser> _userManager;
         readonly ILogger<UserController> _log;
         public readonly UserRepository _userRepo = new UserRepository();
 
         public static IConfiguration Configuration;
         //class constructor
-        public UserController(ILogger<UserController> log, UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public UserController(ILogger<UserController> log, UserManager<EatlistDAL.Models.ApplicationUser> userManager, IConfiguration configuration, IUnitOfWork unitOfWork)
         {
             _log = log;
             _userManager = userManager;
             Configuration = configuration;
+            _unitOfWork = unitOfWork;
         }
 
-    private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+        private Task<EatlistDAL.Models.ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         //private readonly UserManager<ApplicationUser> _userManager;
         //private readonly SignInManager<ApplicationUser> _signInManager;
@@ -53,8 +54,9 @@ namespace EatlistApi.Controllers
         {
             try
             {
-                ApplicationUser userId = await GetCurrentUserAsync();
-                return Ok(value: _userRepo.GetUser(userId.Id, userId.Id));
+                EatlistDAL.Models.ApplicationUser userId = await GetCurrentUserAsync();
+                //return Ok(value: _userRepo.GetUser(userId.Id, userId.Id));
+                return Ok(_unitOfWork.Users.GetUser(userId.Id, userId.Id));
             }
             catch (Exception ex)
             {
@@ -70,8 +72,9 @@ namespace EatlistApi.Controllers
         {
             try
             {
-                ApplicationUser userId = await GetCurrentUserAsync();
-                return Ok(_userRepo.GetUser(UserId, userId.Id));
+                EatlistDAL.Models.ApplicationUser userId = await GetCurrentUserAsync();
+                //return Ok(_userRepo.GetUser(UserId, userId.Id));
+                return Ok(_unitOfWork.Users.GetUser(UserId, userId.Id));
             }
             catch (Exception ex)
             {
@@ -117,7 +120,7 @@ namespace EatlistApi.Controllers
             {
                 Account acc = new Account(Configuration["my_cloud_name"], Configuration["my_api_key"], Configuration["my_api_secret"]);
                 Cloudinary cloudinary = new Cloudinary(acc);
-                ApplicationUser userId = await GetCurrentUserAsync();
+                EatlistDAL.Models.ApplicationUser userId = await GetCurrentUserAsync();
 
                 if (ModelState.IsValid)
                 {
@@ -161,7 +164,7 @@ namespace EatlistApi.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    ApplicationUser userId = await GetCurrentUserAsync();
+                    EatlistDAL.Models.ApplicationUser userId = await GetCurrentUserAsync();
                     _log.LogInformation("RestaurantName : " + userId.RestaurantName);
                     _log.LogInformation("IsRestaurant : " + userId.IsRestaurant);
                     //var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
@@ -199,7 +202,8 @@ namespace EatlistApi.Controllers
         {
             try
             {
-                return Ok(await _userRepo.FetchRestaurantsAsync(id));
+                //return Ok(await _userRepo.FetchRestaurantsAsync(id));
+                return Ok(_unitOfWork.Users.GetRestaurants(id));
             }
             catch (Exception ex)
             {
@@ -209,12 +213,13 @@ namespace EatlistApi.Controllers
         }
 
         [HttpPost, Route("UpdateAccount")]
-        public async Task<IActionResult> Update([FromBody]UserData userinfo) {
+        public async Task<IActionResult> Update([FromBody]UserData userinfo)
+        {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    ApplicationUser userId = await GetCurrentUserAsync();
+                    EatlistDAL.Models.ApplicationUser userId = await GetCurrentUserAsync();
                     userId.Email = userinfo.Email;
                     userId.FullName = userinfo.FullName;
                     userId.RestaurantName = userinfo.RestaurantName;
@@ -233,7 +238,7 @@ namespace EatlistApi.Controllers
             catch (Exception ex)
             {
                 _log.LogError(ex.Message + ex.StackTrace);
-                return StatusCode(500,new { message="an error occurred"});
+                return StatusCode(500, new { message = "an error occurred" });
             }
         }
     }

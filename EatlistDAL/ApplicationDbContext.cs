@@ -9,7 +9,7 @@ namespace EatlistDAL
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
 
@@ -27,6 +27,12 @@ namespace EatlistDAL
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            //builder.Entity<Posts>()
+            //            .HasOne(s => s.Restaurants)
+            //            .WithMany()
+            //            .HasForeignKey(e => e.Id);
+
         }
 
 

@@ -16,25 +16,24 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using EatlistDAL;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace EatlistApi.Controllers
 {
-    [Authorize()]
+    //[Authorize()]
     [Route("api/[controller]")]
     //Pls, kindly change the TestController to BaseController for IDS
     public class PostController : Controller
     {
-        //private static readonly ApplicationDbContext _post = new ApplicationDbContext();
-        //private readonly PostRepository _postRepo = new PostRepository(_post);
-        //readonly ILogger<PostController> _log;
+        private IUnitOfWork _unitOfWork;
         private Posts _Posts = new Posts();
         private PostsMedia _Media = new PostsMedia();
         public readonly PostRepository _postRepo = new PostRepository();
         public ILogger<dynamic> _log;
-        private static UserManager<ApplicationUser> _userManager;//= new UserManager<ApplicationUser>();
+        private static UserManager<EatlistDAL.Models.ApplicationUser> _userManager;//= new UserManager<ApplicationUser>();
         public static IConfiguration Configuration;
         //public string UserID
         //{
@@ -49,15 +48,15 @@ namespace EatlistApi.Controllers
         //UserID will be changed
         //string UserID = "03503819-15ce-489c-946e-ff86a5324189";
 
-        public PostController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public PostController(ILogger<dynamic> log, UserManager<EatlistDAL.Models.ApplicationUser> userManager, IConfiguration configuration, IUnitOfWork unitOfWork)
         {
             _log = log;
             _userManager = userManager;
             Configuration = configuration;
+            _unitOfWork = unitOfWork;
         }
-        //private Account acc = new Account(Configuration["my_cloud_name"], Configuration["my_api_key"], Configuration["my_api_secret"]);
 
-        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+        private Task<EatlistDAL.Models.ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: api/<controller>
         /// <summary>
@@ -69,8 +68,9 @@ namespace EatlistApi.Controllers
         {
             try
             {
-                ApplicationUser userId = await GetCurrentUserAsync();
-                return Ok(_postRepo.GetViewableForUser(userId.Id));
+                EatlistDAL.Models.ApplicationUser userId = await GetCurrentUserAsync();
+                //return Ok(_postRepo.GetViewableForUser(userId.Id));
+                return Ok(_unitOfWork.posts.UserPosts(userId.Id, true, userId.Id));
             }
             catch (Exception ex)
             {
@@ -91,8 +91,9 @@ namespace EatlistApi.Controllers
         {
             try
             {
-                ApplicationUser userId = await GetCurrentUserAsync();
-                return Ok(_postRepo.GetAllbyUserID(userId.Id, userId.Id));
+                EatlistDAL.Models.ApplicationUser userId = await GetCurrentUserAsync();
+                //return Ok(_postRepo.GetAllbyUserID(userId.Id, userId.Id));
+                return Ok(_unitOfWork.posts.UserPosts(userId.Id, false, userId.Id));
             }
             catch (Exception ex)
             {
@@ -115,8 +116,9 @@ namespace EatlistApi.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    ApplicationUser userid = await GetCurrentUserAsync();
-                    return Ok(_postRepo.GetAllbyUserID(Id, userid.Id).ToList());
+                    EatlistDAL.Models.ApplicationUser userid = await GetCurrentUserAsync();
+                    //return Ok(_postRepo.GetAllbyUserID(Id, userid.Id).ToList());
+                    return Ok(_unitOfWork.posts.UserPosts(Id, false, userid.Id));
                 }
                 return BadRequest();
             }
@@ -134,7 +136,7 @@ namespace EatlistApi.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    ApplicationUser userid = await GetCurrentUserAsync();
+                    EatlistDAL.Models.ApplicationUser userid = await GetCurrentUserAsync();
                     return Ok(_postRepo.GetPostmedia(Id, userid.Id).ToList());
                 }
                 return BadRequest();
@@ -158,40 +160,67 @@ namespace EatlistApi.Controllers
             {
                 Account acc = new Account(Configuration["my_cloud_name"], Configuration["my_api_key"], Configuration["my_api_secret"]);
                 Cloudinary cloudinary = new Cloudinary(acc);
-                ApplicationUser userid = await GetCurrentUserAsync();//await _userManager.GetUserAsync(User);
-                _log.LogInformation(userid.Id);
+                EatlistDAL.Models.ApplicationUser userid = await GetCurrentUserAsync();//await _userManager.GetUserAsync(User);
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
 
-                //_Posts = new Posts();
-                _Posts.Caption = post.Caption;
-                _Posts.DishID = post.DishID;
-                _Posts.DateCreated = DateTime.UtcNow;
-                _Posts.CreatedBy = userid.Id;
-                _Posts.RestaurantID = post.RestaurantID;// UserID;
-                var ret = _postRepo.Insert(_Posts);
+                var NPosts = new EatlistDAL.Models.Posts();
+                NPosts.Caption = post.Caption;
+                if (post.DishID > 0)
+                {
+                    var dsh = _unitOfWork.Dishes.GetAll().Where(d => d.Id == (int)post.DishID);
+                    if (dsh.Any())
+                        NPosts.Dish = dsh.FirstOrDefault();
+                    else
+                        return BadRequest("the selected dish is invalid");
+                };
+
+                NPosts.DateCreated = DateTime.UtcNow;
+                NPosts.CreatedBy = userid.Id;
+                if (post.RestaurantID != "")
+                {
+                    var resuser = _userManager.Users.Where(i => i.Id == post.RestaurantID).ToList();
+                    if (resuser.Any())
+                        NPosts.Restaurant = resuser.FirstOrDefault();
+                    else
+                        return BadRequest("the selected restaurant is invalid");
+                }// UserID;
+                //var ret = _postRepo.Insert(_Posts);
+                var ret = _unitOfWork.posts.NewPost(NPosts);
 
                 if (post.PostFiles != null)
                 {
+                    List<EatlistDAL.Models.PostsMedia> files = new List<EatlistDAL.Models.PostsMedia>();
                     foreach (var file in post.PostFiles)
                     {
                         var uploadParams = new ImageUploadParams()
                         {
                             File = new FileDescription(file.FileURL),
-                            Folder="Eatlist/Posts/"
+                            Folder = "Eatlist/Posts/"
                         };
                         var uploadResult = cloudinary.Upload(uploadParams);
                         var user = JsonConvert.SerializeObject(uploadResult);
                         _log.LogInformation(user);
 
-                        PostsMedia postEntity = new PostsMedia { FileType = file.FileType, FileURL = uploadResult.SecureUri.AbsoluteUri, PostID = ret.PostID, FileName=uploadResult.PublicId };
-                        _postRepo.Insert(postEntity);
+                        //PostsMedia postEntity = new PostsMedia { FileType = file.FileType, FileURL = uploadResult.SecureUri.AbsoluteUri, PostID = ret.Id, FileName = uploadResult.PublicId };
+                        //_postRepo.Insert(postEntity);
+                        files.Add(new EatlistDAL.Models.PostsMedia
+                        {
+                            FileName = uploadResult.PublicId,
+                            FileType = file.FileType,
+                            FileURL = uploadResult.SecureUri.AbsoluteUri,
+                            PostID = ret.Id,
+                            CreatedBy = "0ee0f590-f921-4e96-b295-f420680627b6",//userid.Id,
+                            DateCreated = DateTime.UtcNow
+                        });
                     }
+                    _unitOfWork.posts.UploadPostMedia(files.ToArray());
                 }
 
-                return Ok(_postRepo.GetAllbyUserID(userid.Id, userid.Id));
+                //return Ok(_postRepo.GetAllbyUserID(userid.Id, userid.Id));
+                return Ok(_unitOfWork.posts.UserPosts(userid.Id, true, userid.Id));
             }
             catch (Exception ex)
             {
@@ -254,7 +283,7 @@ namespace EatlistApi.Controllers
         {
             try
             {
-                ApplicationUser userid = await GetCurrentUserAsync();
+                EatlistDAL.Models.ApplicationUser userid = await GetCurrentUserAsync();
                 if (ModelState.IsValid)
                 {
                     Comments _comment = new Comments();
@@ -328,7 +357,7 @@ namespace EatlistApi.Controllers
             {
 
                 dynamic res = "";
-                ApplicationUser userid = await GetCurrentUserAsync();
+                EatlistDAL.Models.ApplicationUser userid = await GetCurrentUserAsync();
                 Posts _postObject = _postRepo.Get(Convert.ToInt32(PostID));
 
                 //_log.LogInformation(PostID.ToString());

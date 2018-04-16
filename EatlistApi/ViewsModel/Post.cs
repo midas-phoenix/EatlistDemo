@@ -13,6 +13,7 @@ namespace EatlistApi.Models
         public string FileURL { get; set; }
         [Required]
         public string FileType { get; set; }
+
     }
 
     public class Post

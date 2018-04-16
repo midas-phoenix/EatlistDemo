@@ -9,8 +9,8 @@ namespace EatlistDAL
     {
 
         IUserRepository Users { get; }
-        
-
+        IPostRepository posts { get; }
+        IDishRepository Dishes { get; }
 
         int SaveChanges();
     }

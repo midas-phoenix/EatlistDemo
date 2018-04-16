@@ -9,17 +9,17 @@ namespace EatlistDAL.Models
     {
         public string Caption { get; set; }
 
-        [ForeignKey("Dishes")]
-        public int? Dish { get; set; }
+        public virtual Dishes Dish { get; set; }
 
-        [ForeignKey("Restaurants")]
-        public string RestaurantID { get; set; }
-        
-        public virtual Dishes Dishes { get; set; }
         public virtual ICollection<PostsMedia> PostsMedia { get; set; }
+
+        [InverseProperty("Post")]
         public virtual ICollection<Likes> Likes { get; set; }
+
+        [InverseProperty("Post")]
         public virtual ICollection<Comments> Comments { get; set; }
-        public virtual ApplicationUser Restaurants { get; set; }
+
+        public virtual ApplicationUser Restaurant { get; set; }
     }
 
     public class PostsMedia : AuditableEntity
@@ -38,19 +38,14 @@ namespace EatlistDAL.Models
 
     public class Likes: AuditableEntity
     {
-        [ForeignKey("Posts")]
-        public int PostID { get; set; }
-
-        public virtual Posts Posts { get; set; }
+        public virtual Posts Post { get; set; }
     }
 
     public class Comments : AuditableEntity
     {
-        [ForeignKey("Posts")]
-        public int PostID { get; set; }
         public string Content { get; set; }
         public string Image { get; set; }
 
-        public virtual Posts Posts { get; set; }
+        public virtual Posts Post { get; set; }
     }
 }

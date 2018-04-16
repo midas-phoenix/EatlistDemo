@@ -11,9 +11,10 @@ using System;
 namespace EatlistDAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180412155235_initial_4_6")]
+    partial class initial_4_6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -354,7 +355,7 @@ namespace EatlistDAL.Migrations
 
                     b.Property<DateTime>("DateCreated");
 
-                    b.Property<int?>("DishId");
+                    b.Property<int?>("Dish");
 
                     b.Property<string>("RestaurantId");
 
@@ -362,7 +363,7 @@ namespace EatlistDAL.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.HasIndex("DishId");
+                    b.HasIndex("Dish");
 
                     b.HasIndex("RestaurantId");
 
@@ -649,9 +650,9 @@ namespace EatlistDAL.Migrations
                         .WithMany("PCreatedBy")
                         .HasForeignKey("CreatedBy");
 
-                    b.HasOne("EatlistDAL.Models.Dishes", "Dish")
-                        .WithMany("Post")
-                        .HasForeignKey("DishId");
+                    b.HasOne("EatlistDAL.Models.Dishes", "Dishes")
+                        .WithMany()
+                        .HasForeignKey("Dish");
 
                     b.HasOne("EatlistDAL.Models.ApplicationUser", "Restaurant")
                         .WithMany("RestaurantInPost")

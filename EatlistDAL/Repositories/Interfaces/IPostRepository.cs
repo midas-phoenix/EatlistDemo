@@ -7,9 +7,12 @@ namespace EatlistDAL.Repositories.Interfaces
 {
     public interface IPostRepository: IRepository<Posts>
     {
-        dynamic GetViewableForUser(string UserID);
-        void NewPost(Posts post, PostsMedia pm);
-        dynamic GetPostmedia(long id, string CUser);
+
+        //dynamic GetViewableForUser(string UserID);
+        Posts NewPost(Posts post);
+        dynamic UserPosts(string userid, bool allpost, string CUser);
+        dynamic GetPostByID(long id, string CUser);
+        List<PostsMedia> UploadPostMedia(PostsMedia[] medias);
     }
 
     public interface ICommentRepository : IRepository<Comments>

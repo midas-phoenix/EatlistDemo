@@ -16,11 +16,27 @@ namespace EatlistDAL.Repositories
         }
 
         private ApplicationDbContext _appContext => (ApplicationDbContext)_context;
-        private ILogger<dynamic> log => (ILogger<dynamic>)_log;
+        private ILogger<dynamic> logger => (ILogger<dynamic>)_log;
 
         public dynamic GetRestaurants(string Id)
         {
-            throw new NotImplementedException();
+            try
+            {
+            if (Id=="0")
+            {
+                return _appContext.Users.Where(x => x.IsRestaurant);
+            }
+            else
+            {
+                return _appContext.Users.Where(x => x.Id == Id);
+            }
+
+            }
+            catch (Exception ex)
+            {
+                logger.LogInformation(ex.Message + " : " + ex.InnerException + ex.StackTrace);
+                return ex;
+            }
         }
 
         public dynamic GetUser(string UserID, string me)
@@ -51,7 +67,7 @@ namespace EatlistDAL.Repositories
             }
             catch (Exception ex)
             {
-                log.LogInformation(ex.Message + " : " + ex.InnerException + ex.StackTrace);
+                logger.LogInformation(ex.Message + " : " + ex.InnerException + ex.StackTrace);
                 return ex;
             }
         }
