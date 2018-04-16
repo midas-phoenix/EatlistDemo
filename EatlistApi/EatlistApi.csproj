@@ -1,0 +1,55 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ControllersX\**" />
+    <Compile Remove="Views\**" />
+    <Content Remove="ControllersX\**" />
+    <Content Remove="Views\**" />
+    <EmbeddedResource Remove="ControllersX\**" />
+    <EmbeddedResource Remove="Views\**" />
+    <None Remove="ControllersX\**" />
+    <None Remove="Views\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\SampleDataController.cs" />
+    <Compile Remove="Controllers\ValuesController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Properties\PublishProfiles\eatlist - Web Deploy.pubxml" />
+    <None Remove="Properties\PublishProfiles\eatlist - Web Deploy1.pubxml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Logs\" />
+    <Folder Include="Properties\PublishProfiles\" />
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CloudinaryDotNet" Version="1.2.0" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.5.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
+    <PackageReference Include="NewtonSoft.Json" Version="11.0.2" />
+    <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0-dev-00023" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EatlistDAL\EatlistDAL.csproj" />
+    <ProjectReference Include="..\EatListDataService\EatListDataService.csproj" />
+  </ItemGroup>
+
+</Project>
