@@ -9,7 +9,6 @@ namespace EatlistDAL.Repositories.Interfaces
     {
 
         //dynamic GetViewableForUser(string UserID);
-        Posts NewPost(Posts post);
         dynamic UserPosts(string userid, bool allpost, string CUser);
         dynamic GetPostByID(long id, string CUser);
         List<PostsMedia> UploadPostMedia(PostsMedia[] medias);
@@ -18,7 +17,12 @@ namespace EatlistDAL.Repositories.Interfaces
     public interface ICommentRepository : IRepository<Comments>
     {
         dynamic FetchComment(int PostID);
+    }
 
-
+    public interface ILikesRepository: IRepository<Likes>
+    {
+        dynamic FetchLikes(long PostID);
+        bool LikeExist(int PostID, string UserID);
+        Likes UserPostLike(int PostID, string UserID);
     }
 }

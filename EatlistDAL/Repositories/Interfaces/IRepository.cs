@@ -8,14 +8,14 @@ namespace EatlistDAL.Repositories.Interfaces
     public interface IRepository<TEntity> where TEntity : class
     {
 
-        void Add(TEntity entity);
-        void AddRange(IEnumerable<TEntity> entities);
+        TEntity Add(TEntity entity);
+        IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities);
 
-        void Update(TEntity entity);
-        void UpdateRange(IEnumerable<TEntity> entities);
+        TEntity Update(TEntity entity);
+        IEnumerable<TEntity> UpdateRange(IEnumerable<TEntity> entities);
 
-        void Remove(TEntity entity);
-        void RemoveRange(IEnumerable<TEntity> entities);
+        bool Remove(TEntity entity);
+        bool RemoveRange(IEnumerable<TEntity> entities);
 
         int Count();
 

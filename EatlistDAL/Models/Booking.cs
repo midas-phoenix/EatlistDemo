@@ -7,8 +7,6 @@ namespace EatlistDAL.Models
 {
     public class Bookings : AuditableEntity
     {
-        public string RestaurantID { get; set; }
-        
         public string Description { get; set; }
 
         public DateTime BookingTime { get; set; }
@@ -17,21 +15,20 @@ namespace EatlistDAL.Models
         
         public int? TableSize { get; set; }
 
+        [InverseProperty("Booking")]
+        public virtual IEnumerable<BookingDishes> BookingDishes { get; set; }
+
+        public virtual ApplicationUser Restaurant { get; set; }
+
     }
 
 
     public class BookingDishes: AuditableEntity
     {
-
-        [ForeignKey("Dishes")]
-        public int DishID { get; set; }
-
-        public virtual Dishes Dishes { get; set; }
-
-        [ForeignKey("Bookings")]
-        public int BookingID { get; set; }
-
-        public virtual Bookings Bookings { get; set; }
+        
+        public virtual Dishes Dish { get; set; }
+        
+        public virtual Bookings Booking { get; set; }
         
 
     }

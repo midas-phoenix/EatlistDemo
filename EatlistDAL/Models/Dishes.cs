@@ -18,16 +18,30 @@ namespace EatlistDAL.Models
         [InverseProperty("Dish")]
         public virtual ICollection<Posts> Post { get; set; }
 
+        [InverseProperty("Dish")]
+        public virtual ICollection<TodoDishes> TodoDishes { get; set; }
+
+        [InverseProperty("Dish")]
+        public virtual ICollection<DishMedia> DishMedia { get; set; }
+
+        [InverseProperty("Dish")]
+        public virtual ICollection<OrderDish> OrderDish { get; set; }
+
+        [InverseProperty("Dish")]
+        public virtual ICollection<BookingDishes> BookingDishes { get; set; }
+
     }
 
     public class DishMedia: AuditableEntity
     {
-        [ForeignKey("Dishes")]
-        public int DishID { get; set; }
+
         public string FileName { get; set; }
+
         public string Url { get; set; }
+
         public string Type { get; set; }
-        public virtual Dishes Dishes { get; set; }
+
+        public virtual Dishes Dish { get; set; }
 
     }
 }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using EatlistApi.ViewsModel;
-using EatListDataService.DataBase;
-using EatListDataService.DataTables;
-using EatListDataService.Repository;
+using EatlistDAL;
+using EatlistDAL.Models;
+using EatlistDAL.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -25,16 +25,17 @@ namespace EatlistApi.Controllers
         //private readonly BookingRepository _bookRepo = new BookingRepository(new ApplicationDbContext());
         //readonly ILogger<BookingController> _log;
         private Bookings _Bookings = new Bookings();
-        public readonly BookingRepository _bookRepo = new BookingRepository();
+        private IUnitOfWork _unitOfwork;
 
         public ILogger<dynamic> _log;
         private static UserManager<ApplicationUser> _userManager;//= new UserManager<ApplicationUser>();
 
-       
-        public BookingController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager)
+
+        public BookingController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager, IUnitOfWork unitOfWork)
         {
             _log = log;
             _userManager = userManager;
+            _unitOfwork = unitOfWork;
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
@@ -56,19 +57,19 @@ namespace EatlistApi.Controllers
                 _log.LogInformation(userId.Id);
                 if (userId.IsRestaurant)
                 {
-                    var result = _bookRepo.GetAllByUserID(userId.Id, true);
-                    if (result== null) { return StatusCode(404); }
+                    var result = _unitOfwork.Bookings.GetAllByUserID(userId.Id, true);
+                    if (result == null) { return StatusCode(404); }
                     return Ok(result);
                 }
                 else
                 {
-                    var result = _bookRepo.GetAllByUserID(userId.Id, false);
+                    var result = _unitOfwork.Bookings.GetAllByUserID(userId.Id, false);
                     if (result == null) { return StatusCode(404); }
                     return Ok(result);
                 }
-                
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _log.LogInformation(ex.Message + " " + ex.StackTrace);
                 return StatusCode(500);
@@ -84,8 +85,17 @@ namespace EatlistApi.Controllers
         [HttpGet, Route("GetBooking/{id}")]
         public dynamic Get(int id)
         {
-            if (_bookRepo.Get(id) == null) { return StatusCode(404); }
-            return _bookRepo.Get(id);
+            try
+            {
+                var booking = _unitOfwork.Bookings.GetBooking(id);
+                if (booking == null) { return StatusCode(404); }
+                return booking;
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + " " + ex.StackTrace);
+                throw;
+            }
         }
 
         // POST api/<controller>
@@ -100,38 +110,43 @@ namespace EatlistApi.Controllers
                 }
 
                 ApplicationUser userId = await GetCurrentUserAsync();
+                var restaurant = _userManager.Users.Where(i => i.Id == model.RestaurantID).ToList();
+                if (!restaurant.Any())
+                    return BadRequest("the selected restaurant is invalid");
 
-                //_Bookings = new Bookings();
                 _Bookings.Description = model.Description;
                 _Bookings.BookingTime = model.BookingTime;
-                _Bookings.RestaurantID = model.RestaurantID;
+                _Bookings.Restaurant = restaurant.FirstOrDefault();
                 _Bookings.TableSize = model.TableSize;
                 _Bookings.DateCreated = DateTime.UtcNow;
-                _Bookings.CreatedBy = userId.Id;
-                var result = _bookRepo.Insert(_Bookings);
+                _Bookings.CreatedBy = userId;
+                var result = _unitOfwork.Bookings.Add(_Bookings);
                 if (result == null)
                 {
-                    return StatusCode(500, new {message= "Your booking failed." });
+                    return StatusCode(500, new { message = "Your booking failed." });
                 }
                 else
                 {
+                    List<BookingDishes> bdshs = new List<BookingDishes>();
                     foreach (var dish in model.DishList)
                     {
-                        BookingDishes dishEntity = new BookingDishes { BookingID = result.BookingID, DishID = dish, DateCreated = DateTime.Now.Date };
-                        _bookRepo.InsertBookingDish(dishEntity);
+                        BookingDishes dishEntity = new BookingDishes { Booking = result, Dish = _unitOfwork.Dishes.Get(dish), DateCreated = DateTime.Now.Date };
+                        //_bookRepo.InsertBookingDish(dishEntity);
+                        bdshs.Add(dishEntity);
                     }
+                    var res = _unitOfwork.Bookingdishes.AddRange(bdshs);
                 }
                 //return Ok(Get(result.BookingID));
                 //return Ok(Get());
                 if (userId.IsRestaurant)
                 {
                     //if (_bookRepo.GetAllByUserID(UserID) == null) { return StatusCode(404); }
-                    return Ok(_bookRepo.GetAllByUserID(userId.Id, true));
+                    return Ok(_unitOfwork.Bookings.GetAllByUserID(userId.Id, true));
                 }
                 else
                 {
                     //if (_bookRepo.GetAllByUserID(UserID) == null) { return StatusCode(404); }
-                    return Ok(_bookRepo.GetAllByUserID(userId.Id, false));
+                    return Ok(_unitOfwork.Bookings.GetAllByUserID(userId.Id, false));
                 }
             }
             catch (Exception ex)
@@ -152,11 +167,11 @@ namespace EatlistApi.Controllers
                 }
                 ApplicationUser userId = await GetCurrentUserAsync();
 
-                _Bookings = _bookRepo.GetSpecific(model.BookingID);//["Booking"];
+                _Bookings = _unitOfwork.Bookings.GetBooking(model.BookingID);//["Booking"];
                 _Bookings.Description = model.Description;
                 _Bookings.BookingTime = model.BookingTime;
                 _Bookings.TableSize = model.TableSize;
-                var retObj = _bookRepo.Update(_Bookings);
+                var retObj = _unitOfwork.Bookings.Update(_Bookings);
                 if (retObj == null)
                 {
                     return StatusCode(500);
@@ -164,16 +179,18 @@ namespace EatlistApi.Controllers
                 else
                 {
                     //var delResult = _bookRepo.DeleteDishesByBookingID(id);
-                    if (_bookRepo.DeleteDishesByBookingID(model.BookingID))
+                    if (_unitOfwork.Bookingdishes.DeleteDishesByBookingID(model.BookingID))
                     {
+                        List<BookingDishes> bdshs = new List<BookingDishes>();
                         foreach (var dish in model.DishList)
                         {
                             //BookingDishes dishEntity = new BookingDishes { BookingID = dish.BookID, DishID = dish.DishID };
                             //_bookRepo.InsertBookingDish(dishEntity);
 
-                            BookingDishes dishEntity = new BookingDishes { BookingID = retObj.BookingID, DishID = dish, DateCreated = DateTime.Now.Date };
-                            _bookRepo.InsertBookingDish(dishEntity);
+                            BookingDishes dishEntity = new BookingDishes { Booking = retObj, Dish = _unitOfwork.Dishes.Get(dish), DateCreated = DateTime.Now.Date };
+                            bdshs.Add(dishEntity);
                         }
+                        var res = _unitOfwork.Bookingdishes.AddRange(bdshs);
                     }
                     else
                     {
@@ -181,14 +198,14 @@ namespace EatlistApi.Controllers
                         return StatusCode(500);
                     }
                 }
-                return Ok(Get(retObj.BookingID));
+                return Ok(_unitOfwork.Bookings.GetAllByUserID(userId.Id, userId.IsRestaurant));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _log.LogInformation(ex.StackTrace);
                 return StatusCode(500);
             }
-            
+
         }
 
         // DELETE api/<controller>/5
@@ -197,14 +214,14 @@ namespace EatlistApi.Controllers
         {
             try
             {
-               return  _bookRepo.Delete(_bookRepo.Get(id));
+                return _unitOfwork.Bookings.Remove(_unitOfwork.Bookings.Get(id));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _log.LogInformation(ex.ToString());
                 return false;
             }
-            
+
         }
         #endregion
 
@@ -214,10 +231,10 @@ namespace EatlistApi.Controllers
         {
             try
             {
-                var ret = _bookRepo.SetBookingStatus(BookingID, BookingStatusID);
+                var ret = _unitOfwork.Bookings.SetBookingStatus(BookingID, BookingStatusID);
                 return Ok(ret);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _log.LogInformation(ex.Message + ":" + ex.InnerException);
                 return StatusCode(500);

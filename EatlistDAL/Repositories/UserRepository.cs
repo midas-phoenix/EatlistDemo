@@ -22,14 +22,54 @@ namespace EatlistDAL.Repositories
         {
             try
             {
-            if (Id=="0")
-            {
-                return _appContext.Users.Where(x => x.IsRestaurant);
-            }
-            else
-            {
-                return _appContext.Users.Where(x => x.Id == Id);
-            }
+                if (Id == "0")
+                {
+                    return _appContext.Users.Where(x => x.IsRestaurant).Select(u => new
+                    {
+                        u.Id,
+                        u.Bio,
+                        u.Email,
+                        u.FullName,
+                        u.UserName,
+                        u.PhoneNumber,
+                        u.Address,
+                        u.Gender,
+                        u.Dob,
+                        u.IsRestaurant,
+                        u.RestaurantName,
+                        u.Doi,
+                        u.profilepic,
+                        PostCount = u.PCreatedBy.Count(),
+                        FollowingCount = u.FCreatedBy.Count(),
+                        FollowersCount = u.Followers.Count(),
+                        following = u.FCreatedBy.Any(),
+                        follower = u.Followers.Any()
+                    });
+                }
+                else
+                {
+                    return _appContext.Users.Where(x => x.Id == Id).Select(u => new
+                    {
+                        u.Id,
+                        u.Bio,
+                        u.Email,
+                        u.FullName,
+                        u.UserName,
+                        u.PhoneNumber,
+                        u.Address,
+                        u.Gender,
+                        u.Dob,
+                        u.IsRestaurant,
+                        u.RestaurantName,
+                        u.Doi,
+                        u.profilepic,
+                        PostCount = u.PCreatedBy.Count(),
+                        FollowingCount = u.FCreatedBy.Count(),
+                        FollowersCount = u.Followers.Count(),
+                        following = u.FCreatedBy.Any(),
+                        follower = u.Followers.Any()
+                    }).FirstOrDefault();
+                }
 
             }
             catch (Exception ex)
@@ -59,10 +99,10 @@ namespace EatlistDAL.Repositories
                     u.Doi,
                     u.profilepic,
                     PostCount = u.PCreatedBy.Count(),
-                    FollowingCount = u.FCreatedBy.Count(f => f.CreatedBy == u.Id),
-                    FollowersCount = u.Friends.Count(fo => fo.FollowerID == u.Id),
-                    following = u.FCreatedBy.Any(f => f.CreatedBy == me && f.FollowerID == u.Id),
-                    follower = u.Friends.Any(f => f.CreatedBy == u.Id && f.FollowerID == me)
+                    FollowingCount = u.FCreatedBy.Count(),
+                    FollowersCount = u.Followers.Count(),
+                    following = u.FCreatedBy.Any(),
+                    follower = u.Followers.Any()
                 }).FirstOrDefault();
             }
             catch (Exception ex)

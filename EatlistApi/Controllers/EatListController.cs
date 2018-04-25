@@ -1,29 +1,34 @@
-﻿using EatlistApi.Models;
-using EatlistApi.ViewsModel;
-using EatListDataService.DataBase;
-using EatListDataService.DataTables;
-using EatListDataService.Repository;
+﻿using EatlistApi.ViewsModel;
+using EatlistDAL;
+using EatlistDAL.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace EatlistApi.Controllers
 {
+    [Authorize()]
     [Route("api/[controller]")]
-    public class EatListController: Controller
+    public class EatListController : Controller
     {
         #region "Declaration"
-        private static readonly ApplicationDbContext _EatList = new ApplicationDbContext();
-        private readonly EatListRepository _eatlistRepo = new EatListRepository(_EatList);
-        readonly ILogger<EatListController> _log;
-        private ToDoMeals _EatLists = new ToDoMeals();
+        private IUnitOfWork _unitOfWork;
+        public ILogger<dynamic> _log;
+        private static UserManager<ApplicationUser> _userManager;
 
-        int DishID = 2;
-        string UserID = "03503819-15ce-489c-946e-ff86a5324189";
 
+        public EatListController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager, IUnitOfWork unitOfWork)
+        {
+            _log = log;
+            _userManager = userManager;
+            _unitOfWork = unitOfWork;
+        }
+
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         public EatListController(ILogger<EatListController> log)
         {
@@ -31,61 +36,65 @@ namespace EatlistApi.Controllers
         }
         #endregion
 
-        // GET: api/<controller>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         [HttpPost, Route("create")]
-        public IActionResult EatList(int DishID)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            _EatLists = new ToDoMeals();
-            _EatLists.DishID = DishID;
-            _EatLists.DateCreated = DateTime.UtcNow;
-            _EatLists.CreatedBy = UserID;
-
-            return Ok(_eatlistRepo.Insert(_EatLists));
-        }
-
-        [HttpPut, Route("update")]
-        public IActionResult Update(EatList update)
+        public async Task<IActionResult> EatListAsync(int DishID)
         {
             try
             {
-
-
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
 
-                _EatLists.ToDoID = update.ToDoID;
-                _EatLists.DishID = update.DishID;
-                //_EatLists.DateCreated = DateTime.UtcNow;
-                //_EatLists.CreatedBy = UserID;
+                ApplicationUser userId = await GetCurrentUserAsync();
+                TodoDishes _EatLists = new TodoDishes();
+                _EatLists.Dish = _unitOfWork.Dishes.Get(DishID);
+                _EatLists.DateCreated = DateTime.UtcNow;
+                _EatLists.CreatedBy = userId;
 
-                _eatlistRepo.Update(_EatLists);
-                var res = _eatlistRepo.Update(_EatLists);
-                if (res.GetType() == typeof(KeyNotFoundException))
-                {
-                    _log.LogInformation(res.ToString());
-                    return StatusCode(500);
-                }
-                return Ok(res);
-
+                return Ok(_unitOfWork.EatList.Add(_EatLists));
             }
             catch (Exception ex)
             {
-                _log.LogInformation(ex.Message.ToString());
-                return StatusCode(500);
+                _log.LogInformation(ex.Message + ex.StackTrace);
+                return StatusCode(500, new { Message= "An error occurred"});
             }
+
         }
+
+        //[HttpPut, Route("update")]
+        //public IActionResult Update(EatList update)
+        //{
+        //    try
+        //    {
+
+
+        //        if (!ModelState.IsValid)
+        //        {
+        //            return BadRequest(ModelState);
+        //        }
+        //        TodoDishes _EatLists =_unitOfWork.EatList.Get(update.ToDoID);
+        //        _EatLists.Id = update.ToDoID;
+        //        _EatLists.DishID = update.DishID;
+        //        //_EatLists.DateCreated = DateTime.UtcNow;
+        //        //_EatLists.CreatedBy = UserID;
+
+        //        _eatlistRepo.Update(_EatLists);
+        //        var res = _eatlistRepo.Update(_EatLists);
+        //        if (res.GetType() == typeof(KeyNotFoundException))
+        //        {
+        //            _log.LogInformation(res.ToString());
+        //            return StatusCode(500);
+        //        }
+        //        return Ok(res);
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _log.LogInformation(ex.Message.ToString());
+        //        return StatusCode(500);
+        //    }
+        //}
         //DELETE api/<controller>/5
 
         /// <summary>
@@ -93,19 +102,39 @@ namespace EatlistApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(int id)
         {
+            try
+            {
+                if (_unitOfWork.EatList.Remove(_unitOfWork.EatList.Get(id)))
+                {
+                    return Ok(new {Message="Item removed successfully" });
+                }
+                return BadRequest("sorry, this item could not be removed");
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + ex.StackTrace);
+                return StatusCode(500, new { Message = "An error occurred" });
+            }
         }
 
         // GET api/<controller>/5
         [HttpGet, Route("todos/{DishID}")]
         public IActionResult Get(int DishID)
         {
-
-            return Ok(_eatlistRepo.GetToDoMealsByDishID(DishID));
+            try
+            {
+            return Ok(_unitOfWork.EatList.GetEatList(DishID));
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + ex.StackTrace);
+                return StatusCode(500, new { Message = "An error occurred" });
+            }
         }
     }
 }
 
-    
+
 

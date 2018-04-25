@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using EatListDataService.DataBase;
-using EatListDataService.Repository;
+using EatlistDAL;
+using EatlistDAL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -18,14 +16,15 @@ namespace EatlistApi.Controllers
     public class UtilsController : Controller
     {
         public ILogger<dynamic> _log;
-        public readonly UtilRepository _utilRepo = new UtilRepository();
         private static UserManager<ApplicationUser> _userManager;//= new UserManager<ApplicationUser>();
+        private IUnitOfWork _unitofwork;
 
 
-        public UtilsController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager)
+        public UtilsController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager, IUnitOfWork unitofwork)
         {
             _log = log;
             _userManager = userManager;
+            _unitofwork = unitofwork;
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
@@ -40,7 +39,7 @@ namespace EatlistApi.Controllers
             try
             {
                 ApplicationUser userId = await GetCurrentUserAsync();
-                return Ok(_utilRepo.Search(word));
+                return Ok(_unitofwork.Utils.Search(word));
             }
             catch (Exception ex)
             {

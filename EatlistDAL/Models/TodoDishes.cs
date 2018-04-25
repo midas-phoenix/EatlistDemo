@@ -7,9 +7,6 @@ namespace EatlistDAL.Models
 {
     public class TodoDishes: AuditableEntity
     {
-        [ForeignKey("Dishes")]
-        public int DishID { get; set; }
-
-        public virtual Dishes Dishes { get; set; }
+        public virtual Dishes Dish { get; set; }
     }
 }

@@ -96,21 +96,21 @@ namespace EatlistDAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("BookingID");
+                    b.Property<int?>("BookingId");
 
-                    b.Property<string>("CreatedBy");
+                    b.Property<string>("CreatedById");
 
                     b.Property<DateTime>("DateCreated");
 
-                    b.Property<int>("DishID");
+                    b.Property<int?>("DishId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookingID");
+                    b.HasIndex("BookingId");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasIndex("CreatedById");
 
-                    b.HasIndex("DishID");
+                    b.HasIndex("DishId");
 
                     b.ToTable("TblBookingDishes");
                 });
@@ -124,19 +124,21 @@ namespace EatlistDAL.Migrations
 
                     b.Property<DateTime>("BookingTime");
 
-                    b.Property<string>("CreatedBy");
+                    b.Property<string>("CreatedById");
 
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("RestaurantID");
+                    b.Property<string>("RestaurantId");
 
                     b.Property<int?>("TableSize");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("RestaurantId");
 
                     b.ToTable("TblBookings");
                 });
@@ -146,19 +148,19 @@ namespace EatlistDAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CreatedBy");
+                    b.Property<string>("CreatedById");
 
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<string>("Message");
 
-                    b.Property<string>("MessageToID");
+                    b.Property<string>("RecipientId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasIndex("CreatedById");
 
-                    b.HasIndex("MessageToID");
+                    b.HasIndex("RecipientId");
 
                     b.ToTable("ChatMessages");
                 });
@@ -170,19 +172,19 @@ namespace EatlistDAL.Migrations
 
                     b.Property<string>("Content");
 
-                    b.Property<string>("CreatedBy");
+                    b.Property<string>("CreatedById");
 
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<string>("Image");
 
-                    b.Property<int>("PostID");
+                    b.Property<int?>("PostId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasIndex("CreatedById");
 
-                    b.HasIndex("PostID");
+                    b.HasIndex("PostId");
 
                     b.ToTable("TblCommennts");
                 });
@@ -192,7 +194,7 @@ namespace EatlistDAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CreatedBy");
+                    b.Property<string>("CreatedById");
 
                     b.Property<DateTime>("DateCreated");
 
@@ -202,7 +204,7 @@ namespace EatlistDAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasIndex("CreatedById");
 
                     b.ToTable("TblDishes");
                 });
@@ -212,11 +214,11 @@ namespace EatlistDAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CreatedBy");
+                    b.Property<string>("CreatedById");
 
                     b.Property<DateTime>("DateCreated");
 
-                    b.Property<int>("DishID");
+                    b.Property<int?>("DishId");
 
                     b.Property<string>("FileName");
 
@@ -226,9 +228,9 @@ namespace EatlistDAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasIndex("CreatedById");
 
-                    b.HasIndex("DishID");
+                    b.HasIndex("DishId");
 
                     b.ToTable("TblDishMedia");
                 });
@@ -238,17 +240,17 @@ namespace EatlistDAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CreatedBy");
+                    b.Property<string>("CreatedById");
 
                     b.Property<DateTime>("DateCreated");
 
-                    b.Property<string>("FollowerID");
+                    b.Property<string>("FollowerId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasIndex("CreatedById");
 
-                    b.HasIndex("FollowerID");
+                    b.HasIndex("FollowerId");
 
                     b.ToTable("TblFriendship");
                 });
@@ -258,17 +260,17 @@ namespace EatlistDAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CreatedBy");
+                    b.Property<string>("CreatedById");
 
                     b.Property<DateTime>("DateCreated");
 
-                    b.Property<int>("PostID");
+                    b.Property<int?>("PostId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasIndex("CreatedById");
 
-                    b.HasIndex("PostID");
+                    b.HasIndex("PostId");
 
                     b.ToTable("TblLikes");
                 });
@@ -278,17 +280,23 @@ namespace EatlistDAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CreatedBy");
+                    b.Property<string>("CreatedById");
 
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<string>("Message");
 
-                    b.Property<string>("Recipient");
+                    b.Property<string>("RecipientId");
+
+                    b.Property<string>("Source");
+
+                    b.Property<bool>("seen");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("RecipientId");
 
                     b.ToTable("tblNotification");
                 });
@@ -298,23 +306,23 @@ namespace EatlistDAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CreatedBy");
+                    b.Property<string>("CreatedById");
 
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("DishID");
+                    b.Property<int?>("DishId");
 
-                    b.Property<int>("OrderID");
+                    b.Property<int?>("OrderId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasIndex("CreatedById");
 
-                    b.HasIndex("DishID");
+                    b.HasIndex("DishId");
 
-                    b.HasIndex("OrderID");
+                    b.HasIndex("OrderId");
 
                     b.ToTable("TblOrderDish");
                 });
@@ -324,7 +332,7 @@ namespace EatlistDAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CreatedBy");
+                    b.Property<string>("CreatedById");
 
                     b.Property<DateTime>("DateCreated");
 
@@ -332,13 +340,15 @@ namespace EatlistDAL.Migrations
 
                     b.Property<string>("Note");
 
-                    b.Property<string>("ResturantID");
+                    b.Property<string>("RestaurantId");
 
                     b.Property<string>("Status");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("RestaurantId");
 
                     b.ToTable("TblOrders");
                 });
@@ -350,7 +360,7 @@ namespace EatlistDAL.Migrations
 
                     b.Property<string>("Caption");
 
-                    b.Property<string>("CreatedBy");
+                    b.Property<string>("CreatedById");
 
                     b.Property<DateTime>("DateCreated");
 
@@ -360,7 +370,7 @@ namespace EatlistDAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasIndex("CreatedById");
 
                     b.HasIndex("DishId");
 
@@ -374,7 +384,7 @@ namespace EatlistDAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CreatedBy");
+                    b.Property<string>("CreatedById");
 
                     b.Property<DateTime>("DateCreated");
 
@@ -384,13 +394,13 @@ namespace EatlistDAL.Migrations
 
                     b.Property<string>("FileURL");
 
-                    b.Property<int>("PostID");
+                    b.Property<int?>("PostId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasIndex("CreatedById");
 
-                    b.HasIndex("PostID");
+                    b.HasIndex("PostId");
 
                     b.ToTable("TblPostsMedia");
                 });
@@ -400,17 +410,17 @@ namespace EatlistDAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CreatedBy");
+                    b.Property<string>("CreatedById");
 
                     b.Property<DateTime>("DateCreated");
 
-                    b.Property<int>("DishID");
+                    b.Property<int?>("DishId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasIndex("CreatedById");
 
-                    b.HasIndex("DishID");
+                    b.HasIndex("DishId");
 
                     b.ToTable("TodoDishes");
                 });
@@ -525,129 +535,134 @@ namespace EatlistDAL.Migrations
 
             modelBuilder.Entity("EatlistDAL.Models.BookingDishes", b =>
                 {
-                    b.HasOne("EatlistDAL.Models.Bookings", "Bookings")
-                        .WithMany()
-                        .HasForeignKey("BookingID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("EatlistDAL.Models.Bookings", "Booking")
+                        .WithMany("BookingDishes")
+                        .HasForeignKey("BookingId");
 
-                    b.HasOne("EatlistDAL.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedBy");
+                    b.HasOne("EatlistDAL.Models.ApplicationUser", "CreatedBy")
+                        .WithMany("BDCreatedBy")
+                        .HasForeignKey("CreatedById");
 
-                    b.HasOne("EatlistDAL.Models.Dishes", "Dishes")
-                        .WithMany()
-                        .HasForeignKey("DishID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("EatlistDAL.Models.Dishes", "Dish")
+                        .WithMany("BookingDishes")
+                        .HasForeignKey("DishId");
                 });
 
             modelBuilder.Entity("EatlistDAL.Models.Bookings", b =>
                 {
-                    b.HasOne("EatlistDAL.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedBy");
+                    b.HasOne("EatlistDAL.Models.ApplicationUser", "CreatedBy")
+                        .WithMany("BCreatedBy")
+                        .HasForeignKey("CreatedById");
+
+                    b.HasOne("EatlistDAL.Models.ApplicationUser", "Restaurant")
+                        .WithMany("RestaurantInBooking")
+                        .HasForeignKey("RestaurantId");
                 });
 
             modelBuilder.Entity("EatlistDAL.Models.ChatMessages", b =>
                 {
-                    b.HasOne("EatlistDAL.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("EatlistDAL.Models.ApplicationUser", "CreatedBy")
                         .WithMany("CCreatedBy")
-                        .HasForeignKey("CreatedBy");
+                        .HasForeignKey("CreatedById");
 
                     b.HasOne("EatlistDAL.Models.ApplicationUser", "Recipient")
                         .WithMany("Recipient")
-                        .HasForeignKey("MessageToID");
+                        .HasForeignKey("RecipientId");
                 });
 
             modelBuilder.Entity("EatlistDAL.Models.Comments", b =>
                 {
-                    b.HasOne("EatlistDAL.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedBy");
+                    b.HasOne("EatlistDAL.Models.ApplicationUser", "CreatedBy")
+                        .WithMany("CoCreatedBy")
+                        .HasForeignKey("CreatedById");
 
-                    b.HasOne("EatlistDAL.Models.Posts", "Posts")
+                    b.HasOne("EatlistDAL.Models.Posts", "Post")
                         .WithMany("Comments")
-                        .HasForeignKey("PostID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("PostId");
                 });
 
             modelBuilder.Entity("EatlistDAL.Models.Dishes", b =>
                 {
-                    b.HasOne("EatlistDAL.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("EatlistDAL.Models.ApplicationUser", "CreatedBy")
                         .WithMany("Dishes")
-                        .HasForeignKey("CreatedBy");
+                        .HasForeignKey("CreatedById");
                 });
 
             modelBuilder.Entity("EatlistDAL.Models.DishMedia", b =>
                 {
-                    b.HasOne("EatlistDAL.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("EatlistDAL.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedBy");
+                        .HasForeignKey("CreatedById");
 
-                    b.HasOne("EatlistDAL.Models.Dishes", "Dishes")
-                        .WithMany()
-                        .HasForeignKey("DishID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("EatlistDAL.Models.Dishes", "Dish")
+                        .WithMany("DishMedia")
+                        .HasForeignKey("DishId");
                 });
 
             modelBuilder.Entity("EatlistDAL.Models.Friendship", b =>
                 {
-                    b.HasOne("EatlistDAL.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("EatlistDAL.Models.ApplicationUser", "CreatedBy")
                         .WithMany("FCreatedBy")
-                        .HasForeignKey("CreatedBy");
+                        .HasForeignKey("CreatedById");
 
-                    b.HasOne("EatlistDAL.Models.ApplicationUser", "Friends")
-                        .WithMany("Friends")
-                        .HasForeignKey("FollowerID");
+                    b.HasOne("EatlistDAL.Models.ApplicationUser", "Follower")
+                        .WithMany("Followers")
+                        .HasForeignKey("FollowerId");
                 });
 
             modelBuilder.Entity("EatlistDAL.Models.Likes", b =>
                 {
-                    b.HasOne("EatlistDAL.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Likes")
-                        .HasForeignKey("CreatedBy");
+                    b.HasOne("EatlistDAL.Models.ApplicationUser", "CreatedBy")
+                        .WithMany("LCreatedBy")
+                        .HasForeignKey("CreatedById");
 
-                    b.HasOne("EatlistDAL.Models.Posts", "Posts")
+                    b.HasOne("EatlistDAL.Models.Posts", "Post")
                         .WithMany("Likes")
-                        .HasForeignKey("PostID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("PostId");
                 });
 
             modelBuilder.Entity("EatlistDAL.Models.Notifications", b =>
                 {
-                    b.HasOne("EatlistDAL.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedBy");
+                    b.HasOne("EatlistDAL.Models.ApplicationUser", "CreatedBy")
+                        .WithMany("NCreatedBy")
+                        .HasForeignKey("CreatedById");
+
+                    b.HasOne("EatlistDAL.Models.ApplicationUser", "Recipient")
+                        .WithMany("NRecipient")
+                        .HasForeignKey("RecipientId");
                 });
 
             modelBuilder.Entity("EatlistDAL.Models.OrderDish", b =>
                 {
-                    b.HasOne("EatlistDAL.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedBy");
+                    b.HasOne("EatlistDAL.Models.ApplicationUser", "CreatedBy")
+                        .WithMany("OdCreatedBy")
+                        .HasForeignKey("CreatedById");
 
-                    b.HasOne("EatlistDAL.Models.Dishes", "Dishes")
-                        .WithMany()
-                        .HasForeignKey("DishID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("EatlistDAL.Models.Dishes", "Dish")
+                        .WithMany("OrderDish")
+                        .HasForeignKey("DishId");
 
-                    b.HasOne("EatlistDAL.Models.Orders", "Orders")
-                        .WithMany()
-                        .HasForeignKey("OrderID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("EatlistDAL.Models.Orders", "Order")
+                        .WithMany("OrderDish")
+                        .HasForeignKey("OrderId");
                 });
 
             modelBuilder.Entity("EatlistDAL.Models.Orders", b =>
                 {
-                    b.HasOne("EatlistDAL.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedBy");
+                    b.HasOne("EatlistDAL.Models.ApplicationUser", "CreatedBy")
+                        .WithMany("OCreatedBy")
+                        .HasForeignKey("CreatedById");
+
+                    b.HasOne("EatlistDAL.Models.ApplicationUser", "Restaurant")
+                        .WithMany("ORecipient")
+                        .HasForeignKey("RestaurantId");
                 });
 
             modelBuilder.Entity("EatlistDAL.Models.Posts", b =>
                 {
-                    b.HasOne("EatlistDAL.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("EatlistDAL.Models.ApplicationUser", "CreatedBy")
                         .WithMany("PCreatedBy")
-                        .HasForeignKey("CreatedBy");
+                        .HasForeignKey("CreatedById");
 
                     b.HasOne("EatlistDAL.Models.Dishes", "Dish")
                         .WithMany("Post")
@@ -660,26 +675,24 @@ namespace EatlistDAL.Migrations
 
             modelBuilder.Entity("EatlistDAL.Models.PostsMedia", b =>
                 {
-                    b.HasOne("EatlistDAL.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("EatlistDAL.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedBy");
+                        .HasForeignKey("CreatedById");
 
-                    b.HasOne("EatlistDAL.Models.Posts", "Posts")
+                    b.HasOne("EatlistDAL.Models.Posts", "Post")
                         .WithMany("PostsMedia")
-                        .HasForeignKey("PostID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("PostId");
                 });
 
             modelBuilder.Entity("EatlistDAL.Models.TodoDishes", b =>
                 {
-                    b.HasOne("EatlistDAL.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("EatlistDAL.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedBy");
+                        .HasForeignKey("CreatedById");
 
-                    b.HasOne("EatlistDAL.Models.Dishes", "Dishes")
-                        .WithMany()
-                        .HasForeignKey("DishID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("EatlistDAL.Models.Dishes", "Dish")
+                        .WithMany("TodoDishes")
+                        .HasForeignKey("DishId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

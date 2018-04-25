@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EatListDataService.DataTables;
 namespace EatlistApi.Models
 {
     public class ProfileUpload//:Upload
@@ -37,12 +33,12 @@ namespace EatlistApi.Models
 
         public string Address { get; set; }
 
-        public int Gender { get; set; }
+        public int? Gender { get; set; }
 
-        public DateTime Dob { get; set; }
+        public DateTime? Dob { get; set; }
 
         public string RestaurantName { get; set; }
 
-        public DateTime Doi { get; set; }
+        public DateTime? Doi { get; set; }
     }
 }

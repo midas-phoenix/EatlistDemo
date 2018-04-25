@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 //using EatlistApi.Models;
 using EatlistApi.ViewsModel;
-using EatListDataService.DataBase;
-using EatListDataService.DataTables;
-using EatListDataService.Repository;
+using EatlistDAL;
+using EatlistDAL.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,19 +14,20 @@ using Microsoft.Extensions.Logging;
 
 namespace EatlistApi.Controllers
 {
+    [Authorize()]
     [Produces("application/json")]
     [Route("api/Order")]
     public class OrderController : Controller
     {
-        private Orders _orders =new Orders();
-        private OrderRepository _orderRepo = new OrderRepository();
         public ILogger<dynamic> _log;
+        private IUnitOfWork _unitofwork;
         private static UserManager<ApplicationUser> _userManager;//= new UserManager<ApplicationUser>();
 
-        public OrderController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager)
+        public OrderController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager, IUnitOfWork unitofwork)
         {
             _log = log;
             _userManager = userManager;
+            _unitofwork = unitofwork;
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
@@ -41,30 +42,32 @@ namespace EatlistApi.Controllers
                     return BadRequest(ModelState);
                 }
                 ApplicationUser userId = await GetCurrentUserAsync();
-
-                _orders.CreatedBy =  userId.Id;
-                //_orders.CreatedBy = "fgdfgjhhhtdhhgdsefghgjhjfgtdgrd";// userId.Id;
+                Orders _orders = new Orders();
+                _orders.CreatedBy = userId;
                 _orders.DeliveryLocation = model.DeliveryLocation;
                 _orders.DateCreated = DateTime.UtcNow;
-                _orders.ResturantID = model.ResturantID;
+                _orders.Restaurant = await _userManager.FindByIdAsync(model.ResturantID);
                 _orders.Status = new OrderStatus[0].ToString();// model.;
-                var result = _orderRepo.Insert(_orders);
+                var result = _unitofwork.Order.Add(_orders);
                 if (result == null)
                 {
                     return StatusCode(500, "Not Saved Successfully");
                 }
+
+                List<EatlistDAL.Models.OrderDish> odishes = new List<EatlistDAL.Models.OrderDish>();
                 foreach (EatlistApi.ViewsModel.OrderDish md in model.dishes)
                 {
-                    EatListDataService.DataTables.OrderDish dish = new EatListDataService.DataTables.OrderDish();
+                    EatlistDAL.Models.OrderDish dish = new EatlistDAL.Models.OrderDish();
 
                     dish.Description = md.Description;
-                    dish.DishID = md.DishID;
-                    dish.OrderID = md.OrderID;
-                    var ret = _orderRepo.DishInsert(dish);
-                    if (ret.Count < 1) { throw new InvalidOperationException(); }
+                    dish.Dish = _unitofwork.Dishes.Get(md.DishID);
+                    dish.Order = result;
+                    odishes.Add(dish);
                 }
+                    var ret = _unitofwork.OrderDish.AddRange(odishes);
+                    //if (ret.Count < 1) { throw new InvalidOperationException(); }
                 //return the list of orders made by user
-                return Ok(_orderRepo.GetAllByUserID(result.CreatedBy));
+                return Ok(_unitofwork.Order.GetAllByUserID(result.CreatedBy.Id, userId.IsRestaurant));
             }
             catch (Exception ex)
             {
@@ -75,11 +78,12 @@ namespace EatlistApi.Controllers
 
 
         [HttpGet, Route("user")]
-        public IActionResult Get(string UserID)
+        public async Task<IActionResult> GetAsync()
         {
             try
             {
-                return Ok(_orderRepo.GetAllByUserID(UserID));
+                ApplicationUser userId = await GetCurrentUserAsync();
+                return Ok(_unitofwork.Order.GetAllByUserID(userId.Id, userId.IsRestaurant));
             }
             catch (Exception ex)
             {
@@ -94,7 +98,7 @@ namespace EatlistApi.Controllers
         {
             try
             {
-                return Ok(_orderRepo.GetAllResturantID(restaurantID));
+                return Ok(_unitofwork.Order.GetAllByUserID(restaurantID, true));
             }
             catch (Exception ex)
             {

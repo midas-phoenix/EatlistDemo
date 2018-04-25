@@ -5,27 +5,24 @@ using System.Text;
 
 namespace EatlistDAL.Models
 {
-    public class Orders: AuditableEntity
+    public class Orders : AuditableEntity
     {
-        public string ResturantID { get; set; }
         public string DeliveryLocation { get; set; }
         public string Status { get; set; }
         public string Note { get; set; }
+
+        [InverseProperty("Order")]
+        public virtual ICollection<OrderDish> OrderDish { get; set; }
+
+        public virtual ApplicationUser Restaurant { get; set; } 
     }
 
-    public class OrderDish: AuditableEntity
+    public class OrderDish : AuditableEntity
     {
-
-        [ForeignKey("Orders")]
-        public int OrderID { get; set; }
-
-        [ForeignKey("Dishes")]
-        public int DishID { get; set; }
-
         public string Description { get; set; }
 
-        public virtual Orders Orders { get; set; }
+        public virtual Orders Order { get; set; }
 
-        public virtual Dishes Dishes { get; set; }
+        public virtual Dishes Dish { get; set; }
     }
 }

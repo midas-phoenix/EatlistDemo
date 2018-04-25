@@ -4,10 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using EatlistApi.Models;
-using Microsoft.EntityFrameworkCore;
-using EatListDataService.DataBase;
-using EatListDataService.Repository;
-using EatListDataService.DataTables;
 using Microsoft.Extensions.Logging;
 using EatlistApi.ViewsModel;
 using CloudinaryDotNet;
@@ -17,13 +13,14 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using EatlistDAL;
+using EatlistDAL.Models;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace EatlistApi.Controllers
 {
-    //[Authorize()]
+    [Authorize()]
     [Route("api/[controller]")]
     //Pls, kindly change the TestController to BaseController for IDS
     public class PostController : Controller
@@ -31,9 +28,8 @@ namespace EatlistApi.Controllers
         private IUnitOfWork _unitOfWork;
         private Posts _Posts = new Posts();
         private PostsMedia _Media = new PostsMedia();
-        public readonly PostRepository _postRepo = new PostRepository();
         public ILogger<dynamic> _log;
-        private static UserManager<EatlistDAL.Models.ApplicationUser> _userManager;//= new UserManager<ApplicationUser>();
+        private static UserManager<ApplicationUser> _userManager;//= new UserManager<ApplicationUser>();
         public static IConfiguration Configuration;
         //public string UserID
         //{
@@ -48,7 +44,7 @@ namespace EatlistApi.Controllers
         //UserID will be changed
         //string UserID = "03503819-15ce-489c-946e-ff86a5324189";
 
-        public PostController(ILogger<dynamic> log, UserManager<EatlistDAL.Models.ApplicationUser> userManager, IConfiguration configuration, IUnitOfWork unitOfWork)
+        public PostController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager, IConfiguration configuration, IUnitOfWork unitOfWork)
         {
             _log = log;
             _userManager = userManager;
@@ -56,7 +52,7 @@ namespace EatlistApi.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        private Task<EatlistDAL.Models.ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: api/<controller>
         /// <summary>
@@ -68,7 +64,7 @@ namespace EatlistApi.Controllers
         {
             try
             {
-                EatlistDAL.Models.ApplicationUser userId = await GetCurrentUserAsync();
+                ApplicationUser userId = await GetCurrentUserAsync();
                 //return Ok(_postRepo.GetViewableForUser(userId.Id));
                 return Ok(_unitOfWork.posts.UserPosts(userId.Id, true, userId.Id));
             }
@@ -91,7 +87,7 @@ namespace EatlistApi.Controllers
         {
             try
             {
-                EatlistDAL.Models.ApplicationUser userId = await GetCurrentUserAsync();
+                ApplicationUser userId = await GetCurrentUserAsync();
                 //return Ok(_postRepo.GetAllbyUserID(userId.Id, userId.Id));
                 return Ok(_unitOfWork.posts.UserPosts(userId.Id, false, userId.Id));
             }
@@ -116,8 +112,7 @@ namespace EatlistApi.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    EatlistDAL.Models.ApplicationUser userid = await GetCurrentUserAsync();
-                    //return Ok(_postRepo.GetAllbyUserID(Id, userid.Id).ToList());
+                    ApplicationUser userid = await GetCurrentUserAsync();
                     return Ok(_unitOfWork.posts.UserPosts(Id, false, userid.Id));
                 }
                 return BadRequest();
@@ -136,8 +131,8 @@ namespace EatlistApi.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    EatlistDAL.Models.ApplicationUser userid = await GetCurrentUserAsync();
-                    return Ok(_postRepo.GetPostmedia(Id, userid.Id).ToList());
+                    ApplicationUser userid = await GetCurrentUserAsync();
+                    return Ok(_unitOfWork.posts.GetPostByID(Id, userid.Id).ToList());
                 }
                 return BadRequest();
             }
@@ -160,25 +155,25 @@ namespace EatlistApi.Controllers
             {
                 Account acc = new Account(Configuration["my_cloud_name"], Configuration["my_api_key"], Configuration["my_api_secret"]);
                 Cloudinary cloudinary = new Cloudinary(acc);
-                EatlistDAL.Models.ApplicationUser userid = await GetCurrentUserAsync();//await _userManager.GetUserAsync(User);
+                ApplicationUser userid = await GetCurrentUserAsync();//await _userManager.GetUserAsync(User);
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
 
-                var NPosts = new EatlistDAL.Models.Posts();
+                var NPosts = new Posts();
                 NPosts.Caption = post.Caption;
                 if (post.DishID > 0)
                 {
-                    var dsh = _unitOfWork.Dishes.GetAll().Where(d => d.Id == (int)post.DishID);
-                    if (dsh.Any())
-                        NPosts.Dish = dsh.FirstOrDefault();
+                    var dsh = _unitOfWork.Dishes.Get((int)post.DishID);
+                    if (dsh!=null)
+                        NPosts.Dish = dsh;
                     else
                         return BadRequest("the selected dish is invalid");
                 };
 
                 NPosts.DateCreated = DateTime.UtcNow;
-                NPosts.CreatedBy = userid.Id;
+                NPosts.CreatedBy = userid;
                 if (post.RestaurantID != "")
                 {
                     var resuser = _userManager.Users.Where(i => i.Id == post.RestaurantID).ToList();
@@ -188,7 +183,7 @@ namespace EatlistApi.Controllers
                         return BadRequest("the selected restaurant is invalid");
                 }// UserID;
                 //var ret = _postRepo.Insert(_Posts);
-                var ret = _unitOfWork.posts.NewPost(NPosts);
+                var ret = _unitOfWork.posts.Add(NPosts);
 
                 if (post.PostFiles != null)
                 {
@@ -211,8 +206,8 @@ namespace EatlistApi.Controllers
                             FileName = uploadResult.PublicId,
                             FileType = file.FileType,
                             FileURL = uploadResult.SecureUri.AbsoluteUri,
-                            PostID = ret.Id,
-                            CreatedBy = "0ee0f590-f921-4e96-b295-f420680627b6",//userid.Id,
+                            Post = ret,
+                            CreatedBy =userid,
                             DateCreated = DateTime.UtcNow
                         });
                     }
@@ -290,17 +285,17 @@ namespace EatlistApi.Controllers
 
                     _comment.Content = _vmComment.Content;
                     _comment.Image = _vmComment.Image;
-                    _comment.PostID = _vmComment.PostID;
-                    _comment.CreatedBy = userid.Id;
+                    _comment.Post = _unitOfWork.posts.Get( _vmComment.PostID);
+                    _comment.CreatedBy = userid;
                     _comment.DateCreated = DateTime.Now;
 
-                    var res = _postRepo.CommentInsert(_comment);
+                    var res = _unitOfWork.Comments.Add(_comment);
                     if (res.GetType() == typeof(System.InvalidOperationException))
                     {
                         _log.LogInformation(res.ToString());
                         return StatusCode(500);
                     }
-                    return Ok(_postRepo.FetchComments(_comment.PostID));
+                    return Ok(_unitOfWork.Comments.FetchComment(_vmComment.PostID));
                 }
                 else
                 {
@@ -326,7 +321,7 @@ namespace EatlistApi.Controllers
                 if (ModelState.IsValid)
                 {
                     // var comments= _postRepo.FetchComments(PostID);
-                    var res = _postRepo.FetchComments(PostID);
+                    var res = _unitOfWork.Comments.FetchComment(PostID);
                     if (res.GetType() == typeof(System.InvalidOperationException) || res.GetType() == typeof(System.ArgumentNullException))
                     {
                         _log.LogInformation("Exception thrown from comments");
@@ -357,41 +352,39 @@ namespace EatlistApi.Controllers
             {
 
                 dynamic res = "";
-                EatlistDAL.Models.ApplicationUser userid = await GetCurrentUserAsync();
-                Posts _postObject = _postRepo.Get(Convert.ToInt32(PostID));
+                Posts _postObject = _unitOfWork.posts.Get(Convert.ToInt32(PostID));
+                //ApplicationUser userid = await _userManager.FindByIdAsync("0ee0f590-f921-4e96-b295-f420680627b6");
+                ApplicationUser userid = await GetCurrentUserAsync();
 
-                //_log.LogInformation(PostID.ToString());
-                //ApplicationUser userid = await GetCurrentUserAsync();
-                //Posts _postObject = _postRepo.Get(PostID);
 
                 if (_postObject != null)
                 {
-                    if (!_postRepo.LikeExist(_postObject.PostID, userid.Id))
+                    if (!_unitOfWork.Likes.LikeExist(_postObject.Id, userid.Id))
                     {
                         Likes _likes = new Likes();
-                        _likes.PostID = PostID;
-                        _likes.CreatedBy = userid.Id;
+                        _likes.Post = _postObject;
+                        _likes.CreatedBy = userid;
                         _likes.DateCreated = DateTime.UtcNow.Date;
                         //_likes.IsLiked = !_likes.IsLiked;
                         //success insert
-                        res = _postRepo.LikeInsert(_likes);
-                        if (res.GetType() == typeof(System.InvalidOperationException) || res.GetType() == typeof(System.ArgumentNullException))
+                        res = _unitOfWork.Likes.Add(_likes);
+                        if (res.GetType() == typeof(InvalidOperationException) || res.GetType() == typeof(ArgumentNullException))
                         {
                             _log.LogInformation((string)res);
                             return StatusCode(500);
                         }
-                        return Ok(res);
                     }
 
-                    else if (!_postRepo.LikeDelete(_postObject.PostID, userid.Id))
+                    else //if (!_unitOfWork.Likes.LikeDelete(_postObject.PostID, userid.Id))
                     {
-                        return StatusCode(500, "Operation could not be completed");
+                        //return StatusCode(500, "Operation could not be completed");
+                        var likeobj = _unitOfWork.Likes.UserPostLike(_postObject.Id, userid.Id);
+                        if (!_unitOfWork.Likes.Remove(likeobj))
+                        {
+                            return StatusCode(500, "Operation could not be completed");
+                        }
                     }
-                    //success delete
-                    //return Ok(_postRepo.Get(PostID));
-
-                    //return Ok(_postRepo.FetchLikes(PostID));
-                    return Ok(_postRepo.GetPostmedia(PostID, userid.Id));
+                    return Ok(_unitOfWork.posts.GetPostByID(PostID, userid.Id));
 
                 }
                 else
@@ -416,7 +409,7 @@ namespace EatlistApi.Controllers
                 if (ModelState.IsValid)
                 {
                     // var comments= _postRepo.FetchComments(PostID);
-                    var res = _postRepo.FetchLikes(PostID);
+                    var res = _unitOfWork.Likes.FetchLikes(PostID);
                     if (res.GetType() == typeof(System.InvalidOperationException) || res.GetType() == typeof(System.ArgumentNullException))
                     {
                         _log.LogInformation("Exception thrown from comments");

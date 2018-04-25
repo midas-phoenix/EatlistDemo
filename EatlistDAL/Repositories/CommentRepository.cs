@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace EatlistDAL.Repositories
@@ -16,9 +17,29 @@ namespace EatlistDAL.Repositories
 
         private ApplicationDbContext _appContext => (ApplicationDbContext)_context;
 
+        private ILogger<dynamic> logger => (ILogger<dynamic>)_log;
+
         public dynamic FetchComment(int PostID)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return _appContext.TblCommennts.Where(c => c.Post.Id == PostID).Select(n => new
+                {
+                    CommentID = n.Id,
+                    PostID,
+                    n.Content,
+                    n.DateCreated,
+                    n.Image,
+                    CreatedBy = n.CreatedBy.Id,
+                    CreatedByName = n.CreatedBy.IsRestaurant == true ? n.CreatedBy.RestaurantName : n.CreatedBy.FullName
+                });
+            }
+            catch (Exception ex)
+            {
+                logger.LogInformation(ex.Message + " : " + ex.InnerException + " : " + ex.StackTrace);
+                throw ex;
+            }
         }
     }
+
 }

@@ -21,40 +21,33 @@ namespace EatlistDAL.Repositories
 
         public dynamic GetPostByID(long id, string CUser)
         {
-            return _appContext.TblPosts.Where(p => p.Id == id).Select(
-                p => new
-                {
-                    Post = new
-                    {
-                        p.Caption,
-                        p.Id,
-                        RestaurantId = p.Restaurant.Id,
-                        p.Restaurant.RestaurantName,
-                        p.Restaurant.IsRestaurant,
-                        CreatedByName = !Convert.ToBoolean(p.Restaurant.IsRestaurant) ? p.ApplicationUser.RestaurantName : p.ApplicationUser.FullName,
-                        p.CreatedBy,
-                        CommentCount = p.Comments.Count(),
-                        LikeCount = p.Likes.Count(),
-                        Liked = p.Likes.Count(l => l.CreatedBy == CUser) > 0 ? true : false
-                    },
-                    PostDish = new { p.Dish.Id, p.Dish.Name },
-                    Media = p.PostsMedia.Select(m => new
-                    {
-                        m.FileName,
-                        m.FileURL,
-                        m.FileType
-                    })
-                }
-                );
-        }
-
-        public Posts NewPost(Posts post)
-        {
             try
             {
-                _appContext.TblPosts.Add(post);
-                _appContext.SaveChanges();
-                return post;
+                return _appContext.TblPosts.Where(p => p.Id == id).Select(
+                   p => new
+                   {
+                       Post = new
+                       {
+                           p.Caption,
+                           p.Id,
+                           p.DateCreated,
+                           RestaurantID = p.Restaurant != null ? p.Restaurant.Id : null,
+                           RestaurantName = p.Restaurant != null ? p.Restaurant.RestaurantName : null,
+                           IsRestaurant = p.Restaurant != null ? (bool)p.Restaurant.IsRestaurant : false,
+                           CreatedByName = p.CreatedBy.IsRestaurant ? p.CreatedBy.RestaurantName : p.CreatedBy.FullName,
+                           CreatedBy = p.CreatedBy.Id,
+                           CommentCount = p.Comments.Count(),
+                           LikeCount = p.Likes.Count(),
+                           Liked = p.Likes.Any(l => l.CreatedBy.Id == CUser)
+                       },
+                       PostDish = retdish(p.Dish),
+                       Media = p.PostsMedia.Select(m => new
+                       {
+                           m.FileName,
+                           m.FileURL,
+                           m.FileType
+                       }).ToList()
+                   }).FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -63,6 +56,7 @@ namespace EatlistDAL.Repositories
             }
         }
 
+       
         public List<PostsMedia> UploadPostMedia(PostsMedia[] medias)
         {
             try
@@ -93,25 +87,26 @@ namespace EatlistDAL.Repositories
                 listusers.Add(userid);
                 if (allpost)
                 {
-                    listusers.AddRange(_appContext.TblFriendship.Where(tf => tf.CreatedBy == userid).Select(x => x.FollowerID).Distinct().ToList());
-                    listusers.AddRange(_appContext.TblFriendship.Where(tf => tf.FollowerID == userid).Select(x => x.CreatedBy).Distinct().ToList());
+                    listusers.AddRange(_appContext.TblFriendship.Where(tf => tf.CreatedBy.Id == userid).Select(x => x.Follower.Id).Distinct().ToList());
+                    listusers.AddRange(_appContext.TblFriendship.Where(tf => tf.Follower.Id == userid).Select(x => x.CreatedBy.Id).Distinct().ToList());
                 }
 
-                return _appContext.TblPosts.Where(x => listusers.Contains(x.CreatedBy)).Select(
+                return _appContext.TblPosts.Where(x => listusers.Contains(x.CreatedBy.Id)).Select(
                     p => new
                     {
                         Post = new
                         {
                             p.Caption,
                             p.Id,
+                            p.DateCreated,
                             RestaurantID = p.Restaurant != null ? p.Restaurant.Id : null,
                             RestaurantName = p.Restaurant != null ? p.Restaurant.RestaurantName : null,
                             IsRestaurant = p.Restaurant != null ? (bool)p.Restaurant.IsRestaurant : false,
-                            CreatedByName = p.ApplicationUser.IsRestaurant ? p.ApplicationUser.RestaurantName : p.ApplicationUser.FullName,
-                            CreatedBy = p.ApplicationUser.Id,
+                            CreatedByName = p.CreatedBy.IsRestaurant ? p.CreatedBy.RestaurantName : p.CreatedBy.FullName,
+                            CreatedBy = p.CreatedBy.Id,
                             CommentCount = p.Comments.Count(),
                             LikeCount = p.Likes.Count(),
-                            Liked = p.Likes.Any(l => l.CreatedBy == CUser)
+                            Liked = p.Likes.Any(l => l.CreatedBy.Id == CUser)
                         },
                         PostDish = retdish(p.Dish),
                         Media = p.PostsMedia.Select(m => new

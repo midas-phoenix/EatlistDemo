@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using EatlistApi.Models;
-using EatListDataService.DataBase;
-using EatListDataService.DataTables;
-using EatListDataService.Repository;
+using EatlistDAL;
+using EatlistDAL.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -25,18 +24,20 @@ namespace EatlistApi.Controllers
         //private readonly DishesRepository _dishRepo = new DishesRepository(_dish);
         //readonly ILogger<DishesController> _log;
         private Dishes _Dishes = new Dishes();
-        public readonly DishesRepository _dishRepo = new DishesRepository();
+        //public readonly DishesRepository _dishRepo = new DishesRepository();
         public ILogger<dynamic> _log;
         private static UserManager<ApplicationUser> _userManager;//= new UserManager<ApplicationUser>();
         public static IConfiguration Configuration;
+        private IUnitOfWork _unitOfWork;
 
 
 
-        public DishesController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public DishesController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager, IConfiguration configuration, IUnitOfWork unitOfWork)
         {
             _log = log;
             _userManager = userManager;
             Configuration = configuration;
+            _unitOfWork = unitOfWork;
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
@@ -49,27 +50,27 @@ namespace EatlistApi.Controllers
         {
             try
             {
-                return Ok(_dishRepo.Get(ID));
+                return Ok(_unitOfWork.Dishes.Get(ID));
             }
             catch (Exception ex)
             {
                 _log.LogError(ex.Message + ex.StackTrace);
                 return StatusCode(500, new { message = ex.Message });
             }
-            
+
         }
 
         // GET api/<controller>/5
         [HttpGet, Route("user")]
-        public async  Task<IActionResult> Get()
+        public async Task<IActionResult> Get()
         {
             try
             {
                 ApplicationUser userId = await GetCurrentUserAsync();
                 _log.LogInformation("testing...");
-                var res = await _dishRepo.GetDishesByUserID(userId.Id);
+                var res = _unitOfWork.Dishes.GetDishByUserID(userId.Id);
                 string user = JsonConvert.SerializeObject(res);
-                _log.LogInformation("user:"+user);
+                _log.LogInformation("user:" + user);
                 return Ok(res);
             }
             catch (Exception ex)
@@ -77,7 +78,7 @@ namespace EatlistApi.Controllers
                 _log.LogError(ex.Message + ex.StackTrace);
                 return StatusCode(500, new { message = ex.Message });
             }
-            
+
         }
 
         [HttpGet, Route("user/{restaurantID}")]
@@ -85,19 +86,19 @@ namespace EatlistApi.Controllers
         {
             try
             {
-                return Ok(_dishRepo.GetDishesByUserID(restaurantID));
+                return Ok(_unitOfWork.Dishes.GetDishByUserID(restaurantID));
             }
             catch (Exception ex)
             {
                 _log.LogError(ex.Message + ex.StackTrace);
                 return StatusCode(500, new { message = ex.Message });
             }
- 
+
         }
 
         // GET api/<controller>/5
         [HttpPost, Route("create")]
-        public async  Task<IActionResult> Post([FromBody]Dish model)
+        public async Task<IActionResult> Post([FromBody]Dish model)
         {
             try
             {
@@ -112,67 +113,13 @@ namespace EatlistApi.Controllers
                 _Dishes.Name = model.Name;
                 _Dishes.Description = model.Description;
                 _Dishes.DateCreated = DateTime.UtcNow;
-                _Dishes.RestaurantID = userId.Id;// model.RestaurantID;
-                var result = _dishRepo.Insert(_Dishes);
+                _Dishes.CreatedBy = userId;// model.RestaurantID;
+                var result = _unitOfWork.Dishes.Add(_Dishes);
                 if (result == null)
                 {
-                    return StatusCode(500,"Not Saved Successfully");
+                    return StatusCode(500, "Could not save dish");
                 }
-                foreach(Media md in model.Media)
-                {
-                    var uploadParams = new ImageUploadParams()
-                    {
-                        File = new FileDescription(md.Url),
-                        Folder = "Eatlist/Dish/"
-                    };
-                    var uploadResult = cloudinary.Upload(uploadParams);
-
-                    DishMedia media = new DishMedia();
-                    media.DishID = result.DishesID;
-                    media.Url = uploadResult.SecureUri.AbsoluteUri;
-                    media.FileName = uploadResult.PublicId;
-                    media.Type = md.Type.ToString();
-                    var ret=_dishRepo.MediaInsert(media);
-                    if (ret.Count < 1){ throw new InvalidOperationException(); }
-                }
-                return Ok(_dishRepo.GetDishesByUserID(userId.Id));
-            }
-            catch (Exception ex)
-            {
-                _log.LogInformation(ex.Message + " : " + ex.StackTrace);
-                return StatusCode(500, "Error,Creating Record");
-            }
-        }
-
-        [HttpPost, Route("update")]
-        public async Task<IActionResult> UpdateDish([FromBody]DishUpd model)
-        { 
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                Account acc = new Account(Configuration["my_cloud_name"], Configuration["my_api_key"], Configuration["my_api_secret"]);
-                Cloudinary cloudinary = new Cloudinary(acc);
-                ApplicationUser userId = await GetCurrentUserAsync();
-
-                if (_dishRepo.GetMedia(model.DishID).Count>0 && !_dishRepo.DeleteMedia(model.DishID))
-                {
-                    return StatusCode(500,"Media Not Deleted");
-                }
-                //DishMedia media =  new DishMedia();
-                _Dishes= _dishRepo.Get(model.DishID);
-                _Dishes.Name = model.Name;
-                _Dishes.Description = model.Description;
-                //_Dishes.DateCreated = DateTime.UtcNow;
-                _Dishes.RestaurantID = userId.Id;// model.RestaurantID;
-
-                var result = _dishRepo.Update(_Dishes);
-                if (result == null)
-                {
-                    return StatusCode(500, "Not Saved Successfully");
-                }
+                List<DishMedia> dm = new List<DishMedia>();
                 foreach (Media md in model.Media)
                 {
                     var uploadParams = new ImageUploadParams()
@@ -183,20 +130,85 @@ namespace EatlistApi.Controllers
                     var uploadResult = cloudinary.Upload(uploadParams);
 
                     DishMedia media = new DishMedia();
-                    media.DishID = result.DishesID;
+                    media.Dish = result;
                     media.Url = uploadResult.SecureUri.AbsoluteUri;
                     media.FileName = uploadResult.PublicId;
                     media.Type = md.Type.ToString();
-                    var ret = _dishRepo.MediaInsert(media);
-                    if (ret.Count < 1) { throw new InvalidOperationException(); }
+                    dm.Add(media);
                 }
-                return Ok(_dishRepo.GetDishMedia(result.DishesID));
+                List<DishMedia> ret = (List<DishMedia>)_unitOfWork.DishMedia.AddRange(dm);
+                if (ret.Count < 1) { throw new InvalidOperationException(); }
+                return Ok(_unitOfWork.Dishes.GetDishByUserID(userId.Id));
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + " : " + ex.StackTrace);
+                return StatusCode(500, "Error,Creating Record");
+            }
+        }
+
+        [HttpPost, Route("update")]
+        public async Task<IActionResult> UpdateDish([FromBody]DishUpd model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                Account acc = new Account(Configuration["my_cloud_name"], Configuration["my_api_key"], Configuration["my_api_secret"]);
+                Cloudinary cloudinary = new Cloudinary(acc);
+                ApplicationUser userId = await GetCurrentUserAsync();
+
+                var dms = (List<DishMedia>)_unitOfWork.DishMedia.GetMediaByDishID(model.DishID);
+                if (dms.Count > 0)
+                {
+                    bool dmd = _unitOfWork.DishMedia.RemoveRange(dms);
+
+                    if (!dmd)
+                    {
+                        return StatusCode(500, "Media Not Deleted");
+                    }
+                }
+
+                //DishMedia media =  new DishMedia();
+                _Dishes = _unitOfWork.Dishes.Get(model.DishID);
+                _Dishes.Name = model.Name;
+                _Dishes.Description = model.Description;
+                //_Dishes.DateCreated = DateTime.UtcNow;
+                //_Dishes.CreatedBy = userId.Id;// model.RestaurantID;
+
+                var result = _unitOfWork.Dishes.Update(_Dishes);
+                if (result == null)
+                {
+                    return StatusCode(500, "An error occurred while trying to modify this dish");
+                }
+                List<DishMedia> dm = new List<DishMedia>();
+                foreach (Media md in model.Media)
+                {
+                    var uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(md.Url),
+                        Folder = "Eatlist/Dish/"
+                    };
+                    var uploadResult = cloudinary.Upload(uploadParams);
+
+                    DishMedia media = new DishMedia();
+                    media.Dish = result;
+                    media.Url = uploadResult.SecureUri.AbsoluteUri;
+                    media.FileName = uploadResult.PublicId;
+                    media.Type = md.Type.ToString();
+                    dm.Add(media);
+                }
+                List<DishMedia> ret = (List<DishMedia>)_unitOfWork.DishMedia.AddRange(dm);
+                if (ret.Count < 1) { throw new InvalidOperationException(); }
+                return Ok(_unitOfWork.Dishes.GetDishByUserID(userId.Id));
             }
             catch (Exception ex)
             {
                 _log.LogInformation(ex.StackTrace);
                 return StatusCode(500);
             }
-        }        
+        }
     }
 }

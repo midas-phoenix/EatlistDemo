@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using EatListDataService.DataBase;
-using EatListDataService.Repository;
+﻿using EatlistDAL;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,13 +6,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using IdentityServer4.AccessTokenValidation;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Swagger;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using Swashbuckle.AspNetCore.SwaggerUI;
-using EatlistDAL;
+using System.Reflection;
 
 namespace EatlistApi
 {
@@ -88,7 +79,10 @@ namespace EatlistApi
             });
 
             services.AddScoped<IUnitOfWork, HttpUnitOfWork>();
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(options => {
+                //options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                //options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using EatlistApi.Models;
-using EatListDataService.DataBase;
-using EatListDataService.Repository;
+using EatlistDAL;
+using EatlistDAL.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,24 +13,37 @@ namespace EatlistApi.Controllers
     [Route("api/Chat")]
     public class ChatController : Controller
     {
-        private EatListDataService.DataTables.ChatMessages _chatMessage = new EatListDataService.DataTables.ChatMessages();
-        private ChatRepository _chatRepo = new ChatRepository();
-        //private readonly ApplicationDbContext entities;
+
         readonly ILogger<dynamic> _log;
         private static UserManager<ApplicationUser> _userManager;
+        private UnitOfWork _unitOfwork;
 
-        public ChatController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager)
+        public ChatController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager, UnitOfWork unitOfwork)
         {
             _log = log;
             _userManager = userManager;
+            _unitOfwork = unitOfwork;
         }
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
-      
-        
-        
+
+        [HttpGet, Route("ChatHistory/{Recipient}")]
+        public async Task<IActionResult> ChatHistory(string Recipient)
+        {
+            try
+            {
+                ApplicationUser userid = await GetCurrentUserAsync();
+                return Ok(_unitOfwork.ChatMessages.FetchChatHistory(userid.Id, Recipient));
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + ex.StackTrace);
+                return StatusCode(500, new { message = "An error occurred" });
+            }
+        }
+
         // POST: api/Chat
         [HttpPost, Route("Create")]
-        public async Task<IActionResult>  Create([FromBody]ChatMessages chat)
+        public async Task<IActionResult> Create([FromBody]EatlistApi.Models.ChatMessages chat)
         {
             try
             {
@@ -42,24 +52,22 @@ namespace EatlistApi.Controllers
                     return BadRequest(ModelState);
                 }
                 ApplicationUser userid = await GetCurrentUserAsync();
-                _chatMessage.CreatedBy = userid.Id;
+                ChatMessages _chatMessage = new ChatMessages();
+                _chatMessage.CreatedBy = userid;
                 //_chatMessage.CreatedBy = "fgdfgjhhhtdhhgdsefghgjhjfgtdgrd"; //userid.Id;
                 _chatMessage.DateCreated = DateTime.UtcNow;
                 //_chatMessage.MessageSenderID = chat.MessageSenderID;
-                _chatMessage.MessageToID = chat.MessageToID;
+                _chatMessage.Recipient = await _userManager.FindByIdAsync(chat.MessageToID);
                 _chatMessage.Message = chat.Message;
 
-                var result = _chatRepo.Insert(_chatMessage);
+                var result = _unitOfwork.ChatMessages.Add(_chatMessage);
                 if (result == null)
                 {
                     return StatusCode(500, "Not Successful");
                 }
                 else
                 {
-                    //_chatRepo.fetchChatMessage(_chatMessage.CreatedBy,_chatMessage.MessageToID);
-                    //return Ok(_chatRepo.fetchChatMessage(/*userid.Id*/"fgdfgjhhhtdhhgdsefghgjhjfgtdgrd", chat.MessageToID));
-                    return Ok(_chatRepo.fetchChatMessage(userid.Id, chat.MessageToID));
-                    //ChatController. fetchChatMessage(userid, MessageToID);
+                    return Ok(_unitOfwork.ChatMessages.FetchChatHistory(userid.Id, chat.MessageToID));
                 }
             }
             catch (Exception ex)
@@ -70,7 +78,7 @@ namespace EatlistApi.Controllers
 
             //return "";
         }
-        
-       
+
+
     }
 }

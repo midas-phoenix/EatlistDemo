@@ -22,41 +22,102 @@ namespace EatlistDAL.Repositories
             _log = log;
         }
 
-        public virtual void Add(TEntity entity)
+        public virtual TEntity Add(TEntity entity)
         {
-            _entities.Add(entity);
-        }
-
-        public virtual void AddRange(IEnumerable<TEntity> entities)
-        {
-            _entities.AddRange(entities);
-        }
-
-
-        public virtual void Update(TEntity entity)
-        {
-            _entities.Update(entity);
-        }
-
-        public virtual void UpdateRange(IEnumerable<TEntity> entities)
-        {
-            _entities.UpdateRange(entities);
-        }
-
-
-
-        public virtual void Remove(TEntity entity)
-        {
-            if (entity == null)
+            try
             {
-                throw new ArgumentNullException("entity");
+                _entities.Add(entity);
+                _context.SaveChanges();
+                return entity;
             }
-            _entities.Remove(entity);
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + " : " + ex.InnerException + " : " + ex.StackTrace);
+                throw ex;
+            }
+
         }
 
-        public virtual void RemoveRange(IEnumerable<TEntity> entities)
+        public virtual IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities)
         {
-            _entities.RemoveRange(entities);
+            try
+            {
+                _entities.AddRange(entities);
+                _context.SaveChanges();
+                return entities;
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + " : " + ex.InnerException + " : " + ex.StackTrace);
+                throw ex;
+            }
+        }
+
+
+        public virtual TEntity Update(TEntity entity)
+        {
+            try
+            {
+                _entities.Update(entity);
+                _context.SaveChanges();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + " : " + ex.InnerException + " : " + ex.StackTrace);
+                throw ex;
+            }
+        }
+
+        public virtual IEnumerable<TEntity> UpdateRange(IEnumerable<TEntity> entities)
+        {
+            try
+            {
+                _entities.UpdateRange(entities);
+                _context.SaveChanges();
+                return entities;
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + " : " + ex.InnerException + " : " + ex.StackTrace);
+                throw ex;
+            }
+        }
+
+
+
+        public virtual bool Remove(TEntity entity)
+        {
+            try
+            {
+                if (entity == null)
+                {
+                    throw new ArgumentNullException("entity");
+                }
+                _entities.Remove(entity);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + " : " + ex.InnerException + " : " + ex.StackTrace);
+                throw ex;
+            }
+        }
+
+        public virtual bool RemoveRange(IEnumerable<TEntity> entities)
+        {
+            try
+            {
+                _entities.RemoveRange(entities);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + " : " + ex.InnerException + " : " + ex.StackTrace);
+                throw ex;
+            }
         }
 
 

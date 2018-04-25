@@ -73,8 +73,6 @@ namespace EatListDataService.Repository
             // return entities.TblOrders.Where(x => x.CreatedBy == UserId && x.OrderID ==  ).ToList();
         }
 
-
-
         public List<DataTables.Orders> GetAllResturantID(string ResturandID)
         {
             return entities.TblOrders.Where(x => x.ResturantID == ResturandID ).ToList();
@@ -142,7 +140,5 @@ namespace EatListDataService.Repository
             }
         }
         
-
-
     }
 }

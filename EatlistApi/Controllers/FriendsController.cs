@@ -4,14 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using EatlistApi.Models;
 using Microsoft.AspNetCore.Mvc;
-using EatListDataService.DataBase;
-using EatListDataService.Repository;
-using EatListDataService.DataTables;
 using Microsoft.Extensions.Logging;
 using EatlistApi.ViewsModel;
 using Microsoft.AspNetCore.Identity;
-
-
+using EatlistDAL.Models;
+using EatlistDAL;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,19 +18,17 @@ namespace EatlistApi.Controllers
     public class FriendsController : Controller
     {
         #region "Declaration"
-        private static readonly ApplicationDbContext _friend = new ApplicationDbContext();
-        private readonly FriendsRepository _friendsRepo = new FriendsRepository();
-        //readonly ILogger<FriendsController> _log;
-        private Friendship _Friends = null;
 
         public ILogger<dynamic> _log;
-        private static UserManager<ApplicationUser> _userManager;//= new UserManager<ApplicationUser>();
+        private static UserManager<ApplicationUser> _userManager;
+        private IUnitOfWork _unitOfWork;
 
 
-        public FriendsController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager)
+        public FriendsController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager, IUnitOfWork unitOfWork)
         {
             _log = log;
             _userManager = userManager;
+            _unitOfWork = unitOfWork;
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
@@ -50,29 +45,59 @@ namespace EatlistApi.Controllers
         [HttpGet, Route("Userfollowers/{FollowerID}")]
         public IActionResult Get(string FollowerID)
         {
-
-            return Ok(_friendsRepo.FetchUserFollowers(FollowerID));
+            try
+            {
+                return Ok(_unitOfWork.Friends.FetchUserFollowers(FollowerID));
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + ex.StackTrace);
+                return StatusCode(500);
+            }
         }
 
         [HttpGet, Route("Myfollowers")]
         public async Task<IActionResult> Get()
         {
-            ApplicationUser userId = await GetCurrentUserAsync();
-            return Ok(_friendsRepo.FetchUserFollowers(userId.Id));
+            try
+            {
+                ApplicationUser userId = await GetCurrentUserAsync();
+                return Ok(_unitOfWork.Friends.FetchUserFollowers(userId.Id));
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + ex.StackTrace);
+                return StatusCode(500);
+            }
         }
 
         [HttpGet, Route("Userfollowings/{FollowingID}")]
         public IActionResult ffgGet(string FollowingID)
         {
-
-            return Ok(_friendsRepo.FetchUserFollowing(FollowingID));
+            try
+            {
+            return Ok(_unitOfWork.Friends.FetchUserFollowing(FollowingID));
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + ex.StackTrace);
+                return StatusCode(500);
+            }
         }
 
         [HttpGet, Route("Myfollowings")]
         public async Task<IActionResult> ffgGet()
         {
+            try
+            {
             ApplicationUser userId = await GetCurrentUserAsync();
-            return Ok(_friendsRepo.FetchUserFollowing(userId.Id));
+            return Ok(_unitOfWork.Friends.FetchUserFollowing(userId.Id));
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + ex.StackTrace);
+                return StatusCode(500);
+            }
         }
 
         [HttpPost, Route("create")]
@@ -84,29 +109,31 @@ namespace EatlistApi.Controllers
             }
             ApplicationUser userId = await GetCurrentUserAsync();
 
-            var prevRelationship = _friendsRepo.FetchMyFollow(FollowerID, userId.Id);//userID=Createdby,FollowerID=FollowerID,
+            //var prevRelationship = _unitOfWork.Friends.FetchMyFollow(FollowerID, userId.Id);//userID=Createdby,FollowerID=FollowerID,
+            var prevRelationship = _unitOfWork.Friends.Find(x => x.Follower.Id == FollowerID && x.CreatedBy.Id == userId.Id).ToList();
 
-            if (prevRelationship.GetType() == typeof(EatListError))
-            {
-                EatListError _error = (EatListError)prevRelationship;
-                _log.LogInformation(_error.ErrorMessage.ToString());
-                return StatusCode(500);
-            }
+            //if (prevRelationship.GetType() == typeof(EatListError))
+            //{
+            //    EatListError _error = (EatListError)prevRelationship;
+            //    _log.LogInformation(_error.ErrorMessage.ToString());
+            //    return StatusCode(500);
+            //}
 
-            else if (prevRelationship.Count > 0)
+            //else 
+            if (prevRelationship.Count > 0)
             {
                 foreach (var prev in prevRelationship)
                 {
-                    _friendsRepo.Delete(prev);
+                    _unitOfWork.Friends.Remove(prev);
                 }
-                return Ok(new { status = "unfollowed" });
+                return Ok(new { status = "user has been unfollowed" });
             }
 
-            _Friends = new Friendship();
-            _Friends.FollowerID = FollowerID;
+            Friendship _Friends = new Friendship();
+            _Friends.Follower = await _userManager.FindByIdAsync(FollowerID);
             _Friends.DateCreated = DateTime.UtcNow;
-            _Friends.CreatedBy = userId.Id;
-            var result = _friendsRepo.Insert(_Friends);
+            _Friends.CreatedBy = userId;
+            var result = _unitOfWork.Friends.Add(_Friends);
             if (result == null)
             {
                 return StatusCode(500, "Not Saved Successfully");

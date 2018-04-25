@@ -22,20 +22,20 @@ namespace EatListDataService.Repository
             //var 
             try
             {
-                List<dynamic> result=new List<dynamic>();
-                var IDS=entities.TblBookings.Where(x => x.CreatedBy == UserID).Select(x=>x.BookingID).ToList();
+                List<dynamic> result = new List<dynamic>();
+                var IDS = entities.TblBookings.Where(x => x.CreatedBy == UserID).Select(x => x.BookingID).ToList();
                 foreach (int id in IDS) { result.Add(Get(id)); }
                 return result;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _log.LogDebug(ex.Message+ ":" +ex.StackTrace);
+                _log.LogDebug(ex.Message + ":" + ex.StackTrace);
                 return ex;
             }
-            
+
         }
 
-        public dynamic GetAllByUserID(string UserID,bool IsRestaurant)
+        public dynamic GetAllByUserID(string UserID, bool IsRestaurant)
         {
             //var 
             try
@@ -68,7 +68,7 @@ namespace EatListDataService.Repository
             try
             {
                 var blogs = entities.TblBookings
-                                    .Where(b=>b.BookingID==id)
+                                    .Where(b => b.BookingID == id)
                                     //.Include(book => book.BookingStatus)
                                     //.Include(book => book.BookingDish)
                                     .FirstOrDefault();
@@ -76,7 +76,7 @@ namespace EatListDataService.Repository
                 //List<dynamic> res = new List<dynamic>();
                 var Book = entities.TblBookings.Where(x => x.BookingID == id).FirstOrDefault();
 
-                                    //.Select(b => new { b.BookingID, b.BookingStatus, b.BookingTime, b.DateCreated, b.Description,b.BookingStatusID }).FirstOrDefault();
+                //.Select(b => new { b.BookingID, b.BookingStatus, b.BookingTime, b.DateCreated, b.Description,b.BookingStatusID }).FirstOrDefault();
                 var Dishes = entities.TblBookingDishes.Where(x => x.BookingID == id)
                                     .Select(d => new { d.Dishes.Name, d.Dishes.RestaurantID, d.Dishes.DateCreated }).ToList();
 
@@ -98,6 +98,7 @@ namespace EatListDataService.Repository
             }
 
         }
+
         public dynamic Get(long id)
         {
             try
@@ -116,30 +117,30 @@ namespace EatListDataService.Repository
                 //                    .Where(booking => booking.BookingID == id).FirstOrDefault();    // where statement                
 
 
-                var Book =    from user in entities.Users
-                               join book in entities.TblBookings on user.Id equals book.RestaurantID
-                              //join booker in entities.TblBookings on user.Id equals booker.CreatedBy
-                              where book.BookingID == id
-                               select new
-                               {
-                                   book.BookingID,
-                                   //book.BookingStatus,
-                                   book.BookingTime,
-                                   book.DateCreated,
-                                   book.Description,
-                                   book.RestaurantID,
-                                   book.CreatedBy,
-                                   //booker.
-                                   booker=entities.Users.Where(x=>x.Id==book.CreatedBy).FirstOrDefault().FullName,
-                                   book.TableSize,
-                                   user.FullName,
-                                   user.RestaurantName,
-                                   user.IsRestaurant,
-                               };
+                var Book = from user in entities.Users
+                           join book in entities.TblBookings on user.Id equals book.RestaurantID
+                           //join booker in entities.TblBookings on user.Id equals booker.CreatedBy
+                           where book.BookingID == id
+                           select new
+                           {
+                               book.BookingID,
+                               //book.BookingStatus,
+                               book.BookingTime,
+                               book.DateCreated,
+                               book.Description,
+                               book.RestaurantID,
+                               book.CreatedBy,
+                               //booker.
+                               booker = entities.Users.Where(x => x.Id == book.CreatedBy).FirstOrDefault().FullName,
+                               book.TableSize,
+                               user.FullName,
+                               user.RestaurantName,
+                               user.IsRestaurant,
+                           };
                 //.Select(b =>new { b.BookingID,b.BookingStatus,b.BookingTime,b.DateCreated,b.Description,b.RestaurantID }).FirstOrDefault();
                 // dynamic BooEx = new { Book,entities.Users.Where(x=>x.Id===Book.RestaurantID).FirstOrDefault()};
                 var Dishes = entities.TblBookingDishes.Where(x => x.BookingID == id)
-                                    .Select( d=>new { d.Dishes.Name,d.Dishes.RestaurantID,d.Dishes.DateCreated}).ToList();
+                                    .Select(d => new { d.Dishes.Name, d.Dishes.RestaurantID, d.Dishes.DateCreated }).ToList();
 
                 //res.AddRange("BookingID",Book.BookingID);
                 //res.Add(Book.BookingStatus);
@@ -147,10 +148,10 @@ namespace EatListDataService.Repository
                 //res.Add(Book.DateCreated);
                 //res.Add(Book.Description);
                 //object vbook = Book.Single()
-                res.Add("Booking",Book.Single());
-                
-                
-                res.Add("Dishes",Dishes);
+                res.Add("Booking", Book.Single());
+
+
+                res.Add("Dishes", Dishes);
                 return res;
             }
             catch (Exception ex)
@@ -158,7 +159,7 @@ namespace EatListDataService.Repository
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
                 return ex;
             }
-           
+
         }
 
         public dynamic Insert(DataTables.Bookings entity)
@@ -178,7 +179,7 @@ namespace EatListDataService.Repository
                 _log.LogDebug(ex.Message + ":" + ex.InnerException + ":" + ex.StackTrace);
                 return ex;
             }
-            
+
         }
 
         public dynamic Update(DataTables.Bookings entity)
@@ -213,18 +214,18 @@ namespace EatListDataService.Repository
                 {
                     throw new ArgumentNullException("entity");
                 }
-                var ret=DeleteDishesByBookingID(entity.BookingID);
+                var ret = DeleteDishesByBookingID(entity.BookingID);
                 entities.TblBookings.Remove(entity);
                 SaveChange();
                 return ret;
-                
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _log.LogDebug(ex.Message+ ":" +ex.StackTrace);
+                _log.LogDebug(ex.Message + ":" + ex.StackTrace);
                 return false;
             }
-            
+
         }
 
         #endregion
@@ -315,7 +316,7 @@ namespace EatListDataService.Repository
                 return ex;
             }
         }
-        
+
         //gets by join
         //public dynamic GetBookingStatus(int BookingID)
         //{
@@ -347,7 +348,7 @@ namespace EatListDataService.Repository
         //        return ex;
         //    }
         //}
-        
+
         //public dynamic SetBookingStatus(DataTables.Bookings entity,int BookingStatusID)
         //{
         //    try
@@ -371,8 +372,8 @@ namespace EatListDataService.Repository
         //        _log.LogDebug(ex.Message + ":" + ex.StackTrace);
         //        throw ex;
         //    }
-            
-            
+
+
         //}
 
         public dynamic SetBookingStatus(int EntityID, int BookingStatusID)
@@ -394,7 +395,7 @@ namespace EatListDataService.Repository
                 _log.LogDebug(ex.Message + ":" + ex.StackTrace);
                 return ex;
             }
-            
+
         }
 
         #endregion

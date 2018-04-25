@@ -7,5 +7,13 @@ namespace EatlistDAL.Repositories.Interfaces
 {
     public interface IDishRepository: IRepository<Dishes>
     {
+        dynamic GetDishByUserID(string UserID);
+
+
+    }
+    public interface IDishMediaRepository : IRepository<DishMedia>
+    {
+        IEnumerable<DishMedia> GetMediaByDishID(int dishId);
+
     }
 }

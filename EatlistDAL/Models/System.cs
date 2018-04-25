@@ -8,16 +8,15 @@ namespace EatlistDAL.Models
     public class Notifications: AuditableEntity
     {
         public string Message { get; set; }
-        public string Recipient { get; set; }
+        public bool seen { get; set; }
+        public string Source { get; set; }
+        public virtual ApplicationUser Recipient { get; set; }
     }
 
     public class ChatMessages : AuditableEntity
     {
         public string Message { get; set; }
-
-        [ForeignKey("Recipient")]
-        public string MessageToID { get; set; }
-
+        
         public virtual ApplicationUser Recipient { get; set; }
     }
 }

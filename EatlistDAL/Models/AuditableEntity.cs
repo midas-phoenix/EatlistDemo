@@ -12,12 +12,9 @@ namespace EatlistDAL.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key()]
         public int Id { get; set; }
-
-        [ForeignKey("ApplicationUser")]
-        public string CreatedBy { get; set; }
-
+        
         public DateTime DateCreated { get; set; }
 
-        public virtual ApplicationUser ApplicationUser { get; set; }
+        public virtual ApplicationUser CreatedBy { get; set; }
     }
 }

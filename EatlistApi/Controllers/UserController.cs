@@ -1,26 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using EatListDataService.DataBase;
-using EatListDataService.DataTables;
+﻿using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using EatlistApi.Models;
-using System.Security.Claims;
+using EatlistDAL;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using EatListDataService.Repository;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
-using EatlistDAL;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace EatlistApi.Controllers
 {
-    [Authorize()]
+    //[Authorize()]
     [Route("api/[controller]")]
     public class UserController : Controller
     {
@@ -28,7 +21,6 @@ namespace EatlistApi.Controllers
         private IUnitOfWork _unitOfWork;
         private UserManager<EatlistDAL.Models.ApplicationUser> _userManager;
         readonly ILogger<UserController> _log;
-        public readonly UserRepository _userRepo = new UserRepository();
 
         public static IConfiguration Configuration;
         //class constructor
@@ -45,7 +37,7 @@ namespace EatlistApi.Controllers
         //private readonly UserManager<ApplicationUser> _userManager;
         //private readonly SignInManager<ApplicationUser> _signInManager;
         //private Upload _upload;
-        private Restaurant _restaurant;
+        //private Restaurant _restaurant;
         //string userId = "03503819-15ce-489c-946e-ff86a5324189";
 
         // GET api/<controller>/5
@@ -138,7 +130,7 @@ namespace EatlistApi.Controllers
                     userId.profilepicName = uploadResult.PublicId;
                     await _userManager.UpdateAsync(userId);
 
-                    return Ok(_userRepo.GetUser(userId.Id, userId.Id));
+                    return Ok(_unitOfWork.Users.GetUser(userId.Id, userId.Id));
                 }
                 else
                 {
@@ -198,7 +190,7 @@ namespace EatlistApi.Controllers
         /// <param name="id"></param>
         /// <returns></returns>Gender
         [HttpGet, Route("getRestaurant/{id}")]
-        public async Task<IActionResult> GetRestaurant(string id)
+        public IActionResult GetRestaurant(string id)
         {
             try
             {
@@ -225,13 +217,13 @@ namespace EatlistApi.Controllers
                     userId.RestaurantName = userinfo.RestaurantName;
                     userId.Address = userinfo.Address;
                     userId.Bio = userinfo.Bio;
-                    userId.Dob = userinfo.Dob;
-                    userId.Doi = userinfo.Doi;
+                    userId.Dob = (DateTime)userinfo.Dob;
+                    userId.Doi = (DateTime)userinfo.Doi;
                     userId.PhoneNumber = userinfo.PhoneNumber;
                     userId.Gender = userinfo.Gender == 0 ? "Male" : "Female";
 
                     await _userManager.UpdateAsync(userId);
-                    return Ok(_userRepo.GetUser(userId.Id, userId.Id));
+                    return Ok(_unitOfWork.Users.GetUser(userId.Id, userId.Id));
                 }
                 return BadRequest();
             }

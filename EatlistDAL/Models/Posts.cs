@@ -11,6 +11,7 @@ namespace EatlistDAL.Models
 
         public virtual Dishes Dish { get; set; }
 
+        [InverseProperty("Post")]
         public virtual ICollection<PostsMedia> PostsMedia { get; set; }
 
         [InverseProperty("Post")]
@@ -24,16 +25,13 @@ namespace EatlistDAL.Models
 
     public class PostsMedia : AuditableEntity
     {
-        [ForeignKey("Posts")]
-        public int PostID { get; set; }
-
         public string FileURL { get; set; }
 
         public string FileName { get; set; }
 
         public string FileType { get; set; }
 
-        public virtual Posts Posts { get; set; }
+        public virtual Posts Post { get; set; }
     }
 
     public class Likes: AuditableEntity

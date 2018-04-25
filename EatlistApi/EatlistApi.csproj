@@ -16,7 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\BaseController.cs" />
     <Compile Remove="Controllers\SampleDataController.cs" />
+    <Compile Remove="Controllers\TestController.cs" />
     <Compile Remove="Controllers\ValuesController.cs" />
   </ItemGroup>
 
@@ -49,7 +51,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EatlistDAL\EatlistDAL.csproj" />
-    <ProjectReference Include="..\EatListDataService\EatListDataService.csproj" />
   </ItemGroup>
 
 </Project>

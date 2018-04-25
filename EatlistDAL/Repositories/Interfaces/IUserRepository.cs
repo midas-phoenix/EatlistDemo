@@ -10,4 +10,11 @@ namespace EatlistDAL.Repositories.Interfaces
         dynamic GetUser(string UserID, string me);
         dynamic GetRestaurants(string Id);
     }
+
+    public interface IFriendsRepository: IRepository<Friendship>
+    {
+        dynamic FetchUserFollowers(string Id);
+        dynamic FetchUserFollowing(string Id);
+        dynamic FetchMyFollow(string followerId, string UserID);
+    }
 }
