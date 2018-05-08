@@ -1,5 +1,8 @@
-﻿using EatlistDAL;
+﻿using EatlistApi.Hubs;
+using EatlistDAL;
+using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -7,9 +10,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Swagger;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace EatlistApi
 {
@@ -25,28 +34,55 @@ namespace EatlistApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-            //...............
             var migrationAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-            services.AddDbContext<EatlistDAL.ApplicationDbContext>(options =>
+            services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<EatlistDAL.Models.ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<EatlistDAL.ApplicationDbContext>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            //services.AddTransient<BaseRepository>();
-            //services.AddScoped<UserRepository>();
-            //services.AddScoped<PostRepository>();
-            //services.AddTransient<FriendsRepository>();
-            //services.AddTransient<CommentRepository>();
-            //services.AddTransient<ChatRepository>();
-            //services.AddTransient<BookingRepository>();
-            //services.AddTransient<DishesRepository>();
-            //services.AddTransient<EatListRepository>();
-            //services.AddTransient<Repo>();
+            //var policy = new Microsoft.AspNetCore.Cors.Infrastructure.CorsPolicy();
+            //policy.Headers.Add("*");
+            //policy.Methods.Add("*");
+            //policy.Origins.Add("*");
+            //policy.SupportsCredentials = true;
+
+            //services.AddCors(x => x.AddPolicy("corsGlobalPolicy", policy));
+
+            //var guestPolicy = new AuthorizationPolicyBuilder()
+            //    .RequireClaim("scope", "oidcdemomobile")
+            //    .Build();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("default", policyy =>
+                {
+                    policyy.WithOrigins(Configuration["ClientAddress"])
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                    policyy.WithOrigins("file://")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowAnyOrigin();
+                    policyy.AllowCredentials();
+                });
+
+            });
+
+
+            var jwtSecurityTokenHandler = new JwtSecurityTokenHandler
+            {
+                InboundClaimTypeMap = new Dictionary<string, string>()
+            };
+
+            var tokenValidationParameters = new TokenValidationParameters()
+            {
+                ValidIssuer = Configuration["IdentityServerAddress"],
+                ValidAudience = "oidcdemomobile",
+                AuthenticationType = JwtBearerDefaults.AuthenticationScheme,
+                
+        };
             //*******************************
             /*************SwashBuckle*********************/
             services.AddSwaggerGen(c =>
@@ -63,30 +99,41 @@ namespace EatlistApi
                 o.Authority = Configuration["IdentityServerAddress"];
                 o.Audience = "oidcdemomobile";
                 o.RequireHttpsMetadata = false;
-            });
-
-            services.AddCors(options =>
-            {
-                options.AddPolicy("default", policy =>
+                //o.IncludeErrorDetails = true;
+                //o.SaveToken = true;
+                o.SecurityTokenValidators.Add(jwtSecurityTokenHandler);
+                o.TokenValidationParameters = tokenValidationParameters;
+                o.Events = new JwtBearerEvents
                 {
-                    policy.WithOrigins(Configuration["ClientAddress"])
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
-                    policy.WithOrigins("file://")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
-                });
+                    OnMessageReceived = context =>
+                    {
+                        if ((context.Request.Path.Value.StartsWith("/Ehub")
+                           )
+                            && context.Request.Query.TryGetValue("token", out StringValues token)
+                        )
+                        {
+                            context.Token = token;
+                        }
+
+                        return Task.CompletedTask;
+                    }//,
+                    //OnAuthenticationFailed = context =>
+                    //{
+                    //    var te = context.Exception;
+                    //    return Task.CompletedTask;
+                    //}
+                };
             });
+            
 
             services.AddScoped<IUnitOfWork, HttpUnitOfWork>();
-            services.AddMvc().AddJsonOptions(options => {
-                //options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                //options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            });
+            services.AddMvc();
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env,ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddFile("Logs/ErrorTrace-{Date}.txt");
 
@@ -103,13 +150,18 @@ namespace EatlistApi
                 app.UseDeveloperExceptionPage();
             }
 
+
+            //app.UseCors("corsGlobalPolicy");
             app.UseCors("default");
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<EatlistHub>("/Ehub");
+            });
 
             app.UseAuthentication();
 
             app.UseMvc();
 
-            
         }
     }
 }

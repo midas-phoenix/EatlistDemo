@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Text;
 using System.Threading.Tasks;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -106,7 +107,7 @@ namespace EatlistApi.Controllers
         // POST api/<controller>
         // [Route("Post")]
         [HttpPost, Route("profileUp")]
-        public async Task<IActionResult> Post(ProfileUpload upload)
+        public async Task<IActionResult> Post([FromBody]ProfileUpload upload)
         {
             try
             {
@@ -126,7 +127,7 @@ namespace EatlistApi.Controllers
                         Folder = "Eatlist/profilepic/"
                     };
                     var uploadResult = cloudinary.Upload(uploadParams);
-                    userId.profilepic = uploadResult.SecureUri.AbsolutePath;
+                    userId.profilepic = uploadResult.SecureUri.AbsoluteUri;
                     userId.profilepicName = uploadResult.PublicId;
                     await _userManager.UpdateAsync(userId);
 

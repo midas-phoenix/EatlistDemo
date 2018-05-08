@@ -16,15 +16,30 @@ namespace EatlistApi.Controllers
 
         readonly ILogger<dynamic> _log;
         private static UserManager<ApplicationUser> _userManager;
-        private UnitOfWork _unitOfwork;
+        private IUnitOfWork _unitOfwork;
 
-        public ChatController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager, UnitOfWork unitOfwork)
+        public ChatController(ILogger<dynamic> log, UserManager<ApplicationUser> userManager, IUnitOfWork unitOfwork)
         {
             _log = log;
             _userManager = userManager;
             _unitOfwork = unitOfwork;
         }
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
+        [HttpGet, Route("Chats")]
+        public async Task<IActionResult> FetchChatsAsync()
+        {
+            try
+            {
+                ApplicationUser userid = await GetCurrentUserAsync();
+                return Ok(_unitOfwork.ChatMessages.FetchChats(userid.Id));
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + ex.StackTrace);
+                return StatusCode(500, new { message = "An error occurred" });
+            }
+        }
 
         [HttpGet, Route("ChatHistory/{Recipient}")]
         public async Task<IActionResult> ChatHistory(string Recipient)
@@ -43,7 +58,7 @@ namespace EatlistApi.Controllers
 
         // POST: api/Chat
         [HttpPost, Route("Create")]
-        public async Task<IActionResult> Create([FromBody]EatlistApi.Models.ChatMessages chat)
+        public async Task<IActionResult> Create([FromBody]Models.ChatMessages chat)
         {
             try
             {

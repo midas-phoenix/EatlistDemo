@@ -6,6 +6,7 @@ using CloudinaryDotNet.Actions;
 using EatlistApi.Models;
 using EatlistDAL;
 using EatlistDAL.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -16,6 +17,7 @@ using Newtonsoft.Json;
 
 namespace EatlistApi.Controllers
 {
+    [Authorize()]
     [Route("api/[controller]")]
     public class DishesController : Controller
     {
@@ -45,12 +47,12 @@ namespace EatlistApi.Controllers
         #endregion
 
         // GET: api/<controller>
-        [HttpGet, Route("get")]
+        [HttpGet, Route("get/{ID}")]
         public IActionResult Get(int ID)
         {
             try
             {
-                return Ok(_unitOfWork.Dishes.Get(ID));
+                return Ok(_unitOfWork.Dishes.GetDishByID(ID));
             }
             catch (Exception ex)
             {
@@ -209,6 +211,27 @@ namespace EatlistApi.Controllers
                 _log.LogInformation(ex.StackTrace);
                 return StatusCode(500);
             }
+        }
+
+        [HttpDelete("{DishId}")]
+        public async Task<IActionResult> DeleteDish(int DishId) {
+            try
+            {
+
+                ApplicationUser userId = await GetCurrentUserAsync();
+                var res = _unitOfWork.Dishes.Get(DishId);
+                if (res.Equals(null))
+                    return BadRequest(new { message = "Dish could not be found"});
+                var dd = _unitOfWork.Dishes.Remove(res);
+                if (!dd)
+                    return BadRequest(new { message = "Error deleting dish" });
+                return Ok(_unitOfWork.Dishes.GetDishByUserID(userId.Id));
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.StackTrace);
+                return StatusCode(500);
+            }  
         }
     }
 }

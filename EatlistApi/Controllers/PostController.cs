@@ -112,7 +112,7 @@ namespace EatlistApi.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    ApplicationUser userid = await GetCurrentUserAsync();
+                    ApplicationUser userid = await _userManager.FindByIdAsync("0ee0f590-f921-4e96-b295-f420680627b6");//await GetCurrentUserAsync();
                     return Ok(_unitOfWork.posts.UserPosts(Id, false, userid.Id));
                 }
                 return BadRequest();

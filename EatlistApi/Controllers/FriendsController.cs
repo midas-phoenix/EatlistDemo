@@ -100,6 +100,21 @@ namespace EatlistApi.Controllers
             }
         }
 
+        [HttpGet, Route("AllffUsers")]
+        public async Task<IActionResult> AllffUsers()
+        {
+            try
+            {
+                ApplicationUser userId = await GetCurrentUserAsync();
+                return Ok(_unitOfWork.Friends.FetchanyF(userId.Id));
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + ex.StackTrace);
+                return StatusCode(500);
+            }
+        }
+
         [HttpPost, Route("create")]
         public async Task<IActionResult> Friends(string FollowerID)
         {

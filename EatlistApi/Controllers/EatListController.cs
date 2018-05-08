@@ -30,11 +30,29 @@ namespace EatlistApi.Controllers
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-        public EatListController(ILogger<EatListController> log)
-        {
-            _log = log;
-        }
+        //public EatListController(ILogger<EatListController> log)
+        //{
+        //    _log = log;
+        //    _userManager = userManager;
+        //    Configuration = configuration;
+        //    _unitOfWork = unitOfWork;
+        //}
         #endregion
+
+        [HttpGet, Route("MyEatlist")]
+        public async Task<IActionResult> GetAsync()
+        {
+            try
+            {
+                ApplicationUser userId = await GetCurrentUserAsync();
+                return Ok(_unitOfWork.EatList.GetUserDishList(userId.Id));
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation(ex.Message + ex.StackTrace);
+                return StatusCode(500, new { Message = "An error occurred" });
+            }
+        }
 
         [HttpPost, Route("create")]
         public async Task<IActionResult> EatListAsync(int DishID)
@@ -47,12 +65,17 @@ namespace EatlistApi.Controllers
                 }
 
                 ApplicationUser userId = await GetCurrentUserAsync();
+                
+                if (!_unitOfWork.EatList.EatlistExist(userId.Id,DishID).Equals(null))
+                    return StatusCode(304,new { Message="this dish already exist"});
+
                 TodoDishes _EatLists = new TodoDishes();
                 _EatLists.Dish = _unitOfWork.Dishes.Get(DishID);
                 _EatLists.DateCreated = DateTime.UtcNow;
                 _EatLists.CreatedBy = userId;
+                _unitOfWork.EatList.Add(_EatLists);
 
-                return Ok(_unitOfWork.EatList.Add(_EatLists));
+                return Ok(_unitOfWork.EatList.GetUserDishList(userId.Id));
             }
             catch (Exception ex)
             {
@@ -102,13 +125,14 @@ namespace EatlistApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> DeleteAsync(int id)
         {
             try
             {
+                ApplicationUser userId = await GetCurrentUserAsync();
                 if (_unitOfWork.EatList.Remove(_unitOfWork.EatList.Get(id)))
                 {
-                    return Ok(new {Message="Item removed successfully" });
+                    return Ok(_unitOfWork.EatList.GetUserDishList(userId.Id));
                 }
                 return BadRequest("sorry, this item could not be removed");
             }
