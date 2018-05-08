@@ -31,7 +31,8 @@ namespace EatlistDAL.Repositories
                     n.DateCreated,
                     n.Image,
                     CreatedBy = n.CreatedBy.Id,
-                    CreatedByName = n.CreatedBy.IsRestaurant == true ? n.CreatedBy.RestaurantName : n.CreatedBy.FullName
+                    CreatedByName = n.CreatedBy.IsRestaurant == true ? n.CreatedBy.RestaurantName : n.CreatedBy.FullName,
+                    n.CreatedBy.profilepic
                 });
             }
             catch (Exception ex)

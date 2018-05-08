@@ -20,6 +20,33 @@ namespace EatlistDAL.Repositories
 
         private ILogger<dynamic> logger => (ILogger<dynamic>)_log;
 
+        public dynamic GetDishByID(int Id)
+        {
+            try
+            {
+                return _appContext.TblDishes.Select(y => new
+                {
+                    y.Id,
+                    y.Name,
+                    y.Description,
+                    CreatedBy = y.CreatedBy.Id,
+                    y.CreatedBy.RestaurantName,
+                    dishmedias = y.DishMedia.Select(m => new
+                    {
+                        m.FileName,
+                        m.Url,
+                        m.Type
+                    })
+                }).Where(i=>i.Id == Id).FirstOrDefault();
+                
+            }
+            catch (Exception ex)
+            {
+                logger.LogInformation(ex.Message + " : " + ex.InnerException + " : " + ex.StackTrace);
+                throw ex;
+            }
+        }
+
         public dynamic GetDishByUserID(string UserID)
         {
             try

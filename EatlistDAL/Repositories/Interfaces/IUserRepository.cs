@@ -16,5 +16,6 @@ namespace EatlistDAL.Repositories.Interfaces
         dynamic FetchUserFollowers(string Id);
         dynamic FetchUserFollowing(string Id);
         dynamic FetchMyFollow(string followerId, string UserID);
+        dynamic FetchanyF(string Id);
     }
 }

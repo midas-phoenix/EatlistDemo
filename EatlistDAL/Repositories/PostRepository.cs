@@ -36,6 +36,7 @@ namespace EatlistDAL.Repositories
                            IsRestaurant = p.Restaurant != null ? (bool)p.Restaurant.IsRestaurant : false,
                            CreatedByName = p.CreatedBy.IsRestaurant ? p.CreatedBy.RestaurantName : p.CreatedBy.FullName,
                            CreatedBy = p.CreatedBy.Id,
+                           p.CreatedBy.profilepic,
                            CommentCount = p.Comments.Count(),
                            LikeCount = p.Likes.Count(),
                            Liked = p.Likes.Any(l => l.CreatedBy.Id == CUser)
@@ -104,6 +105,7 @@ namespace EatlistDAL.Repositories
                             IsRestaurant = p.Restaurant != null ? (bool)p.Restaurant.IsRestaurant : false,
                             CreatedByName = p.CreatedBy.IsRestaurant ? p.CreatedBy.RestaurantName : p.CreatedBy.FullName,
                             CreatedBy = p.CreatedBy.Id,
+                            p.CreatedBy.profilepic,
                             CommentCount = p.Comments.Count(),
                             LikeCount = p.Likes.Count(),
                             Liked = p.Likes.Any(l => l.CreatedBy.Id == CUser)

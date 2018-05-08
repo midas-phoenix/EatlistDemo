@@ -15,6 +15,30 @@ namespace EatlistDAL.Repositories
         private ApplicationDbContext _appContext => (ApplicationDbContext)_context;
         private ILogger<dynamic> logger => (ILogger<dynamic>)_log;
 
+        public dynamic FindFriends(string username, string userId)
+        {
+            try
+            {
+                return _appContext.TblFriendship.Where(f => (f.CreatedBy.Id == userId || f.Follower.Id == userId) && (f.CreatedBy.UserName.Contains(username) || f.CreatedBy.FullName.Contains(username) ||
+                f.CreatedBy.RestaurantName.Contains(username) || f.Follower.UserName.Contains(username) || f.Follower.FullName.Contains(username) || f.Follower.RestaurantName.Contains(username)))
+                .Select(x => new
+                {
+                    UserId = x.CreatedBy.Id == userId ? x.Follower.Id : x.CreatedBy.Id,
+                    UserName = x.CreatedBy.Id == userId ? x.Follower.UserName : x.CreatedBy.UserName,
+                    Email = x.CreatedBy.Id == userId ? x.Follower.Email : x.CreatedBy.Email,
+                    Name = x.CreatedBy.Id == userId ? x.Follower.FullName : x.CreatedBy.FullName,
+                    IsRestaurant = x.CreatedBy.Id == userId ? x.Follower.IsRestaurant : x.CreatedBy.IsRestaurant,
+                    RestaurantName = x.CreatedBy.Id == userId ? x.Follower.RestaurantName : x.CreatedBy.RestaurantName,
+                    ProfilePic = x.CreatedBy.Id == userId ? x.Follower.profilepic : x.CreatedBy.profilepic
+                }).Distinct();
+            }
+            catch (Exception ex)
+            {
+                logger.LogInformation(ex.Message + " : " + ex.InnerException + ex.StackTrace);
+                return ex;
+            }
+        }
+
         public dynamic Search(string keyword)
         {
             try
@@ -36,6 +60,8 @@ namespace EatlistDAL.Repositories
                 return ex;
             }
         }
+
+
     }
 
 }

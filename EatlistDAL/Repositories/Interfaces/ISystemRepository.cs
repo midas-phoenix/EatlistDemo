@@ -12,9 +12,11 @@ namespace EatlistDAL.Repositories.Interfaces
 
     public interface IUtilsRepository: IRepository<Object> {
         dynamic Search(string keyword);
+        dynamic FindFriends(string username, string UserId);
     }
 
     public interface IChatMessagesRepository: IRepository<ChatMessages> {
         dynamic FetchChatHistory(string UserID, string MessageToID);
+        dynamic FetchChats(string UserId);
     }
 }

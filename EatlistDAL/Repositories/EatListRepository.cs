@@ -43,8 +43,11 @@ namespace EatlistDAL.Repositories
                     DishName = x.Dish.Name,
                     DishID = x.Dish.Id,
                     x.DateCreated,
-                    x.CreatedBy,
+                    RestaurantId = x.Dish.CreatedBy.Id,
+                    x.Dish.CreatedBy.RestaurantName,
+                    CreatedBy = x.CreatedBy.Id,
                     CreatedByName = x.CreatedBy.FullName,
+                    x.CreatedBy.profilepic
 
                 };
             }
@@ -66,9 +69,11 @@ namespace EatlistDAL.Repositories
                     DishName = x.Dish.Name,
                     DishID = x.Dish.Id,
                     x.DateCreated,
-                    x.CreatedBy,
+                    RestaurantId = x.Dish.CreatedBy.Id,
+                    x.Dish.CreatedBy.RestaurantName,
+                    CreatedBy = x.CreatedBy.Id,
                     CreatedByName = x.CreatedBy.FullName,
-
+                    x.CreatedBy.profilepic
                 });
             }
             catch (Exception ex)

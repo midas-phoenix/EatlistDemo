@@ -29,17 +29,39 @@ namespace EatlistDAL.Repositories
                         MessageID = x.Id,
                         x.Message,
                         x.DateCreated,
-                        x.CreatedBy,
+                        CreatedBy = x.CreatedBy.Id,
                         CreatedByName = x.CreatedBy.IsRestaurant ? x.CreatedBy.RestaurantName : x.CreatedBy.FullName,
+                        x.CreatedBy.profilepic,
                         Receiver = x.Recipient.Id,
-                        ReceiverName = x.Recipient.IsRestaurant ? x.Recipient.RestaurantName : x.Recipient.FullName
+                        ReceiverName = x.Recipient.IsRestaurant ? x.Recipient.RestaurantName : x.Recipient.FullName,
+                        RecieverProfilepic = x.Recipient.profilepic
                     });
 
             }
             catch (Exception ex)
             {
                 logger.LogInformation(ex.Message + " : " + ex.InnerException + " : " + ex.StackTrace);
-                throw;
+                throw ex;
+            }
+        }
+
+        public dynamic FetchChats(string UserId)
+        {
+            try
+            {
+                return _appContext.ChatMessages.Where(c => c.CreatedBy.Id == UserId).GroupBy(r => r.Recipient).Select(x => new
+                {
+                    ReceiverName = x.FirstOrDefault().Recipient.IsRestaurant ? x.FirstOrDefault().Recipient.RestaurantName : x.FirstOrDefault().Recipient.FullName,
+                    Receiver = x.FirstOrDefault().Recipient.Id,
+                    RecieverProfilepic = x.FirstOrDefault().Recipient.profilepic,
+                    LastMessage = x.OrderByDescending(o => o.DateCreated).FirstOrDefault().Message,
+                    x.OrderByDescending(o => o.DateCreated).FirstOrDefault().DateCreated
+                });
+            }
+            catch (Exception ex)
+            {
+                logger.LogInformation(ex.Message + " : " + ex.InnerException + " : " + ex.StackTrace);
+                throw ex;
             }
         }
     }

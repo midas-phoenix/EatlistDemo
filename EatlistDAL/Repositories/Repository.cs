@@ -129,7 +129,7 @@ namespace EatlistDAL.Repositories
 
         public virtual IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
         {
-            return _entities.Where(predicate);
+            return _entities.Where(predicate).ToList();
         }
 
         public virtual TEntity GetSingleOrDefault(Expression<Func<TEntity, bool>> predicate)
