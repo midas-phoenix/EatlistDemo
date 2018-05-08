@@ -102,21 +102,31 @@ namespace EatlistApi
                 //o.IncludeErrorDetails = true;
                 //o.SaveToken = true;
                 o.SecurityTokenValidators.Add(jwtSecurityTokenHandler);
-                o.TokenValidationParameters = tokenValidationParameters;
-                o.Events = new JwtBearerEvents
-                {
-                    OnMessageReceived = context =>
+                o.TokenValidationParameters =
+                    new TokenValidationParameters
                     {
-                        if ((context.Request.Path.Value.StartsWith("/Ehub")
-                           )
-                            && context.Request.Query.TryGetValue("token", out StringValues token)
-                        )
-                        {
-                            context.Token = token;
-                        }
+                        LifetimeValidator = (before, expires, token, parameters) => expires > DateTime.UtcNow,
+                        ValidateAudience = false,
+                        ValidateIssuer = false,
+                        ValidateActor = false,
+                        ValidateLifetime = true,
+                        IssuerSigningKey = SecurityKey
+                    };
 
-                        return Task.CompletedTask;
-                    }//,
+                    o.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+
+                            if (!string.IsNullOrEmpty(accessToken) &&
+                                (context.HttpContext.WebSockets.IsWebSocketRequest || context.Request.Headers["Accept"] == "text/event-stream"))
+                            {
+                                context.Token = context.Request.Query["access_token"];
+                            }
+                            return Task.CompletedTask;
+                        }
+};
                     //OnAuthenticationFailed = context =>
                     //{
                     //    var te = context.Exception;
