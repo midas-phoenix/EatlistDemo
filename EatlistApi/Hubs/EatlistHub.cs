@@ -1,5 +1,6 @@
 ﻿using EatlistDAL;
 using EatlistDAL.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
@@ -7,12 +8,13 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace EatlistApi.Hubs
 {
-    //[Authorize(AuthenticationSchemes = "Bearer")]
-    [Authorize()]
+    [Authorize(JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize()]
     public class EatlistHub : Hub
     {
         private static UserManager<ApplicationUser> _userManager;
@@ -36,7 +38,6 @@ namespace EatlistApi.Hubs
             if (!_userInfoInMemory.AddUpdate(nuser, Context.ConnectionId))
             {// new user
                 var list = _userInfoInMemory.GetAllUsersExceptThis(Context.User.Identity.Name).ToList();
-                //await Clients.AllExcept(new List<string> { Context.ConnectionId }).InvokeAsync("NewOnlineUser",_userInfoInMemory.GetUserInfo(Context.User.Identity.Name));
             }
             await base.OnConnectedAsync();
             return;
@@ -44,7 +45,8 @@ namespace EatlistApi.Hubs
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            _userInfoInMemory.Remove(Context.User.Identity.Name);
+            _log.LogInformation("username is "+Context.ConnectionId);
+            _userInfoInMemory.Remove(Context.ConnectionId);
             return base.OnDisconnectedAsync(exception);
         }
 
@@ -52,10 +54,14 @@ namespace EatlistApi.Hubs
         {
             try
             {
-                Con
-                var friends = _unitofwork.Utils.FindFriends(userbit, _userInfoInMemory.GetUserInfo(Context.User.Identity.Name).UserId);
+                var user = (Context.User.Identity as ClaimsIdentity);
+                //UserInMemory userInfoInMemory = new UserInMemory();
+                _log.LogInformation("online users count is " + user.Name);
+                //_log.LogInformation("UserId is " + _userInfoInMemory.GetUserInfo(Context.ConnectionId).UserId);
+                var friends = _unitofwork.Utils.FindFriends(userbit, _userInfoInMemory.GetUserInfo(Context.ConnectionId).UserId);
                 await Clients.Caller.SendCoreAsync("FriendSearch", friends);
-                    //.SendAsync("FriendSearch", friends);
+                //await Clients.Client(Context.ConnectionId).SendAsync("FriendSearch", friends);
+                //.SendAsync("FriendSearch", friends);
                 return;
             }
             catch (Exception ex)

@@ -1,8 +1,6 @@
 ﻿using EatlistApi.Hubs;
 using EatlistDAL;
-using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -10,14 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Swagger;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
+using System;
 using System.Reflection;
-using System.Text;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace EatlistApi
@@ -31,6 +26,8 @@ namespace EatlistApi
 
         public IConfiguration Configuration { get; }
 
+        private readonly SymmetricSecurityKey SecurityKey = new SymmetricSecurityKey(Guid.NewGuid().ToByteArray());
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -42,48 +39,36 @@ namespace EatlistApi
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            //var policy = new Microsoft.AspNetCore.Cors.Infrastructure.CorsPolicy();
-            //policy.Headers.Add("*");
-            //policy.Methods.Add("*");
-            //policy.Origins.Add("*");
-            //policy.SupportsCredentials = true;
-
-            //services.AddCors(x => x.AddPolicy("corsGlobalPolicy", policy));
-
-            //var guestPolicy = new AuthorizationPolicyBuilder()
-            //    .RequireClaim("scope", "oidcdemomobile")
-            //    .Build();
-
-            services.AddCors(options =>
+            services.AddAuthorization(options =>
             {
-                options.AddPolicy("default", policyy =>
+                options.AddPolicy(JwtBearerDefaults.AuthenticationScheme, policy =>
                 {
-                    policyy.WithOrigins(Configuration["ClientAddress"])
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
-                    policyy.WithOrigins("file://")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowAnyOrigin();
-                    policyy.AllowCredentials();
+                    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+                    policy.RequireClaim(ClaimTypes.NameIdentifier);
                 });
-
             });
 
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy("default", policyy =>
+            //    {
+            //        policyy.WithOrigins(Configuration["ClientAddress"])
+            //            .AllowAnyHeader()
+            //            .AllowAnyMethod()
+            //            .AllowCredentials();
+            //        policyy.WithOrigins("file://")
+            //            .AllowAnyHeader()
+            //            .AllowAnyMethod()
+            //            .AllowAnyOrigin()
+            //            .AllowCredentials();
+            //    });
 
-            var jwtSecurityTokenHandler = new JwtSecurityTokenHandler
-            {
-                InboundClaimTypeMap = new Dictionary<string, string>()
-            };
+            //});
+            //var jwtSecurityTokenHandler = new JwtSecurityTokenHandler
+            //{
+            //    InboundClaimTypeMap = new Dictionary<string, string>()
+            //};
 
-            var tokenValidationParameters = new TokenValidationParameters()
-            {
-                ValidIssuer = Configuration["IdentityServerAddress"],
-                ValidAudience = "oidcdemomobile",
-                AuthenticationType = JwtBearerDefaults.AuthenticationScheme,
-                
-        };
-            //*******************************
             /*************SwashBuckle*********************/
             services.AddSwaggerGen(c =>
             {
@@ -97,11 +82,11 @@ namespace EatlistApi
             }).AddJwtBearer(o =>
             {
                 o.Authority = Configuration["IdentityServerAddress"];
-                o.Audience = "oidcdemomobile";
+                o.Audience = "apiApp";
                 o.RequireHttpsMetadata = false;
-                //o.IncludeErrorDetails = true;
-                //o.SaveToken = true;
-                o.SecurityTokenValidators.Add(jwtSecurityTokenHandler);
+                o.IncludeErrorDetails = true;
+
+                //o.SecurityTokenValidators.Add(jwtSecurityTokenHandler);
                 o.TokenValidationParameters =
                     new TokenValidationParameters
                     {
@@ -110,33 +95,30 @@ namespace EatlistApi
                         ValidateIssuer = false,
                         ValidateActor = false,
                         ValidateLifetime = true,
-                        IssuerSigningKey = SecurityKey
+                        IssuerSigningKey = SecurityKey,
+                        
                     };
 
-                    o.Events = new JwtBearerEvents
+                o.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
                     {
-                        OnMessageReceived = context =>
-                        {
-                            var accessToken = context.Request.Query["access_token"];
+                        var accessToken = context.Request.Query["token"];
 
-                            if (!string.IsNullOrEmpty(accessToken) &&
-                                (context.HttpContext.WebSockets.IsWebSocketRequest || context.Request.Headers["Accept"] == "text/event-stream"))
-                            {
-                                context.Token = context.Request.Query["access_token"];
-                            }
-                            return Task.CompletedTask;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            (context.HttpContext.WebSockets.IsWebSocketRequest || context.Request.Headers["Accept"] == "*/*" || context.Request.Headers["Accept"] == "text/event-stream"))
+                        {
+                            context.Token = context.Request.Query["token"];
                         }
-};
-                    //OnAuthenticationFailed = context =>
-                    //{
-                    //    var te = context.Exception;
-                    //    return Task.CompletedTask;
-                    //}
+                        return Task.CompletedTask;
+
+                    }
                 };
             });
-            
+
 
             services.AddScoped<IUnitOfWork, HttpUnitOfWork>();
+            services.AddTransient<UserInMemory>();
             services.AddMvc();
 
             services.AddSignalR();
@@ -159,10 +141,8 @@ namespace EatlistApi
             {
                 app.UseDeveloperExceptionPage();
             }
-
-
-            //app.UseCors("corsGlobalPolicy");
-            app.UseCors("default");
+            
+            //app.UseCors("default");
             app.UseSignalR(routes =>
             {
                 routes.MapHub<EatlistHub>("/Ehub");
@@ -173,5 +153,6 @@ namespace EatlistApi
             app.UseMvc();
 
         }
+
     }
 }

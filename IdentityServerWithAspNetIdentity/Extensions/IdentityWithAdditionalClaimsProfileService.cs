@@ -1,4 +1,5 @@
-﻿using EatListDataService.DataBase;
+﻿
+using EatlistDAL.Models;
 using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Extensions;
@@ -7,7 +8,6 @@ using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -40,7 +40,7 @@ namespace IdentityServerWithAspNetIdentity.Extensions
 
                 claims.Add(new Claim("Name", user.IsRestaurant ? user.RestaurantName: user.FullName));
                 claims.Add(new Claim("UserName", user.UserName));
-                //claims.Add(new Claim(JwtClaimTypes.GivenName, user.UserName));
+                claims.Add(new Claim(JwtClaimTypes.Name, user.UserName));
                 claims.Add(new Claim(JwtClaimTypes.Role, user.IsRestaurant? "Restaurant": "user"));
                 claims.Add(new Claim(IdentityServerConstants.StandardScopes.Email, user.Email));
                 context.IssuedClaims = claims;

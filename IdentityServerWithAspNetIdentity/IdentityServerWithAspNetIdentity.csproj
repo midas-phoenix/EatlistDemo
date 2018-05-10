@@ -54,7 +54,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EatlistDAL\EatlistDAL.csproj" />
-    <ProjectReference Include="..\EatListDataService\EatListDataService.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -35,7 +35,7 @@
 
   <ItemGroup>
     <PackageReference Include="CloudinaryDotNet" Version="1.2.0" />
-    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.5.0" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.0-rc1-final" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.2" />
@@ -44,6 +44,7 @@
     <PackageReference Include="NewtonSoft.Json" Version="11.0.2" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0-dev-00023" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="2.3.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.2.2" />
   </ItemGroup>
 
   <ItemGroup>
