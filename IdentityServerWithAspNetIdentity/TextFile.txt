@@ -1,5 +1,0 @@
-﻿Severity	Code	Description	Project	File	Line	Suppression State
-Error		The command ""dotnet" exec --runtimeconfig "\\192.168.10.10\wwwroot\EatListN\IdentityServerWithAspNetIdentity\bin\Any CPU\Release\netcoreapp2.0\IdentityServerWithAspNetIdentity.runtimeconfig.json" 
---depsfile "\\192.168.10.10\wwwroot\EatListN\IdentityServerWithAspNetIdentity\bin\Any CPU\Release\netcoreapp2.0\IdentityServerWithAspNetIdentity.deps.json" 
-"C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.mvc.razor.viewcompilation\2.0.2\build\netstandard2.0\Microsoft.AspNetCore.Mvc.Razor.ViewCompilation.dll"
-@"obj\Any CPU\Release\netcoreapp2.0\microsoft.aspnetcore.mvc.razor.viewcompilation.rsp"" exited with code 1.	IdentityServerWithAspNetIdentity		0	

@@ -2,3 +2,7 @@ obj/
 .vs
 Eatlist
 EatList-SPA
+IdentityServerWithAspNetIdentity
+EatListSPA
+EatListDataService
+
